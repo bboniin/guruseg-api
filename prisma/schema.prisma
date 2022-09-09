@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// criar migrate yarn prisma migrate dev
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  photo        String?
+  type         String    @default("cliente")
+  email        String    @unique
+  phone_number String
+  password     String
+  visible      Boolean   @default(true)
+  create_at    DateTime? @default(now())
+  update_at    DateTime? @default(now())
+
+  orders Order[]
+
+  @@map("users")
+}
+
+model Collaborator {
+  id           String    @id @default(uuid())
+  name         String
+  photo        String?
+  type         String    @default("tecnico")
+  email        String    @unique
+  phone_number String
+  password     String
+  visible      Boolean   @default(true)
+  create_at    DateTime? @default(now())
+  update_at    DateTime? @default(now())
+
+  orders Order[]
+
+  @@map("collaborators")
+}
+
+model Admin {
+  id        String    @id @default(uuid())
+  password  String
+  type      String    @default("admin")
+  email     String    @unique
+  create_at DateTime? @default(now())
+  update_at DateTime? @default(now())
+
+  @@map("admins")
+}
+
+model Order {
+  id          Int       @id @default(autoincrement())
+  observation String?
+  message     String?
+  status      String    @default("pendente")
+  month       String    @default("")
+  create_at   DateTime? @default(now())
+  update_at   DateTime? @default(now())
+
+  user    User?   @relation(fields: [user_id], references: [id])
+  user_id String?
+
+  collaborator    Collaborator? @relation(fields: [collaborator_id], references: [id])
+  collaborator_id String?
+
+  items Item[]
+  docs  Doc[]
+
+  @@map("orders")
+}
+
+model Doc {
+  id        String    @id @default(uuid())
+  type      String
+  file      String
+  create_at DateTime? @default(now())
+  update_at DateTime? @default(now())
+  order     Order?    @relation(fields: [order_id], references: [id])
+  order_id  Int?
+
+  @@map("docs")
+}
+
+model Item {
+  id          String    @id @default(uuid())
+  amount      Int
+  name        String
+  value       Float
+  description String?
+  order       Order     @relation(fields: [order_id], references: [id])
+  order_id    Int
+  create_at   DateTime? @default(now())
+  update_at   DateTime? @default(now())
+
+  @@map("items")
+}
+
+model Service {
+  id          String    @id @default(uuid())
+  name        String
+  value       Float
+  visible     Boolean   @default(true)
+  description String?
+  create_at   DateTime? @default(now())
+  update_at   DateTime? @default(now())
+
+  @@map("services")
+}
