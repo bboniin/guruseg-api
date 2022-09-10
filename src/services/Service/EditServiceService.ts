@@ -6,19 +6,21 @@ interface ServiceRequest {
     description: string;
     value: string;
     id: string;
+    commission: number;
 }
 
 class EditServiceService {
-    async execute({ name, id, description, value }: ServiceRequest) {
+    async execute({ name, id, description, value, commission }: ServiceRequest) {
 
-        if (!name || !value) {
-            throw new Error("Nome e valor é obrigátorio")
+        if (!name || !value || !commission) {
+            throw new Error("Nome, valor e comissão é obrigátorio")
         }
 
         let data = {
             name: name,
             description: description,
-            value: Number(value)
+            value: Number(value),
+            commission: Number(commission)
         }
 
         const service = await prismaClient.service.update({

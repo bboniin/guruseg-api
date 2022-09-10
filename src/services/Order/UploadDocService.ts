@@ -4,7 +4,7 @@ import S3Storage from '../../utils/S3Storage';
 interface DocRequest {
     type: string;
     file: string;
-    id: string;
+    id: number;
 }
 
 class CreateDocService {

@@ -32,6 +32,7 @@ class CreateOrderService {
                     order_id: order.id,
                     name: data["name"],
                     value: data["value"],
+                    commission: data["commission"],
                     description: data["description"]
                 }
             })
