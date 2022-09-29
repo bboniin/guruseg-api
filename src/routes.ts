@@ -4,11 +4,11 @@ import multer from 'multer'
 import { AuthAdminController } from './controllers/Admin/AuthAdminController'
 
 import { AuthUserController } from './controllers/User/AuthUserController'
-import { CreateUserController } from './controllers/Admin/CreateUserController'
+import { CreateUserController } from './controllers/Admin/Users/CreateUserController'
 import { EditUserController } from './controllers/User/EditUserController'
 
 import { AuthCollaboratorController } from './controllers/Collaborator/AuthCollaboratorController'
-import { CreateCollaboratorController } from './controllers/Admin/CreateCollaboratorController'
+import { CreateCollaboratorController } from './controllers/Admin/Collaborators/CreateCollaboratorController'
 import { EditCollaboratorController } from './controllers/Collaborator/EditCollaboratorController'
 
 import { isAuthenticated } from './middlewares/isAuthenticated'
@@ -28,28 +28,36 @@ import { AcceptOrderController } from './controllers/Order/AcceptOrdersControlle
 import { StatusOrderController } from './controllers/Order/StatusOrdersController'
 import { ListOpenOrdersController } from './controllers/Order/ListOpenOrdersController'
 
+import { EditAdminUserController } from './controllers/Admin/Users/EditAdminUserController'
+import { EditAdminCollaboratorController } from './controllers/Admin/Collaborators/EditAdminCollaboratorController'
+import { ListUsersController } from './controllers/Admin/Users/ListUsersController'
+import { ListCollaboratorsController } from './controllers/Admin/Collaborators/ListCollaboratorsController'
+import { DeleteUserController } from './controllers/Admin/Users/DeleteUserController'
+import { DeleteCollaboratorController } from './controllers/Admin/Collaborators/DeleteCollaboratorController'
+import { GetUserController } from './controllers/Admin/Users/GetUserController'
+import { GetCollaboratorController } from './controllers/Admin/Collaborators/GetCollaboratorController'
+import { ListAdminOrdersController } from './controllers/Admin/ListAdminOrdersController'
+
+import { ListBannersPublicController } from './controllers/Admin/Banners/ListBannersPublicController'
+import { ListBannersController } from './controllers/Admin/Banners/ListBannersController'
+import { CreateBannerController } from './controllers/Admin/Banners/CreateBannerController'
+import { EditBannerController } from './controllers/Admin/Banners/EditBannerController'
+import { DeleteBannerController } from './controllers/Admin/Banners/DeleteBannerController'
 
 import uploadConfig from './config/multer'
-import { EditAdminUserController } from './controllers/Admin/EditAdminUserController'
-import { EditAdminCollaboratorController } from './controllers/Admin/EditAdminCollaboratorController'
-import { ListUsersController } from './controllers/Admin/ListUsersController'
-import { ListCollaboratorsController } from './controllers/Admin/ListCollaboratorsController'
-import { DeleteUserController } from './controllers/Admin/DeleteUserController'
-import { DeleteCollaboratorController } from './controllers/Admin/DeleteCollaboratorController'
-import { GetUserController } from './controllers/Admin/GetUserController'
-import { GetCollaboratorController } from './controllers/Admin/GetCollaboratorController'
-import { ListAdminOrdersController } from './controllers/Admin/ListAdminOrdersController'
+
 
 const upload = multer(uploadConfig)
 
 const router = Router()
 
-// Routes User
+// Routes Publios
 
 router.post('/user-session', new AuthUserController().handle)
 router.post('/admin-session', new AuthAdminController().handle)
 router.post('/collaborator-session', new AuthCollaboratorController().handle)
 router.get('/services', new ListServicesController().handle)
+router.get('/banners-public', new ListBannersPublicController().handle)
 
 router.use(isAuthenticated)
 
@@ -76,10 +84,17 @@ router.get('/users', new ListUsersController().handle)
 router.post('/user', upload.single("file"), new CreateUserController().handle)
 router.put('/user/:id', upload.single("file"), new EditAdminUserController().handle)
 router.delete('/user/:id', new DeleteUserController().handle)
+
 router.get('/collaborators', new ListCollaboratorsController().handle)
 router.post('/collaborator', upload.single("file"), new CreateCollaboratorController().handle)
 router.put('/collaborator/:id', upload.single("file"), new EditAdminCollaboratorController().handle)
 router.delete('/collaborator/:id', new DeleteCollaboratorController().handle)
+
+router.get('/banners', new ListBannersController().handle)
+router.post('/banner', upload.single("file"), new CreateBannerController().handle)
+router.put('/banner/:id', upload.single("file"), new EditBannerController().handle)
+router.delete('/banner/:id', new DeleteBannerController().handle)
+
 router.get('/user/:id', new GetUserController().handle)
 router.get('/collaborator/:id', new GetCollaboratorController().handle)
 router.get('/orders/:type/:id', new ListAdminOrdersController().handle)

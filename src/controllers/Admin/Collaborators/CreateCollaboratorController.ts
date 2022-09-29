@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CreateCollaboratorService } from '../../services/Admin/CreateCollaboratorService';
+import { CreateCollaboratorService } from '../../../services/Admin/Collaborators/CreateCollaboratorService';
 
 class CreateCollaboratorController {
     async handle(req: Request, res: Response) {

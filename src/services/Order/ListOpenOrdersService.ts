@@ -12,8 +12,7 @@ class ListOpenOrdersService {
                 status: "aberto",
             },
             orderBy: {
-                create_at: "desc",
-
+                urgent: "desc",
             },
             include: {
                 items: {

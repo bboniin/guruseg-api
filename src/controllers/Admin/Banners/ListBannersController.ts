@@ -1,15 +1,14 @@
 import { Request, Response } from 'express';
-import { ListUsersService } from '../../services/Admin/ListUsersService';
+import { ListBannersService } from '../../../services/Admin/Banners/ListBannersService';
 
-class ListUsersController {
+class ListBannersController {
     async handle(req: Request, res: Response) {
-
 
         let userId = req.userId
 
-        const listUsersService = new ListUsersService
+        const listBannersService = new ListBannersService
 
-        const users = await listUsersService.execute({
+        const users = await listBannersService.execute({
             userId
         })
 
@@ -23,4 +22,4 @@ class ListUsersController {
     }
 }
 
-export { ListUsersController }
+export { ListBannersController }

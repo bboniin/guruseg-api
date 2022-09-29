@@ -1,18 +1,18 @@
-import prismaClient from '../../prisma'
+import prismaClient from '../../../prisma'
 
 interface ServiceRequest {
     userId: string;
 }
 
-class ListCollaboratorsService {
+class ListUsersService {
     async execute({ userId }: ServiceRequest) {
 
-        const services = await prismaClient.collaborator.findMany({
+        const services = await prismaClient.user.findMany({
             where: {
                 visible: true
             },
             orderBy: {
-                create_at: "asc",
+                create_at: "asc"
             }
         })
 
@@ -20,4 +20,4 @@ class ListCollaboratorsService {
     }
 }
 
-export { ListCollaboratorsService }
+export { ListUsersService }

@@ -61,6 +61,7 @@ model Order {
   id          Int       @id @default(autoincrement())
   observation String?
   message     String?
+  urgent      Boolean   @default(false)
   status      String    @default("pendente")
   month       String    @default("")
   create_at   DateTime? @default(now())
@@ -116,4 +117,14 @@ model Service {
   update_at   DateTime? @default(now())
 
   @@map("services")
+}
+
+model Banner {
+  id        String    @id @default(uuid())
+  photo     String
+  url       String
+  create_at DateTime? @default(now())
+  update_at DateTime? @default(now())
+
+  @@map("banners")
 }

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ListCollaboratorsService } from '../../services/Admin/ListCollaboratorsService';
+import { ListCollaboratorsService } from '../../../services/Admin/Collaborators/ListCollaboratorsService';
 
 class ListCollaboratorsController {
     async handle(req: Request, res: Response) {

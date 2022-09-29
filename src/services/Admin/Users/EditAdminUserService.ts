@@ -1,6 +1,6 @@
 import { hash } from 'bcryptjs';
-import prismaClient from '../../prisma'
-import S3Storage from '../../utils/S3Storage';
+import prismaClient from '../../../prisma'
+import S3Storage from '../../../utils/S3Storage';
 
 interface UserRequest {
     name: string;

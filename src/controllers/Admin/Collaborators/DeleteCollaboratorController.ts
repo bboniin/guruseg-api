@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { DeleteCollaboratorService } from '../../services/Admin/DeleteCollaboratorService';
+import { DeleteCollaboratorService } from '../../../services/Admin/Collaborators/DeleteCollaboratorService';
 
 class DeleteCollaboratorController {
     async handle(req: Request, res: Response) {

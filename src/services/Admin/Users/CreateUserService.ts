@@ -1,8 +1,8 @@
-import prismaClient from '../../prisma'
+import prismaClient from '../../../prisma'
 import { hash } from "bcryptjs"
-import S3Storage from '../../utils/S3Storage';
+import S3Storage from '../../../utils/S3Storage';
 
-interface CollaboratorRequest {
+interface UserRequest {
     name: string;
     email: string;
     phone_number: string;
@@ -10,21 +10,22 @@ interface CollaboratorRequest {
     password: string;
 }
 
-class CreateCollaboratorService {
-    async execute({ name, email, phone_number, password, photo }: CollaboratorRequest) {
+class CreateUserService {
+    async execute({ name, email, phone_number, password, photo }: UserRequest) {
+
 
         if (!email || !name || !phone_number || !password) {
             throw new Error("Preencha todos os campos obrigátorios")
         }
 
 
-        const collaboratorAlreadyExists = await prismaClient.collaborator.findFirst({
+        const userAlreadyExists = await prismaClient.user.findFirst({
             where: {
                 email: email
             }
         })
 
-        if (collaboratorAlreadyExists) {
+        if (userAlreadyExists) {
             throw new Error("Email já cadastrado.")
         }
 
@@ -37,7 +38,7 @@ class CreateCollaboratorService {
 
         const passwordHash = await hash(password, 8)
 
-        const collaborator = await prismaClient.collaborator.create({
+        const user = await prismaClient.user.create({
             data: {
                 name: name,
                 email: email,
@@ -53,9 +54,9 @@ class CreateCollaboratorService {
             }
         })
 
-        return (collaborator)
+        return (user)
 
     }
 }
 
-export { CreateCollaboratorService }
+export { CreateUserService }
