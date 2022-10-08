@@ -1,5 +1,4 @@
 import prismaClient from '../../prisma'
-import S3Storage from '../../utils/S3Storage';
 
 interface OrderRequest {
     observation: string;

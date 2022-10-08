@@ -8,17 +8,17 @@ class ListBannersController {
 
         const listBannersService = new ListBannersService
 
-        const users = await listBannersService.execute({
+        const banners = await listBannersService.execute({
             userId
         })
 
-        users.map((item) => {
+        banners.map((item) => {
             if (item["photo"]) {
                 item["photo_url"] = "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + item["photo"];
             }
         })
 
-        return res.json(users)
+        return res.json(banners)
     }
 }
 

@@ -3,7 +3,7 @@ import { EditAdminUserService } from '../../../services/Admin/Users/EditAdminUse
 
 class EditAdminUserController {
     async handle(req: Request, res: Response) {
-        const { name, email, phone_number, password } = req.body
+        const { name, email, phone_number, password, course } = req.body
 
         const { id } = req.params
 
@@ -13,10 +13,12 @@ class EditAdminUserController {
             photo = req.file.filename
         }
 
+        let courseBoolean = course == "true" ? true : false
+
         const editAdminUserService = new EditAdminUserService
 
         const user = await editAdminUserService.execute({
-            name, email, phone_number, photo, id, password
+            name, email, phone_number, photo, id, password, courseBoolean
         })
 
         if (user["photo"]) {

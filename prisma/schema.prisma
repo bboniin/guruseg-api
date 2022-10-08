@@ -21,6 +21,7 @@ model User {
   phone_number String
   password     String
   visible      Boolean   @default(true)
+  course       Boolean   @default(false)
   create_at    DateTime? @default(now())
   update_at    DateTime? @default(now())
 
@@ -127,4 +128,32 @@ model Banner {
   update_at DateTime? @default(now())
 
   @@map("banners")
+}
+
+model Course {
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  photo       String?
+  create_at   DateTime? @default(now())
+  update_at   DateTime? @default(now())
+
+  lessons Lesson[]
+
+  @@map("courses")
+}
+
+model Lesson {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  video       String?
+  file        String?
+  file_name   String?
+  create_at   DateTime? @default(now())
+  update_at   DateTime? @default(now())
+  course      Course    @relation(fields: [course_id], references: [id])
+  course_id   String
+
+  @@map("lessons")
 }

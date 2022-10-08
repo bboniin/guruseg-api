@@ -45,6 +45,17 @@ import { EditBannerController } from './controllers/Admin/Banners/EditBannerCont
 import { DeleteBannerController } from './controllers/Admin/Banners/DeleteBannerController'
 
 import uploadConfig from './config/multer'
+import { ListCoursesController } from './controllers/Admin/Courses/ListCoursesController'
+import { CreateCourseController } from './controllers/Admin/Courses/CreatecCourseController'
+import { EditCourseController } from './controllers/Admin/Courses/EditCourseController'
+import { DeleteCourseController } from './controllers/Admin/Courses/DeleteCourseController'
+import { ListLessonsController } from './controllers/Admin/Lessons/ListLessonsController'
+import { CreateLessonController } from './controllers/Admin/Lessons/CreateLessonController'
+import { EditLessonController } from './controllers/Admin/Lessons/EditLessonController'
+import { DeleteLessonController } from './controllers/Admin/Lessons/DeleteLessonController'
+import { ListCoursesPublicController } from './controllers/Admin/Courses/ListCoursesPublicController'
+import { GetLessonController } from './controllers/Admin/Lessons/GetLessonController'
+import { GetCoursePublicController } from './controllers/Admin/Courses/GetCoursePublicController'
 
 
 const upload = multer(uploadConfig)
@@ -63,6 +74,7 @@ router.use(isAuthenticated)
 
 // Users and Colaborators
 
+router.get('/courses-user', new ListCoursesPublicController().handle)
 router.put('/user', upload.single("file"), new EditUserController().handle)
 router.put('/collaborator', upload.single("file"), new EditCollaboratorController().handle)
 
@@ -94,6 +106,19 @@ router.get('/banners', new ListBannersController().handle)
 router.post('/banner', upload.single("file"), new CreateBannerController().handle)
 router.put('/banner/:id', upload.single("file"), new EditBannerController().handle)
 router.delete('/banner/:id', new DeleteBannerController().handle)
+
+
+router.get('/courses', new ListCoursesController().handle)
+router.get('/course/:course_id', new GetCoursePublicController().handle)
+router.post('/course', upload.single("file"), new CreateCourseController().handle)
+router.put('/course/:id', upload.single("file"), new EditCourseController().handle)
+router.delete('/course/:id', new DeleteCourseController().handle)
+
+router.get('/lesson/:id', new GetLessonController().handle)
+router.get('/lessons/:course_id', new ListLessonsController().handle)
+router.post('/lesson', upload.single("file"), new CreateLessonController().handle)
+router.put('/lesson/:id', upload.single("file"), new EditLessonController().handle)
+router.delete('/lesson/:id', new DeleteLessonController().handle)
 
 router.get('/user/:id', new GetUserController().handle)
 router.get('/collaborator/:id', new GetCollaboratorController().handle)
