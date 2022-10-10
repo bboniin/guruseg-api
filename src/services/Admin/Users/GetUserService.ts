@@ -11,6 +11,11 @@ class GetUserService {
             where: {
                 id: id,
             },
+            select: {
+                name: true,
+                email: true,
+                course: true
+            }
         })
 
         if (!user) {

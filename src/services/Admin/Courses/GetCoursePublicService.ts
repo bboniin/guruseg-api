@@ -14,10 +14,6 @@ class GetCoursePublicService {
             }
         })
 
-        if (!admin) {
-            throw new Error("Rota restrita ao administrador")
-        }
-
         const course = await prismaClient.course.findUnique({
             where: {
                 id: course_id,

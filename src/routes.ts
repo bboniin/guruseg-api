@@ -74,6 +74,7 @@ router.use(isAuthenticated)
 
 // Users and Colaborators
 
+router.get('/course/:course_id', new GetCoursePublicController().handle)
 router.get('/courses-user', new ListCoursesPublicController().handle)
 router.put('/user', upload.single("file"), new EditUserController().handle)
 router.put('/collaborator', upload.single("file"), new EditCollaboratorController().handle)
@@ -89,6 +90,9 @@ router.put('/status/:id', new StatusOrderController().handle)
 router.put('/order-cancel/:id', new CancelOrderController().handle)
 router.post('/doc/:id', upload.single("file"), new CreateDocOrderController().handle)
 router.delete('/doc/:id', upload.single("file"), new DeleteDocOrderController().handle)
+
+router.get('/user', new GetUserController().handle)
+router.get('/collaborator', new GetCollaboratorController().handle)
 
 // Routes Admin
 
@@ -109,7 +113,6 @@ router.delete('/banner/:id', new DeleteBannerController().handle)
 
 
 router.get('/courses', new ListCoursesController().handle)
-router.get('/course/:course_id', new GetCoursePublicController().handle)
 router.post('/course', upload.single("file"), new CreateCourseController().handle)
 router.put('/course/:id', upload.single("file"), new EditCourseController().handle)
 router.delete('/course/:id', new DeleteCourseController().handle)
