@@ -19,7 +19,7 @@ class ListCoursesService {
 
         const courses = await prismaClient.course.findMany({
             orderBy: {
-                create_at: "desc"
+                order: "asc"
             }
         })
 

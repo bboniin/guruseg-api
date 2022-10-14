@@ -3,7 +3,7 @@ import { EditLessonService } from '../../../services/Admin/Lessons/EditLessonSer
 
 class EditLessonController {
     async handle(req: Request, res: Response) {
-        const { name, description, video, file_name } = req.body
+        const { name, description, video, file_name, order, delete_file } = req.body
 
         const { id } = req.params
 
@@ -18,7 +18,7 @@ class EditLessonController {
         const editLessonService = new EditLessonService
 
         const lesson = await editLessonService.execute({
-            userId, name, description, video, file_name, file, id
+            userId, name, description, video, file_name, order, file, id, delete_file
         })
 
         if (lesson["file"]) {

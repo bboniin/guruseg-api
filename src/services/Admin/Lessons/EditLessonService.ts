@@ -8,10 +8,12 @@ interface LessonRequest {
     video: string;
     file: string;
     file_name: string;
+    order: string;
+    delete_file: string;
     userId: string;
 }
 class EditLessonService {
-    async execute({ name, userId, file, description, video, id, file_name }: LessonRequest) {
+    async execute({ name, userId, file, delete_file, description, order, video, id, file_name }: LessonRequest) {
 
         const admin = await prismaClient.admin.findUnique({
             where: {
@@ -38,11 +40,26 @@ class EditLessonService {
             throw new Error("Aula não existe")
         }
 
+        let orderC = parseInt(order)
+
+        if (!orderC) {
+            orderC = 0
+        }
+
         let data = {
             name: name,
             description: description,
             video: video,
-            file_name: file_name
+            file_name: file_name,
+            order: orderC
+        }
+
+        if (delete_file) {
+            if (lesson.file) {
+                const s3Storage = new S3Storage()
+                await s3Storage.deleteFile(lesson["file"])
+                data["file"] = ""
+            }
         }
 
         if (file) {

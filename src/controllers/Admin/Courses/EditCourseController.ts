@@ -3,7 +3,7 @@ import { EditCourseService } from '../../../services/Admin/Courses/EditCourseSer
 
 class EditCourseController {
     async handle(req: Request, res: Response) {
-        const { name, description } = req.body
+        const { name, description, order } = req.body
 
         const { id } = req.params
 
@@ -18,7 +18,7 @@ class EditCourseController {
         const editCourseService = new EditCourseService
 
         const course = await editCourseService.execute({
-            name, description, photo, id, userId
+            name, description, order, photo, id, userId
         })
 
         if (course["photo"]) {

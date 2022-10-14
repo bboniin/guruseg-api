@@ -134,6 +134,7 @@ model Course {
   id          String    @id @default(uuid())
   name        String
   description String
+  order       Int       @default(0)
   photo       String?
   create_at   DateTime? @default(now())
   update_at   DateTime? @default(now())
@@ -146,6 +147,7 @@ model Course {
 model Lesson {
   id          String    @id @default(uuid())
   name        String
+  order       Int       @default(0)
   description String?
   video       String?
   file        String?

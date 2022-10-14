@@ -23,7 +23,7 @@ class ListLessonsService {
                 course_id: course_id
             },
             orderBy: {
-                create_at: "desc"
+                order: "asc"
             }
         })
 

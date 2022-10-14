@@ -1,4 +1,5 @@
 import prismaClient from '../../../prisma'
+import S3Storage from '../../../utils/S3Storage';
 
 interface CourseRequest {
     userId: string;
@@ -18,13 +19,24 @@ class DeleteCourseService {
             throw new Error("Rota restrita ao administrador")
         }
 
-        const courses = await prismaClient.course.delete({
+        const course = await prismaClient.course.findFirst({
             where: {
                 id: id,
             },
         })
 
-        return (courses)
+        if (course.photo) {
+            const s3Storage = new S3Storage()
+            await s3Storage.deleteFile(course["photo"])
+        }
+
+        const courseD = await prismaClient.course.delete({
+            where: {
+                id: id,
+            },
+        })
+
+        return (courseD)
     }
 }
 

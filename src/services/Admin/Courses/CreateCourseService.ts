@@ -5,11 +5,12 @@ interface CourseRequest {
     name: string;
     userId: string;
     photo: string;
+    order: string;
     description: string;
 }
 
 class CreateCourseService {
-    async execute({ userId, name, photo, description }: CourseRequest) {
+    async execute({ userId, name, photo, order, description }: CourseRequest) {
 
         const admin = await prismaClient.admin.findUnique({
             where: {
@@ -30,11 +31,18 @@ class CreateCourseService {
             await s3Storage.saveFile(photo)
         }
 
+        let orderC = parseInt(order)
+
+        if (!orderC) {
+            orderC = 0
+        }
+
         const courseRes = await prismaClient.course.create({
             data: {
                 name: name,
                 description: description,
-                photo: photo
+                photo: photo,
+                order: orderC
             }
         })
 

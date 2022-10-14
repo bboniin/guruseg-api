@@ -12,7 +12,7 @@ class ListCoursesPublicService {
                 id: true
             },
             orderBy: {
-                create_at: "desc"
+                order: "asc"
             }
         })
 

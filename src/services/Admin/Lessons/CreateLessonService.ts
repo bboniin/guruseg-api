@@ -8,11 +8,12 @@ interface LessonRequest {
     video: string;
     file: string;
     file_name: string;
+    order: string;
     userId: string;
 }
 
 class CreateLessonService {
-    async execute({ name, userId, file, description, video, course_id, file_name }: LessonRequest) {
+    async execute({ name, userId, file, description, video, order, course_id, file_name }: LessonRequest) {
 
         const admin = await prismaClient.admin.findUnique({
             where: {
@@ -33,6 +34,13 @@ class CreateLessonService {
             await s3Storage.saveFile(file)
         }
 
+        let orderC = parseInt(order)
+
+        if (!orderC) {
+            orderC = 0
+        }
+
+
         const lessonRes = await prismaClient.lesson.create({
             data: {
                 name: name,
@@ -40,7 +48,8 @@ class CreateLessonService {
                 video: video,
                 file_name: file_name,
                 course_id: course_id,
-                file: file
+                file: file,
+                order: orderC
             }
         })
 
