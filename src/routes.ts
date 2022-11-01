@@ -56,6 +56,12 @@ import { DeleteLessonController } from './controllers/Admin/Lessons/DeleteLesson
 import { ListCoursesPublicController } from './controllers/Admin/Courses/ListCoursesPublicController'
 import { GetLessonController } from './controllers/Admin/Lessons/GetLessonController'
 import { GetCoursePublicController } from './controllers/Admin/Courses/GetCoursePublicController'
+import { GetContractController } from './controllers/Contract/GetContractController'
+import { ListContractsController } from './controllers/Contract/ListContractsController'
+import { AdminListContractsController } from './controllers/Contract/AdminListContractController'
+import { CreateContractController } from './controllers/Contract/CreateContractController'
+import { SignatureContractController } from './controllers/Contract/SignatureContractController'
+import { RefusalContractController } from './controllers/Contract/RefusalContractController'
 
 
 const upload = multer(uploadConfig)
@@ -69,6 +75,7 @@ router.post('/admin-session', new AuthAdminController().handle)
 router.post('/collaborator-session', new AuthCollaboratorController().handle)
 router.get('/services', new ListServicesController().handle)
 router.get('/banners-public', new ListBannersPublicController().handle)
+router.get('/contract/:id', new GetContractController().handle)
 
 router.use(isAuthenticated)
 
@@ -132,6 +139,15 @@ router.get('/orders/:type/:id', new ListAdminOrdersController().handle)
 router.post('/service', new CreateServiceController().handle)
 router.put('/service/:id', new EditServiceController().handle)
 router.delete('/service/:id', new DeleteServiceController().handle)
+
+// Contracts
+
+router.get('/contracts', new ListContractsController().handle)
+router.get('/contracts/:user_id', new AdminListContractsController().handle)
+router.post('/contract', new CreateContractController().handle)
+router.put('/signature-contract/:id', new SignatureContractController().handle)
+router.put('/refusal-contract/:id', new RefusalContractController().handle)
+
 
 
 export { router }

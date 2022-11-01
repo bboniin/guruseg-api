@@ -159,3 +159,43 @@ model Lesson {
 
   @@map("lessons")
 }
+
+model Contract {
+  id                  String    @id @default(uuid())
+  user_id             String
+  name                String
+  company             String
+  contact             String
+  consultant          String
+  phone_number        String
+  banking             String
+  status              String    @default("aguardando")
+  risk                Int?
+  lifes               Int?
+  discount            Int?
+  service_name        String?
+  service_value       Float?
+  service_description String?
+  signature           String?
+  signature_date      DateTime?
+  create_at           DateTime? @default(now())
+  update_at           DateTime? @default(now())
+
+  services ContractServices[]
+
+  @@map("contracts")
+}
+
+model ContractServices {
+  id          String    @id @default(uuid())
+  amount      Int
+  name        String
+  value       Float
+  description String?
+  contract    Contract  @relation(fields: [contract_id], references: [id])
+  contract_id String
+  create_at   DateTime? @default(now())
+  update_at   DateTime? @default(now())
+
+  @@map("contractServices")
+}
