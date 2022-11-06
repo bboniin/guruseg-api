@@ -173,6 +173,8 @@ model Contract {
   risk                Int?
   lifes               Int?
   discount            Int?
+  initial_value       Float?    @default(0)
+  life_value          Float?    @default(0)
   service_name        String?
   service_value       Float?
   service_description String?

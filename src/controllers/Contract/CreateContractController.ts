@@ -3,14 +3,14 @@ import { CreateContractService } from '../../services/Contract/CreateContractSer
 
 class CreateContractController {
     async handle(req: Request, res: Response) {
-        const { services, risk, lifes, name, company, contact, consultant, phone_number, banking, discount, service_name, service_value, service_description } = req.body
+        const { services, risk, lifes, name, company, contact, consultant, phone_number, banking, discount, service_name, service_value, service_description, life_value, initial_value } = req.body
 
         let userId = req.userId
 
         const createContractService = new CreateContractService
 
         const order = await createContractService.execute({
-            userId, services, risk, lifes, name, company, contact, consultant, phone_number, banking, discount, service_name, service_value, service_description
+            userId, services, risk, lifes, name, company, contact, consultant, phone_number, banking, discount, service_name, service_value, service_description, life_value, initial_value
         })
 
         return res.json(order)

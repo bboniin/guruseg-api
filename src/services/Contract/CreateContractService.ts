@@ -10,6 +10,8 @@ interface ContractrRequest {
     banking: string;
     risk: number;
     lifes: number;
+    life_value: number;
+    initial_value: number;
     discount: number;
     service_name: string;
     service_value: number;
@@ -18,13 +20,13 @@ interface ContractrRequest {
 }
 
 class CreateContractService {
-    async execute({ userId, services, risk, lifes, name, company, contact, consultant, phone_number, banking, discount, service_name, service_value, service_description }: ContractrRequest) {
+    async execute({ userId, life_value, initial_value, services, risk, lifes, name, company, contact, consultant, phone_number, banking, discount, service_name, service_value, service_description }: ContractrRequest) {
 
         if (!name || !company || !contact || !consultant || !phone_number || !banking) {
             throw new Error("Preencha as informações básicas do contrato")
         }
 
-        if (services.length == 0 && (!risk || !lifes)) {
+        if (services.length == 0 && (!risk || !lifes || !life_value || !initial_value)) {
             throw new Error("Preencha pelo menos um serviço ou a Gestão Mensal")
         }
 
@@ -33,10 +35,14 @@ class CreateContractService {
             name, company, contact, consultant, phone_number, banking
         }
 
-        if (risk && lifes) {
+        if (risk && lifes && life_value && initial_value) {
             newContract["risk"] = risk
             newContract["lifes"] = lifes
-        } else {
+            newContract["life_value"] = life_value
+            newContract["initial_value"] = initial_value
+        }
+
+        if (services.length != 0) {
             newContract["discount"] = discount
             if ((!service_name && service_value) || (service_name && !service_value)) {
                 throw new Error("Adicionando serviço extra, é obrigátorio preencher nome e valor.")
@@ -56,10 +62,10 @@ class CreateContractService {
             services.map(async (data) => {
                 const itemcontract = await prismaClient.contractServices.create({
                     data: {
-                        amount: data["amount"],
+                        amount: parseInt(data["amount"]),
                         contract_id: contract.id,
                         name: data["name"],
-                        value: data["value"],
+                        value: parseFloat(data["value"]),
                         description: data["description"]
                     }
                 })
