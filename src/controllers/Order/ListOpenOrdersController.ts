@@ -3,8 +3,6 @@ import { ListOpenOrdersService } from '../../services/Order/ListOpenOrdersServic
 
 class ListOpenOrdersController {
     async handle(req: Request, res: Response) {
-
-
         let userId = req.userId
 
         const listOpenOrdersService = new ListOpenOrdersService

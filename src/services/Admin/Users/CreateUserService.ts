@@ -8,10 +8,12 @@ interface UserRequest {
     phone_number: string;
     photo: string;
     password: string;
+    courseBoolean: boolean;
+    resaleBoolean: boolean;
 }
 
 class CreateUserService {
-    async execute({ name, email, phone_number, password, photo }: UserRequest) {
+    async execute({ name, email, phone_number, password, photo, courseBoolean, resaleBoolean }: UserRequest) {
 
 
         if (!email || !name || !phone_number || !password) {
@@ -44,7 +46,9 @@ class CreateUserService {
                 email: email,
                 password: passwordHash,
                 phone_number: phone_number,
-                photo: photo
+                photo: photo,
+                course: courseBoolean,
+                resale: resaleBoolean
             },
             select: {
                 id: true,

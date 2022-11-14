@@ -7,8 +7,15 @@ interface OrderRequest {
 class ListOpenOrdersService {
     async execute({ userId }: OrderRequest) {
 
+        const collaborator = await prismaClient.collaborator.findFirst({
+            where: {
+                id: userId
+            }
+        })
+
         const orders = await prismaClient.order.findMany({
             where: {
+                sector: collaborator.sector,
                 status: "aberto",
             },
             orderBy: {

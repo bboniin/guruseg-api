@@ -13,7 +13,8 @@ class GetCollaboratorService {
             },
             select: {
                 name: true,
-                email: true
+                email: true,
+                sector: true
             }
         })
 

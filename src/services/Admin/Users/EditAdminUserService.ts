@@ -10,10 +10,11 @@ interface UserRequest {
     password: string;
     id: string;
     courseBoolean: boolean;
+    resaleBoolean: boolean;
 }
 
 class EditAdminUserService {
-    async execute({ name, email, phone_number, photo, id, password, courseBoolean }: UserRequest) {
+    async execute({ name, email, phone_number, photo, id, password, courseBoolean, resaleBoolean }: UserRequest) {
 
         const user = await prismaClient.user.findUnique({
             where: {
@@ -41,7 +42,8 @@ class EditAdminUserService {
             name: name,
             email: email,
             course: courseBoolean,
-            phone_number: phone_number
+            phone_number: phone_number,
+            resale: resaleBoolean
         }
 
         if (password) {

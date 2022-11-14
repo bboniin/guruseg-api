@@ -6,13 +6,14 @@ interface ServiceRequest {
     description: string;
     value: number;
     commission: number;
+    sector: string
 }
 
 class CreateServiceService {
-    async execute({ name, description, value, commission }: ServiceRequest) {
+    async execute({ name, description, value, commission, sector }: ServiceRequest) {
 
-        if (!name || !value || !commission) {
-            throw new Error("Nome, valor e comissão é obrigátorio")
+        if (!name || !value || !commission || !sector) {
+            throw new Error("Nome, valor, setor e comissão é obrigátorio")
         }
 
         const service = await prismaClient.service.create({
@@ -22,6 +23,7 @@ class CreateServiceService {
                 commission: Number(commission),
                 visible: true,
                 description: description,
+                sector: sector
             }
         })
 

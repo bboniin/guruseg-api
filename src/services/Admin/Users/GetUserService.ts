@@ -14,7 +14,8 @@ class GetUserService {
             select: {
                 name: true,
                 email: true,
-                course: true
+                course: true,
+                resale: true
             }
         })
 

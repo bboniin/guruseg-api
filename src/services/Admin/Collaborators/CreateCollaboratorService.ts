@@ -8,12 +8,13 @@ interface CollaboratorRequest {
     phone_number: string;
     photo: string;
     password: string;
+    sector: string
 }
 
 class CreateCollaboratorService {
-    async execute({ name, email, phone_number, password, photo }: CollaboratorRequest) {
+    async execute({ name, email, phone_number, password, photo, sector }: CollaboratorRequest) {
 
-        if (!email || !name || !phone_number || !password) {
+        if (!email || !name || !phone_number || !password || !sector) {
             throw new Error("Preencha todos os campos obrigátorios")
         }
 
@@ -43,7 +44,8 @@ class CreateCollaboratorService {
                 email: email,
                 password: passwordHash,
                 phone_number: phone_number,
-                photo: photo
+                photo: photo,
+                sector: sector
             },
             select: {
                 id: true,

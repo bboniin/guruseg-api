@@ -3,7 +3,7 @@ import { EditAdminCollaboratorService } from '../../../services/Admin/Collaborat
 
 class EditAdminCollaboratorController {
     async handle(req: Request, res: Response) {
-        const { name, email, phone_number, password } = req.body
+        const { name, email, phone_number, password, sector } = req.body
 
         const { id } = req.params
 
@@ -16,7 +16,7 @@ class EditAdminCollaboratorController {
         const editAdminCollaboratorService = new EditAdminCollaboratorService
 
         const collaborator = await editAdminCollaboratorService.execute({
-            name, email, phone_number, photo, password, id
+            name, email, phone_number, photo, password, id, sector
         })
 
         if (collaborator["photo"]) {

@@ -3,12 +3,12 @@ import { CreateServiceService } from '../../services/Service/CreateServiceServic
 
 class CreateServiceController {
     async handle(req: Request, res: Response) {
-        const { name, description, value, commission } = req.body
+        const { name, description, value, commission, sector } = req.body
 
         const createServiceService = new CreateServiceService
 
         const service = await createServiceService.execute({
-            name, description, value, commission
+            name, description, value, commission, sector
         })
 
         return res.json(service)

@@ -8,11 +8,12 @@ interface CollaboratorRequest {
     phone_number: string;
     photo: string;
     password: string;
+    sector: string
     id: string;
 }
 
 class EditAdminCollaboratorService {
-    async execute({ password, name, email, phone_number, photo, id }: CollaboratorRequest) {
+    async execute({ password, name, email, phone_number, photo, id, sector }: CollaboratorRequest) {
 
         const collaborator = await prismaClient.collaborator.findUnique({
             where: {
@@ -39,7 +40,8 @@ class EditAdminCollaboratorService {
         let data = {
             name: name,
             email: email,
-            phone_number: phone_number
+            phone_number: phone_number,
+            sector: sector
         }
 
         if (password) {

@@ -7,18 +7,20 @@ interface ServiceRequest {
     value: string;
     id: string;
     commission: number;
+    sector: string;
 }
 
 class EditServiceService {
-    async execute({ name, id, description, value, commission }: ServiceRequest) {
+    async execute({ name, id, description, value, commission, sector }: ServiceRequest) {
 
-        if (!name || !value || !commission) {
-            throw new Error("Nome, valor e comissão é obrigátorio")
+        if (!name || !value || !commission || !sector) {
+            throw new Error("Nome, valor, setor e comissão é obrigátorio")
         }
 
         let data = {
             name: name,
             description: description,
+            sector: sector,
             value: Number(value),
             commission: Number(commission)
         }

@@ -3,7 +3,7 @@ import { CreateUserService } from '../../../services/Admin/Users/CreateUserServi
 
 class CreateUserController {
     async handle(req: Request, res: Response) {
-        const { name, email, password, phone_number } = req.body
+        const { name, email, password, phone_number, resale, course } = req.body
 
         let photo = ""
 
@@ -11,10 +11,13 @@ class CreateUserController {
             photo = req.file.filename
         }
 
+        let courseBoolean = course == "true" ? true : false
+        let resaleBoolean = resale == "true" ? true : false
+
         const createUserService = new CreateUserService
 
         const user = await createUserService.execute({
-            name, email, phone_number, password, photo
+            name, email, phone_number, password, photo, courseBoolean, resaleBoolean
         })
 
         return res.json(user)
