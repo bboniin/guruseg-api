@@ -173,6 +173,7 @@ model Contract {
   consultant          String
   phone_number        String
   banking             String
+  services_gestao     String?   @default("")
   status              String    @default("aguardando")
   risk                Int?
   lifes               Int?

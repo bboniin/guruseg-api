@@ -16,11 +16,12 @@ interface ContractrRequest {
     service_name: string;
     service_value: number;
     service_description: string;
+    services_gestao: string;
     services: Array<[]>;
 }
 
 class CreateContractService {
-    async execute({ userId, life_value, initial_value, services, risk, lifes, name, company, contact, consultant, phone_number, banking, discount, service_name, service_value, service_description }: ContractrRequest) {
+    async execute({ userId, life_value, initial_value, services_gestao, services, risk, lifes, name, company, contact, consultant, phone_number, banking, discount, service_name, service_value, service_description }: ContractrRequest) {
 
         if (!name || !company || !contact || !consultant || !phone_number || !banking) {
             throw new Error("Preencha as informações básicas do contrato")
@@ -40,6 +41,7 @@ class CreateContractService {
             newContract["lifes"] = lifes
             newContract["life_value"] = life_value
             newContract["initial_value"] = initial_value
+            newContract["services_gestao"] = services_gestao
         }
 
         if (services.length != 0) {
