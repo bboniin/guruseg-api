@@ -76,6 +76,8 @@ router.post('/collaborator-session', new AuthCollaboratorController().handle)
 router.get('/services', new ListServicesController().handle)
 router.get('/banners-public', new ListBannersPublicController().handle)
 router.get('/contract/:id', new GetContractController().handle)
+router.put('/signature-contract/:id', new SignatureContractController().handle)
+router.put('/refusal-contract/:id', new RefusalContractController().handle)
 
 router.use(isAuthenticated)
 
@@ -145,8 +147,6 @@ router.delete('/service/:id', new DeleteServiceController().handle)
 router.get('/contracts', new ListContractsController().handle)
 router.get('/contracts/:user_id', new AdminListContractsController().handle)
 router.post('/contract', new CreateContractController().handle)
-router.put('/signature-contract/:id', new SignatureContractController().handle)
-router.put('/refusal-contract/:id', new RefusalContractController().handle)
 
 
 
