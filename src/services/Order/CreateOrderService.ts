@@ -5,12 +5,13 @@ interface OrderRequest {
     userId: string;
     month: string;
     urgent: boolean;
+    name: string;
     sector: string;
     items: Array<[]>;
 }
 
 class CreateOrderService {
-    async execute({ observation, userId, items, month, urgent, sector }: OrderRequest) {
+    async execute({ observation, userId, name, items, month, urgent, sector }: OrderRequest) {
 
         if (items.length == 0 || !userId || !month || !sector) {
             throw new Error("Preencha todos os campos.")
@@ -21,6 +22,7 @@ class CreateOrderService {
                 observation: observation,
                 user_id: userId,
                 month: month,
+                name: name,
                 sector: sector,
                 urgent: urgent
             }

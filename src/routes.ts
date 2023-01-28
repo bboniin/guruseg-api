@@ -62,6 +62,10 @@ import { AdminListContractsController } from './controllers/Contract/AdminListCo
 import { CreateContractController } from './controllers/Contract/CreateContractController'
 import { SignatureContractController } from './controllers/Contract/SignatureContractController'
 import { RefusalContractController } from './controllers/Contract/RefusalContractController'
+import { PasswordForgotController } from './controllers/User/PasswordForgotController'
+import { PasswordResetController } from './controllers/User/PasswordResetController'
+import { PasswordVerifyResetController } from './controllers/User/PasswordVerifyResetController'
+import { RecusedOrderController } from './controllers/Order/RecusedOrdersController'
 
 
 const upload = multer(uploadConfig)
@@ -78,6 +82,9 @@ router.get('/banners-public', new ListBannersPublicController().handle)
 router.get('/contract/:id', new GetContractController().handle)
 router.put('/signature-contract/:id', new SignatureContractController().handle)
 router.put('/refusal-contract/:id', new RefusalContractController().handle)
+router.post('/password-forgot', new PasswordForgotController().handle)
+router.post('/password-reset/:code', new PasswordResetController().handle)
+router.get('/password-verify-reset/:code', new PasswordVerifyResetController().handle)
 
 router.use(isAuthenticated)
 
@@ -95,6 +102,7 @@ router.get('/orders/:type', new ListOrdersController().handle)
 router.get('/order/:id', new GetOrderController().handle)
 router.post('/order', new CreateOrderController().handle)
 router.put('/accept-order/:id', new AcceptOrderController().handle)
+router.put('/recused-order/:id', new RecusedOrderController().handle)
 router.put('/status/:id', new StatusOrderController().handle)
 router.put('/order-cancel/:id', new CancelOrderController().handle)
 router.post('/doc/:id', upload.single("file"), new CreateDocOrderController().handle)

@@ -10,7 +10,7 @@ interface OrderRequest {
     message: string;
 }
 
-class AcceptOrderService {
+class RecusedOrderService {
     async execute({ id, userId, message }: OrderRequest) {
 
         const order = await prismaClient.order.findFirst({
@@ -27,7 +27,7 @@ class AcceptOrderService {
         }
 
         if (order.collaborator_id) {
-            throw new Error("Ordem de serviço já foi aceita por outro técnico.")
+            throw new Error("Ordem de serviço já foi aceita ou recusada por outro técnico.")
         }
 
 
@@ -36,7 +36,7 @@ class AcceptOrderService {
             "..",
             "..",
             "views",
-            "acceptOS.hbs"
+            "recusedOS.hbs"
         );
 
         const templateFileContent = fs.readFileSync(path).toString("utf-8");
@@ -72,13 +72,12 @@ class AcceptOrderService {
             html: templateHTML,
         });
 
-
         const orderD = await prismaClient.order.update({
             where: {
                 id: id
             },
             data: {
-                status: "andamento",
+                status: "recusado",
                 message: message,
                 update_at: new Date(),
                 collaborator_id: userId
@@ -88,4 +87,4 @@ class AcceptOrderService {
     }
 }
 
-export { AcceptOrderService }
+export { RecusedOrderService }

@@ -12,12 +12,18 @@ class ListOpenOrdersService {
                 id: userId
             }
         })
-
-        const orders = await prismaClient.order.findMany({
-            where: {
+        let whereData = {}
+        if (collaborator.sector == "Todos") {
+            whereData = { status: "aberto" }
+        } else {
+            whereData = {
                 sector: collaborator.sector,
                 status: "aberto",
-            },
+            }
+        }
+
+        const orders = await prismaClient.order.findMany({
+            where: whereData,
             orderBy: {
                 urgent: "desc",
             },

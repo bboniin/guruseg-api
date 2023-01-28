@@ -8,6 +8,26 @@ interface OrderRequest {
 class GetOrderService {
     async execute({ userId, id }: OrderRequest) {
 
+        const user = await prismaClient.user.findFirst({
+            where: {
+                id: userId
+            },
+            select: {
+                name: true,
+                photo: true
+            }
+        })
+
+        const collaborator = await prismaClient.collaborator.findFirst({
+            where: {
+                id: userId
+            },
+            select: {
+                name: true,
+                photo: true
+            }
+        })
+
         const order = await prismaClient.order.findFirst({
             where: {
                 id: id
@@ -22,34 +42,31 @@ class GetOrderService {
                     orderBy: {
                         create_at: "asc"
                     }
-                }
-            }
-        })
-
-        const user = await prismaClient.user.findFirst({
-            where: {
-                id: order.user_id
-            },
-            select: {
-                name: true,
-                photo: true
-            }
-        })
-
-        order["user"] = user
-
-        if (order.collaborator_id) {
-            const collaborator = await prismaClient.collaborator.findFirst({
-                where: {
-                    id: order.collaborator_id
                 },
-                select: {
-                    name: true,
-                    photo: true
-                }
-            })
-            order["collaborator"] = collaborator
+                user: true,
+                collaborator: true,
+            }
+        })
+
+        if (!order) {
+            throw new Error("Ordem de serviço não foi encontrada")
         }
+
+        if (user) {
+            if (userId != order.user.id) {
+                throw new Error("Essa ordem de serviço não está vinculada a sua conta")
+            }
+        } else {
+            if (collaborator) {
+                if (order.collaborator) {
+                    if (userId != order.collaborator.id) {
+                        throw new Error("Essa ordem de serviço não está vinculada a sua conta")
+                    }
+                }
+            }
+        }
+
+
 
 
 

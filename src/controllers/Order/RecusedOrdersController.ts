@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { AcceptOrderService } from '../../services/Order/AcceptOrderService';
+import { RecusedOrderService } from '../../services/Order/RecusedOrderService';
 
-class AcceptOrderController {
+class RecusedOrderController {
     async handle(req: Request, res: Response) {
 
         const { id } = req.params
@@ -10,9 +10,9 @@ class AcceptOrderController {
 
         let userId = req.userId
 
-        const acceptOrderService = new AcceptOrderService
+        const recusedOrderService = new RecusedOrderService
 
-        const services = await acceptOrderService.execute({
+        const services = await recusedOrderService.execute({
             message, userId, id: parseInt(id)
         })
 
@@ -21,4 +21,4 @@ class AcceptOrderController {
     }
 }
 
-export { AcceptOrderController }
+export { RecusedOrderController }
