@@ -24,11 +24,10 @@ class StatusOrderService {
             }
         })
 
-        console.log(order.collaborator)
-
         if (order.status == "aberto" || order.status == "finalizado") {
             throw new Error("Ordem de serviço está aberta ou já foi finalizada.")
         }
+
         var transport = await nodemailer.createTransport({
             host: "smtp.gmail.com",
             service: "gmail",

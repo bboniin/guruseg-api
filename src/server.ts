@@ -18,7 +18,6 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Origin", "https://app.gurusegead.com.br");
     res.header('Access-Control-Expose-Headers', 'agreementrequired');
-
     next()
 })
 
@@ -32,4 +31,4 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     })
 })
 
-app.listen(3333, () => console.log("rodando v12"))
+app.listen(3333, () => console.log("rodando v13"))

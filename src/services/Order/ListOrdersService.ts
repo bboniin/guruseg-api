@@ -33,7 +33,7 @@ class ListOrdersService {
         const orders = await prismaClient.order.findMany({
             where: data,
             orderBy: {
-                create_at: "desc"
+                update_at: "desc"
             },
             include: {
                 items: {
