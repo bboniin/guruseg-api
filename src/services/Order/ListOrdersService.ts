@@ -48,7 +48,22 @@ class ListOrdersService {
             }
         })
 
-        return (orders)
+        const status = {
+            "aberto": 0,
+            "andamento": 0,
+            "pendente": 0,
+            "validacao": 0,
+            "alteracao": 0,
+            "finalizado": 1,
+            "cancelado": 1,
+            "recusado": 1
+        }
+
+        let ordersStatus = orders.sort(function (a, b) {
+            return status[a.status] < status[b.status] ? -1 : status[a.status] > status[b.status] ? 1 : 0;
+        })
+
+        return (ordersStatus)
     }
 }
 
