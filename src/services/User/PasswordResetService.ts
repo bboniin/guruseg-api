@@ -82,7 +82,34 @@ class PasswordResetService {
 
                 return ({ message: "Senha alterada com sucesso" })
             } else {
-                throw new Error("Nenhum usuário encontrado")
+                const credential = await prismaClient.credential.findFirst({
+                    where: {
+                        email: passwordCode.user_email
+                    }
+                })
+
+                if (credential) {
+                    const hashedPassword = await hash(password, 8);
+
+                    await prismaClient.credential.update({
+                        where: {
+                            email: passwordCode.user_email
+                        },
+                        data: {
+                            password: hashedPassword
+                        }
+                    })
+
+                    await prismaClient.passwordForgot.deleteMany({
+                        where: {
+                            code: code,
+                        },
+                    });
+
+                    return ({ message: "Senha alterada com sucesso" })
+                } else {
+                    throw new Error("Nenhum usuário encontrado")
+                }
             }
         }
 

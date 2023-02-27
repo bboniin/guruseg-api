@@ -3,7 +3,7 @@ import { EditBannerService } from '../../../services/Admin/Banners/EditBannerSer
 
 class EditBannerController {
     async handle(req: Request, res: Response) {
-        const { url } = req.body
+        const { url, types } = req.body
 
         const { id } = req.params
 
@@ -18,7 +18,7 @@ class EditBannerController {
         const editBannerService = new EditBannerService
 
         const banner = await editBannerService.execute({
-            url, photo, id, userId
+            url, types, photo, id, userId
         })
 
         if (banner["photo"]) {

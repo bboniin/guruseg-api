@@ -5,10 +5,11 @@ interface BannerRequest {
     photo: string;
     userId: string;
     url: string;
+    types: string;
 }
 
 class CreateBannerService {
-    async execute({ url, userId, photo }: BannerRequest) {
+    async execute({ url, types, userId, photo }: BannerRequest) {
 
         const admin = await prismaClient.admin.findUnique({
             where: {
@@ -20,8 +21,8 @@ class CreateBannerService {
             throw new Error("Rota restrita ao administrador")
         }
 
-        if (!url || !photo) {
-            throw new Error("Preencha a Url e a Imagem do banner")
+        if (!url || !photo || !types) {
+            throw new Error("Preencha a Url, visualizadores e a Imagem do banner")
         }
 
         const s3Storage = new S3Storage()
@@ -31,6 +32,7 @@ class CreateBannerService {
         const bannerRes = await prismaClient.banner.create({
             data: {
                 url: url,
+                types: types,
                 photo: photo
             }
         })

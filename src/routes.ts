@@ -66,17 +66,28 @@ import { PasswordForgotController } from './controllers/User/PasswordForgotContr
 import { PasswordResetController } from './controllers/User/PasswordResetController'
 import { PasswordVerifyResetController } from './controllers/User/PasswordVerifyResetController'
 import { RecusedOrderController } from './controllers/Order/RecusedOrdersController'
+import { ListCredentialsController } from './controllers/Credential/ListCredentialsController'
+import { AdminListCredentialsController } from './controllers/Credential/AdminListOrdersController'
+import { AdminCreateCredentialController } from './controllers/Credential/AdminCreateCredentialController'
+import { AdminEditCredentialController } from './controllers/Credential/AdminEditCredentialController'
+import { CreateCredentialController } from './controllers/Credential/CreateCredentialController'
+import { GetCredentialController } from './controllers/Credential/GetCredentialController'
+import { DeleteCredentialController } from './controllers/Credential/DeleteCredentialController'
+import { EditCredentialController } from './controllers/Credential/EditCredentialController'
+import { AuthCredentialController } from './controllers/Credential/AuthCredentialController'
+import { PublicEditCredentialController } from './controllers/Credential/PublicEditCredentialController'
 
 
 const upload = multer(uploadConfig)
 
 const router = Router()
 
-// Routes Publios
+// Routes Publics
 
 router.post('/user-session', new AuthUserController().handle)
 router.post('/admin-session', new AuthAdminController().handle)
 router.post('/collaborator-session', new AuthCollaboratorController().handle)
+router.post('/credential-session', new AuthCredentialController().handle)
 router.get('/services', new ListServicesController().handle)
 router.get('/banners-public', new ListBannersPublicController().handle)
 router.get('/contract/:id', new GetContractController().handle)
@@ -86,7 +97,19 @@ router.post('/password-forgot', new PasswordForgotController().handle)
 router.post('/password-reset/:code', new PasswordResetController().handle)
 router.get('/password-verify-reset/:code', new PasswordVerifyResetController().handle)
 
+router.get('/list-credentials', new ListCredentialsController().handle)
+router.post('/credential', upload.single("file"), new CreateCredentialController().handle)
+router.get('/credential/:id', new GetCredentialController().handle)
+router.put('/completed/:id', upload.single("file"), new PublicEditCredentialController().handle)
+
 router.use(isAuthenticated)
+
+// Credential
+
+router.put('/credential', upload.single("file"), new EditCredentialController().handle)
+router.delete('/credential/:id', new DeleteCredentialController().handle)
+router.post('/admin/credential', upload.single("file"), new AdminCreateCredentialController().handle)
+router.put('/admin/credential/:id', upload.single("file"), new AdminEditCredentialController().handle)
 
 // Users and Colaborators
 
@@ -112,6 +135,10 @@ router.get('/user', new GetUserController().handle)
 router.get('/collaborator', new GetCollaboratorController().handle)
 
 // Routes Admin
+
+router.get('/admin/list-credentials', new AdminListCredentialsController().handle)
+router.post('/credential', new AdminCreateCredentialController().handle)
+router.put('/credential', new AdminEditCredentialController().handle)
 
 router.get('/users', new ListUsersController().handle)
 router.post('/user', upload.single("file"), new CreateUserController().handle)

@@ -6,10 +6,11 @@ interface BannerRequest {
     userId: string;
     url: string;
     id: string;
+    types: string;
 }
 
 class EditBannerService {
-    async execute({ url, userId, photo, id }: BannerRequest) {
+    async execute({ url, types, userId, photo, id }: BannerRequest) {
 
         const admin = await prismaClient.admin.findUnique({
             where: {
@@ -31,12 +32,17 @@ class EditBannerService {
             throw new Error("Preencha a Url do banner")
         }
 
+        if (!types) {
+            throw new Error("Preencha os visualizadores do banner")
+        }
+
         if (!banner) {
             throw new Error("Banner não existe")
         }
 
         let data = {
-            url: url
+            url: url,
+            types: types
         }
 
         if (photo) {

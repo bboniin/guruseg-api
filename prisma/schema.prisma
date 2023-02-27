@@ -129,6 +129,7 @@ model Banner {
   id        String    @id @default(uuid())
   photo     String
   url       String
+  types     String?   @default("tecnico;admin;franqueado;credenciado;")
   create_at DateTime? @default(now())
   update_at DateTime? @default(now())
 
@@ -216,4 +217,28 @@ model PasswordForgot {
   update_at  DateTime? @default(now())
 
   @@map("passwords_forgot")
+}
+
+model Credential {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  name          String
+  password      String?
+  phone_number  String?
+  state         String?
+  city          String?
+  enabled       Boolean   @default(false)
+  visible       Boolean   @default(true)
+  cpf           String?
+  rg            String?
+  served_cities String?
+  birthday      String?
+  services      String?
+  profession    String?
+  photo         String?
+  description   String?
+  create_at     DateTime? @default(now())
+  update_at     DateTime? @default(now())
+
+  @@map("credentials")
 }

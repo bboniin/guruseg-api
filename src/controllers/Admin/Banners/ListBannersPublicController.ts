@@ -3,10 +3,13 @@ import { ListBannersPublicService } from '../../../services/Admin/Banners/ListBa
 
 class ListBannersPublicController {
     async handle(req: Request, res: Response) {
+        const { type } = req.query
 
         const listBannersPublicService = new ListBannersPublicService
 
-        const bannersPublic = await listBannersPublicService.execute()
+        const bannersPublic = await listBannersPublicService.execute({
+            type: String(type)
+        })
 
         bannersPublic.map((item) => {
             if (item["photo"]) {

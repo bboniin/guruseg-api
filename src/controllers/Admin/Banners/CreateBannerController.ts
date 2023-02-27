@@ -3,7 +3,7 @@ import { CreateBannerService } from '../../../services/Admin/Banners/CreateBanne
 
 class CreateBannerController {
     async handle(req: Request, res: Response) {
-        const { url } = req.body
+        const { url, types } = req.body
 
         let photo = ""
 
@@ -16,7 +16,7 @@ class CreateBannerController {
         const createBannerService = new CreateBannerService
 
         const banner = await createBannerService.execute({
-            userId, url, photo
+            userId, url, types, photo
         })
 
         return res.json(banner)

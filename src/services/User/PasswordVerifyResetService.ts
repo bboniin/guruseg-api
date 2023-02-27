@@ -44,10 +44,20 @@ class PasswordVerifyResetService {
             })
 
             if (!collaborator) {
-                throw new Error("Usuário não encontrado")
+                const credential = await prismaClient.credential.findFirst({
+                    where: {
+                        email: passwordCode.user_email
+                    }
+                })
+
+                if (!credential) {
+                    throw new Error("Usuário não encontrado")
+                }
+                user = credential
+            } else {
+                user = collaborator
             }
 
-            user = collaborator
         }
 
         return (user)

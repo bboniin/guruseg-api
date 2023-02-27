@@ -34,10 +34,19 @@ class PasswordForgotService {
             })
 
             if (!collaborator) {
-                throw new Error("Usuário não encontrado")
+                const credential = await prismaClient.credential.findFirst({
+                    where: {
+                        email: email
+                    }
+                })
+                if (!credential) {
+                    throw new Error("Usuário não encontrado")
+                }
+                user = credential
+            } else {
+                user = collaborator
             }
 
-            user = collaborator
         }
 
         const code = Math.floor(Math.random() * (999999999 - 100000000 + 1)) + 100000000;
