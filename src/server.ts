@@ -1,8 +1,10 @@
 import express, { Request, Response, NextFunction } from "express";
 import 'express-async-errors'
 import cors from 'cors'
+import cron from "node-cron";
 
 import { router } from "./routes";
+import { FinishedOSsService } from "./services/Order/FinishedOSsService";
 
 const app = express()
 
@@ -31,4 +33,9 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     })
 })
 
-app.listen(3333, () => console.log("rodando v15"))
+cron.schedule("0 8,12,16,20 * * *", () => {
+    const finalizeOSs = new FinishedOSsService();
+    finalizeOSs.execute({});
+});
+
+app.listen(3333, () => console.log("rodando v16"))
