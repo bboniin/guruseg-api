@@ -5,12 +5,8 @@ import fs from "fs";
 import nodemailer from "nodemailer";
 import handlebars from "handlebars";
 
-
-interface PlanRequest {
-}
-
 class FinishedOSsService {
-    async execute({ }: PlanRequest) {
+    async execute() {
 
         const orders = await prismaClient.order.findMany({
             where: { status: "validacao" },

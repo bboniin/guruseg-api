@@ -16,6 +16,10 @@ class GetContractService {
             }
         })
 
+        if(!contract){  
+            throw new Error("Contrato não encontrado")
+        }
+
         return (contract)
     }
 }

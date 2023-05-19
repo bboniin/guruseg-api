@@ -72,10 +72,10 @@ model Order {
   create_at   DateTime? @default(now())
   update_at   DateTime? @default(now())
 
-  user    User?   @relation(fields: [user_id], references: [id])
+  user    User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id String?
 
-  collaborator    Collaborator? @relation(fields: [collaborator_id], references: [id])
+  collaborator    Collaborator? @relation(fields: [collaborator_id], references: [id], onDelete: Cascade)
   collaborator_id String?
 
   items Item[]
@@ -90,7 +90,7 @@ model Doc {
   file      String
   create_at DateTime? @default(now())
   update_at DateTime? @default(now())
-  order     Order?    @relation(fields: [order_id], references: [id])
+  order     Order?    @relation(fields: [order_id], references: [id], onDelete: Cascade)
   order_id  Int?
 
   @@map("docs")
@@ -103,7 +103,7 @@ model Item {
   value       Float
   commission  Float     @default(0)
   description String?
-  order       Order     @relation(fields: [order_id], references: [id])
+  order       Order     @relation(fields: [order_id], references: [id], onDelete: Cascade)
   order_id    Int
   create_at   DateTime? @default(now())
   update_at   DateTime? @default(now())
@@ -160,7 +160,7 @@ model Lesson {
   file_name   String?
   create_at   DateTime? @default(now())
   update_at   DateTime? @default(now())
-  course      Course    @relation(fields: [course_id], references: [id])
+  course      Course    @relation(fields: [course_id], references: [id], onDelete: Cascade)
   course_id   String
 
   @@map("lessons")
@@ -201,7 +201,7 @@ model ContractServices {
   name        String
   value       Float
   description String?
-  contract    Contract  @relation(fields: [contract_id], references: [id])
+  contract    Contract  @relation(fields: [contract_id], references: [id], onDelete: Cascade)
   contract_id String
   create_at   DateTime? @default(now())
   update_at   DateTime? @default(now())

@@ -5,6 +5,7 @@ import cron from "node-cron";
 
 import { router } from "./routes";
 import { FinishedOSsService } from "./services/Order/FinishedOSsService";
+import { ExpireContractsService } from "./services/Contract/ExpireContractsService";
 
 const app = express()
 
@@ -35,7 +36,12 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 cron.schedule("0 8,12,16,20 * * *", () => {
     const finalizeOSs = new FinishedOSsService();
-    finalizeOSs.execute({});
+    finalizeOSs.execute();
 });
 
-app.listen(3333, () => console.log("rodando v16"))
+cron.schedule("0 8,12,16,20 * * *", () => {
+    const expireContracts = new ExpireContractsService();
+    expireContracts.execute();
+});
+
+app.listen(3333, () => console.log("rodando v17"))

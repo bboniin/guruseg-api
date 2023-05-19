@@ -76,6 +76,7 @@ import { DeleteCredentialController } from './controllers/Credential/DeleteCrede
 import { EditCredentialController } from './controllers/Credential/EditCredentialController'
 import { AuthCredentialController } from './controllers/Credential/AuthCredentialController'
 import { PublicEditCredentialController } from './controllers/Credential/PublicEditCredentialController'
+import { DeleteContractController } from './controllers/Contract/DeleteCredentialController'
 
 
 const upload = multer(uploadConfig)
@@ -182,6 +183,8 @@ router.delete('/service/:id', new DeleteServiceController().handle)
 router.get('/contracts', new ListContractsController().handle)
 router.get('/contracts/:user_id', new AdminListContractsController().handle)
 router.post('/contract', new CreateContractController().handle)
+router.delete('/contract/:id', new DeleteContractController().handle)
+
 
 
 
