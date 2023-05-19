@@ -11,7 +11,7 @@ class ExpireContractsService {
         })
 
         contracts.map(async (item) => {
-            if (differenceInDays(item.create_at, new Date()) <= -2) {
+            if (differenceInDays(item.create_at, new Date()) <= -59) {
                 await prismaClient.contract.update({
                     where: {
                         id: item.id

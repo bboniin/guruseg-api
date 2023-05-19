@@ -25,6 +25,7 @@ class SignatureContractService {
             data: {
                 status: "assinado",
                 signature: signature,
+                update_at: new Date(),
                 signature_date: new Date()
             }
         })

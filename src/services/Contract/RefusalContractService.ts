@@ -22,6 +22,7 @@ class RefusalContractService {
                 id: contract.id
             },
             data: {
+                update_at: new Date(),
                 signature_date: new Date(),
                 status: "recusado"
             }

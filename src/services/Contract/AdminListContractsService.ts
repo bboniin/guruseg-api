@@ -22,6 +22,9 @@ class AdminListContractsService {
             where: {
                 user_id: user_id
             },
+            orderBy: {
+                update_at: "desc"
+            }
         })
 
         return (contracts)

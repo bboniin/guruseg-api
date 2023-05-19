@@ -11,6 +11,9 @@ class ListContractsService {
             where: {
                 user_id: userId
             },
+            orderBy: {
+                update_at: "desc"
+            }
         })
 
         return (contracts)
