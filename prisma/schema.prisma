@@ -13,18 +13,19 @@ datasource db {
 // criar migrate yarn prisma migrate dev
 
 model User {
-  id           String    @id @default(uuid())
-  name         String
-  photo        String?
-  type         String    @default("cliente")
-  email        String    @unique
-  phone_number String
-  password     String
-  visible      Boolean   @default(true)
-  course       Boolean   @default(false)
-  resale       Boolean   @default(false)
-  create_at    DateTime? @default(now())
-  update_at    DateTime? @default(now())
+  id                String    @id @default(uuid())
+  name              String
+  photo             String?
+  type              String    @default("cliente")
+  course_restricted Boolean @default(false)
+  email             String    @unique
+  phone_number      String
+  password          String
+  visible           Boolean   @default(true)
+  course            Boolean   @default(false)
+  resale            Boolean   @default(false)
+  create_at         DateTime? @default(now())
+  update_at         DateTime? @default(now())
 
   orders Order[]
 
@@ -137,13 +138,14 @@ model Banner {
 }
 
 model Course {
-  id          String    @id @default(uuid())
-  name        String
-  description String
-  order       Int       @default(0)
-  photo       String?
-  create_at   DateTime? @default(now())
-  update_at   DateTime? @default(now())
+  id            String    @id @default(uuid())
+  name          String
+  description   String
+  order         Int       @default(0)
+  photo         String?
+  restricted    Boolean   @default(false)
+  create_at     DateTime? @default(now())
+  update_at     DateTime? @default(now())
 
   lessons Lesson[]
 

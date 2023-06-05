@@ -3,7 +3,7 @@ import { CreateCourseService } from '../../../services/Admin/Courses/CreateCours
 
 class CreateCourseController {
     async handle(req: Request, res: Response) {
-        const { name, description, order } = req.body
+        const { name, description, order, restricted } = req.body
 
         let photo = ""
 
@@ -16,7 +16,7 @@ class CreateCourseController {
         const createCourseService = new CreateCourseService
 
         const course = await createCourseService.execute({
-            userId, name, order, description, photo
+            userId, name, order, description, photo, restricted: restricted == "true" ? true : false
         })
 
         if (course["photo"]) {

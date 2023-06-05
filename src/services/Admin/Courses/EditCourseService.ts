@@ -7,11 +7,12 @@ interface CourseRequest {
     photo: string;
     description: string;
     id: string;
+    restricted: boolean,
     order: string;
 }
 
 class EditCourseService {
-    async execute({ name, description, userId, order, photo, id }: CourseRequest) {
+    async execute({ name, description, restricted, userId, order, photo, id }: CourseRequest) {
 
         const admin = await prismaClient.admin.findUnique({
             where: {
@@ -46,6 +47,7 @@ class EditCourseService {
 
         let data = {
             name: name,
+            restricted: restricted,
             description: description,
             order: orderC
         }

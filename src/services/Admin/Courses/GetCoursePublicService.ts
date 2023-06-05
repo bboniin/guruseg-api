@@ -8,7 +8,7 @@ interface CourseRequest {
 class GetCoursePublicService {
     async execute({ userId, course_id }: CourseRequest) {
 
-        const admin = await prismaClient.admin.findUnique({
+        const user = await prismaClient.user.findUnique({
             where: {
                 id: userId
             }
@@ -22,6 +22,12 @@ class GetCoursePublicService {
                 lessons: true
             }
         })
+
+        if (user.course_restricted) {
+            if (course.restricted) {
+                throw new Error("Você não tem o acesso a esse curso")
+            }
+        }
 
         return (course)
     }

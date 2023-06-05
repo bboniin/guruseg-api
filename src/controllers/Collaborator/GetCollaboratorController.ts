@@ -1,17 +1,18 @@
 import { Request, Response } from 'express';
-import { GetCollaboratorService } from '../../../services/Admin/Collaborators/GetCollaboratorService';
+import { GetCollaboratorService } from '../../services/Collaborator/GetCollaboratorService';
 
 class GetCollaboratorController {
     async handle(req: Request, res: Response) {
 
 
-        const { id } = req.params
+        let userId = req.userId
 
         const getCollaboratorService = new GetCollaboratorService
 
         const collaborator = await getCollaboratorService.execute({
-            id
+            userId
         })
+        
         if (collaborator) {
             if (collaborator["photo"]) {
                 collaborator["photo_url"] = "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + collaborator["photo"];

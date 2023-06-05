@@ -24,7 +24,7 @@ class ListLessonsService {
             },
             orderBy: {
                 order: "asc"
-            }
+            },
         })
 
         return (lessons)

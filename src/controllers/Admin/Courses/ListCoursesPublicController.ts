@@ -3,10 +3,13 @@ import { ListCoursesPublicService } from '../../../services/Admin/Courses/ListCo
 
 class ListCoursesPublicController {
     async handle(req: Request, res: Response) {
-
+        let userId = req.userId
+        
         const listCoursesPublicService = new ListCoursesPublicService
 
-        const coursesPublic = await listCoursesPublicService.execute()
+        const coursesPublic = await listCoursesPublicService.execute({
+            userId
+        })
 
         coursesPublic.map((item) => {
             if (item["photo"]) {

@@ -4,26 +4,27 @@ interface ServiceRequest {
     id: string;
 }
 
-class GetCollaboratorService {
+class GetUserAdminService {
     async execute({ id }: ServiceRequest) {
 
-        const collaborator = await prismaClient.collaborator.findUnique({
+        const user = await prismaClient.user.findUnique({
             where: {
                 id: id,
             },
             select: {
                 name: true,
                 email: true,
-                sector: true
+                course: true,
+                resale: true
             }
         })
 
-        if (!collaborator) {
-            throw new Error("Técnico não foi encontrado.")
+        if (!user) {
+            throw new Error("Franquiado não foi encontrado.")
         }
 
-        return (collaborator)
+        return (user)
     }
 }
 
-export { GetCollaboratorService }
+export { GetUserAdminService }

@@ -34,8 +34,8 @@ import { ListUsersController } from './controllers/Admin/Users/ListUsersControll
 import { ListCollaboratorsController } from './controllers/Admin/Collaborators/ListCollaboratorsController'
 import { DeleteUserController } from './controllers/Admin/Users/DeleteUserController'
 import { DeleteCollaboratorController } from './controllers/Admin/Collaborators/DeleteCollaboratorController'
-import { GetUserController } from './controllers/Admin/Users/GetUserController'
-import { GetCollaboratorController } from './controllers/Admin/Collaborators/GetCollaboratorController'
+import { GetUserAdminController } from './controllers/Admin/Users/GetUserController'
+import { GetCollaboratorAdminController } from './controllers/Admin/Collaborators/GetCollaboratorAdminController'
 import { ListAdminOrdersController } from './controllers/Admin/ListAdminOrdersController'
 
 import { ListBannersPublicController } from './controllers/Admin/Banners/ListBannersPublicController'
@@ -77,6 +77,8 @@ import { EditCredentialController } from './controllers/Credential/EditCredentia
 import { AuthCredentialController } from './controllers/Credential/AuthCredentialController'
 import { PublicEditCredentialController } from './controllers/Credential/PublicEditCredentialController'
 import { DeleteContractController } from './controllers/Contract/DeleteCredentialController'
+import { GetCollaboratorController } from './controllers/Collaborator/GetCollaboratorController'
+import { GetUserController } from './controllers/User/GetUserController'
 
 
 const upload = multer(uploadConfig)
@@ -168,8 +170,8 @@ router.post('/lesson', upload.single("file"), new CreateLessonController().handl
 router.put('/lesson/:id', upload.single("file"), new EditLessonController().handle)
 router.delete('/lesson/:id', new DeleteLessonController().handle)
 
-router.get('/user/:id', new GetUserController().handle)
-router.get('/collaborator/:id', new GetCollaboratorController().handle)
+router.get('/user/:id', new GetUserAdminController().handle)
+router.get('/collaborator/:id', new GetCollaboratorAdminController().handle)
 router.get('/orders/:type/:id', new ListAdminOrdersController().handle)
 
 // Services

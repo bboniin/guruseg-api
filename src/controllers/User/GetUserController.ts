@@ -1,17 +1,18 @@
 import { Request, Response } from 'express';
-import { GetUserAdminService } from '../../../services/Admin/Users/GetUserAdminService';
+import { GetUserService } from '../../services/User/GetUserService';
 
-class GetUserAdminController {
+class GetUserController {
     async handle(req: Request, res: Response) {
 
 
-        const { id } = req.params
+        let userId = req.userId
 
-        const getUserAdminService = new GetUserAdminService
+        const getUserService = new GetUserService
 
-        const user = await getUserAdminService.execute({
-            id
+        const user = await getUserService.execute({
+            userId
         })
+        
         if (user) {
             if (user["photo"]) {
                 user["photo_url"] = "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + user["photo"];
@@ -23,4 +24,4 @@ class GetUserAdminController {
     }
 }
 
-export { GetUserAdminController }
+export { GetUserController }
