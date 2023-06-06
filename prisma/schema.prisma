@@ -17,7 +17,7 @@ model User {
   name              String
   photo             String?
   type              String    @default("cliente")
-  course_restricted Boolean @default(false)
+  course_restricted Boolean   @default(false)
   email             String    @unique
   phone_number      String
   password          String

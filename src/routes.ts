@@ -46,7 +46,7 @@ import { DeleteBannerController } from './controllers/Admin/Banners/DeleteBanner
 
 import uploadConfig from './config/multer'
 import { ListCoursesController } from './controllers/Admin/Courses/ListCoursesController'
-import { CreateCourseController } from './controllers/Admin/Courses/CreatecCourseController'
+import { CreateCourseController } from './controllers/Admin/Courses/CreateCourseController'
 import { EditCourseController } from './controllers/Admin/Courses/EditCourseController'
 import { DeleteCourseController } from './controllers/Admin/Courses/DeleteCourseController'
 import { ListLessonsController } from './controllers/Admin/Lessons/ListLessonsController'
@@ -79,6 +79,7 @@ import { PublicEditCredentialController } from './controllers/Credential/PublicE
 import { DeleteContractController } from './controllers/Contract/DeleteCredentialController'
 import { GetCollaboratorController } from './controllers/Collaborator/GetCollaboratorController'
 import { GetUserController } from './controllers/User/GetUserController'
+import { ConfirmOrderController } from './controllers/Order/ConfirmOrderController'
 
 
 const upload = multer(uploadConfig)
@@ -126,6 +127,7 @@ router.put('/collaborator', upload.single("file"), new EditCollaboratorControlle
 router.get('/orders-open', new ListOpenOrdersController().handle)
 router.get('/orders/:type', new ListOrdersController().handle)
 router.get('/order/:id', new GetOrderController().handle)
+router.put('/confirm-order/:id', new ConfirmOrderController().handle)
 router.post('/order', new CreateOrderController().handle)
 router.put('/accept-order/:id', new AcceptOrderController().handle)
 router.put('/recused-order/:id', new RecusedOrderController().handle)
