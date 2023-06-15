@@ -24,6 +24,7 @@ class ConfirmOrderService {
 
         const tecnicos = await prismaClient.collaborator.findMany({
             where: {
+                enabled: true,
                 visible: true,
                 OR: [{
                    sector: orderGet.sector

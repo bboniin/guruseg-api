@@ -3,7 +3,7 @@ import { CreateCollaboratorService } from '../../../services/Admin/Collaborators
 
 class CreateCollaboratorController {
     async handle(req: Request, res: Response) {
-        const { name, email, password, phone_number, sector } = req.body
+        const { name, email, password, phone_number, sector, enabled } = req.body
 
         let photo = ""
         if (req.file) {
@@ -13,7 +13,7 @@ class CreateCollaboratorController {
         const createCollaboratorService = new CreateCollaboratorService
 
         const collaborator = await createCollaboratorService.execute({
-            name, email, phone_number, password, photo, sector
+            name, email, phone_number, password, photo, sector, enabled: enabled == "true" ? true : false
         })
 
         return res.json(collaborator)

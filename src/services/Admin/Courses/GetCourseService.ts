@@ -5,14 +5,18 @@ interface CourseRequest {
     course_id: string;
 }
 
-class GetCoursePublicService {
+class GetCourseService {
     async execute({ userId, course_id }: CourseRequest) {
 
-        const user = await prismaClient.user.findUnique({
+        const admin = await prismaClient.admin.findUnique({
             where: {
                 id: userId
             }
         })
+
+        if (!admin) {
+            throw new Error("Rota restrita ao administrador")
+        }
 
         const course = await prismaClient.course.findUnique({
             where: {
@@ -23,14 +27,8 @@ class GetCoursePublicService {
             }
         })
 
-        if (user.course_restricted) {
-            if (!course.restricted) {
-                throw new Error("Você não tem acesso a esse curso")
-            }
-        }
-
         return (course)
     }
 }
 
-export { GetCoursePublicService }
+export { GetCourseService }

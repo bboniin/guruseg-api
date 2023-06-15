@@ -80,6 +80,8 @@ import { DeleteContractController } from './controllers/Contract/DeleteCredentia
 import { GetCollaboratorController } from './controllers/Collaborator/GetCollaboratorController'
 import { GetUserController } from './controllers/User/GetUserController'
 import { ConfirmOrderController } from './controllers/Order/ConfirmOrderController'
+import { HandlerOrderController } from './controllers/Order/HandlerOrderController'
+import { GetCourseController } from './controllers/Admin/Courses/GetCourseControlle'
 
 
 const upload = multer(uploadConfig)
@@ -128,6 +130,7 @@ router.get('/orders-open', new ListOpenOrdersController().handle)
 router.get('/orders/:type', new ListOrdersController().handle)
 router.get('/order/:id', new GetOrderController().handle)
 router.put('/confirm-order/:id', new ConfirmOrderController().handle)
+router.put('/alteracao-order', new HandlerOrderController().handle)
 router.post('/order', new CreateOrderController().handle)
 router.put('/accept-order/:id', new AcceptOrderController().handle)
 router.put('/recused-order/:id', new RecusedOrderController().handle)
@@ -161,6 +164,7 @@ router.put('/banner/:id', upload.single("file"), new EditBannerController().hand
 router.delete('/banner/:id', new DeleteBannerController().handle)
 
 
+router.get('/admin-course/:course_id', new GetCourseController().handle)
 router.get('/courses', new ListCoursesController().handle)
 router.post('/course', upload.single("file"), new CreateCourseController().handle)
 router.put('/course/:id', upload.single("file"), new EditCourseController().handle)

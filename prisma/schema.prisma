@@ -40,6 +40,7 @@ model Collaborator {
   email        String    @unique
   phone_number String
   password     String
+  enabled      Boolean   @default(true)
   sector       String    @default("Serviços de segurança do Trabalho")
   visible      Boolean   @default(true)
   create_at    DateTime? @default(now())
