@@ -8,27 +8,13 @@ interface CourseRequest {
 class ListCoursesPublicService {
     async execute({ userId }: CourseRequest) {
 
-        const user = await prismaClient.user.findUnique({
-            where: {
-                id: userId
-            }
-        })
-
-        let filter = {}
-
-        if (user.course_restricted) {
-            filter = {
-                    restricted: true
-                }
-        }
-
-        const courses = await prismaClient.course.findMany({
-            where: filter,
+        let courses = await prismaClient.course.findMany({
             select: {
                 name: true,
                 photo: true,
                 description: true,
                 lessons: true,
+                restricted: true,
                 id: true
             },
             orderBy: {
