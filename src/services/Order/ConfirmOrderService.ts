@@ -20,7 +20,12 @@ class ConfirmOrderService {
         const orderGet = await prismaClient.order.findUnique({
             where: {
              id: id
-        }})
+            }
+        })
+        
+        if (orderGet.collaborator_id) {
+            throw new Error("Ordem de serviço já tem um técnico vinculado")
+        }
 
         const tecnicos = await prismaClient.collaborator.findMany({
             where: {
@@ -45,11 +50,31 @@ class ConfirmOrderService {
         tecnicos.map((item) => {
             tecnicosId[item.id] = 0
         })
-        
+
         if (tecnicos.length != 0) {
              const orders = await prismaClient.order.findMany({
-                take: tecnicos.length * 2 - 1,
+                take: tecnicos.length - 1,
                 where: {
+                    OR: [{
+                        status: {
+                            not: "pendente",
+                        }},
+                        {
+                        status: {
+                            not: "cancelado",
+                        }},
+                        {
+                        status: {
+                            not: "recusado",
+                        }},
+                        {
+                        status: {
+                            not: "aberto",
+                        }
+                    }],
+                    id: {
+                        not: orderGet.id 
+                    },
                     sector: orderGet.sector
                 },
                 orderBy: {
@@ -72,7 +97,7 @@ class ConfirmOrderService {
                 return a;
             })
         }
-
+        
         const order = await prismaClient.order.update({
             where: {
                 id: id,
