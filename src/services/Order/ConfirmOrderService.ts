@@ -55,22 +55,22 @@ class ConfirmOrderService {
              const orders = await prismaClient.order.findMany({
                 take: tecnicos.length - 1,
                 where: {
-                    OR: [{
-                        status: {
-                            not: "pendente",
-                        }},
-                        {
-                        status: {
-                            not: "cancelado",
-                        }},
-                        {
-                        status: {
-                            not: "recusado",
-                        }},
-                        {
-                        status: {
-                            not: "aberto",
-                        }
+                    AND: [{
+                          collaborator_id: {
+                              not: null
+                          }},
+                          {
+                          status: {
+                              not: "cancelado",
+                          }},
+                          {
+                          status: {
+                              not: "recusado",
+                          }},
+                          {
+                          status: {
+                              not: "aberto",
+                          }
                     }],
                     id: {
                         not: orderGet.id 
@@ -80,7 +80,8 @@ class ConfirmOrderService {
                 orderBy: {
                     create_at: "desc"
                 }
-            })
+             })
+            
             
             orders.map((item) => {
                 if (item.collaborator_id && tecnicosId[item.collaborator_id] != undefined) {
