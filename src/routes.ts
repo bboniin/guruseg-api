@@ -82,6 +82,7 @@ import { GetUserController } from './controllers/User/GetUserController'
 import { ConfirmOrderController } from './controllers/Order/ConfirmOrderController'
 import { HandlerOrderController } from './controllers/Order/HandlerOrderController'
 import { GetCourseController } from './controllers/Admin/Courses/GetCourseControlle'
+import { ListAdminOrdersPeriodoController } from './controllers/Admin/ListAdminOrdersPeriodoController'
 
 
 const upload = multer(uploadConfig)
@@ -144,6 +145,7 @@ router.get('/collaborator', new GetCollaboratorController().handle)
 
 // Routes Admin
 
+router.post('/list-orders', new ListAdminOrdersPeriodoController().handle)
 router.get('/admin/list-credentials', new AdminListCredentialsController().handle)
 router.post('/credential', new AdminCreateCredentialController().handle)
 router.put('/credential', new AdminEditCredentialController().handle)
