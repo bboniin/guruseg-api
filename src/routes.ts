@@ -83,6 +83,7 @@ import { ConfirmOrderController } from './controllers/Order/ConfirmOrderControll
 import { HandlerOrderController } from './controllers/Order/HandlerOrderController'
 import { GetCourseController } from './controllers/Admin/Courses/GetCourseControlle'
 import { ListAdminOrdersPeriodoController } from './controllers/Admin/ListAdminOrdersPeriodoController'
+import { ListUsersCollaboratorController } from './controllers/Admin/Collaborators/ListUsersCollaboratorController'
 
 
 const upload = multer(uploadConfig)
@@ -165,7 +166,6 @@ router.post('/banner', upload.single("file"), new CreateBannerController().handl
 router.put('/banner/:id', upload.single("file"), new EditBannerController().handle)
 router.delete('/banner/:id', new DeleteBannerController().handle)
 
-
 router.get('/admin-course/:course_id', new GetCourseController().handle)
 router.get('/courses', new ListCoursesController().handle)
 router.post('/course', upload.single("file"), new CreateCourseController().handle)
@@ -179,6 +179,7 @@ router.put('/lesson/:id', upload.single("file"), new EditLessonController().hand
 router.delete('/lesson/:id', new DeleteLessonController().handle)
 
 router.get('/user/:id', new GetUserAdminController().handle)
+router.get('/users-collaborator/:collaborator_id', new ListUsersCollaboratorController().handle)
 router.get('/collaborator/:id', new GetCollaboratorAdminController().handle)
 router.get('/orders/:type/:id', new ListAdminOrdersController().handle)
 

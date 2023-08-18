@@ -23,6 +23,7 @@ class ConfirmOrderService {
              id: id
             }, 
             include: {
+                user: true,
                 items: true
             }
         })
@@ -51,99 +52,103 @@ class ConfirmOrderService {
             id: null
         }
         
-
-        tecnicos.map((item) => {
-            tecnicosTotal[item.id] = {
-                oss: 0,
-                total: 0
-            }
-        })
-
-        if (tecnicos.length != 0) {
-            let total = 0
-            orderGet.items.map((item) => {
-                total += item.amount * item.value
+        if (orderGet.user.collaborator_id) {
+            collaborator.id = orderGet.user.collaborator_id
+        } else {
+            tecnicos.map((item) => {
+                tecnicosTotal[item.id] = {
+                    oss: 0,
+                    total: 0
+                }
             })
-            if (total > 100) {
-                const oss = await prismaClient.order.findMany({
-                    where: {
-                        create_at: {
-                            gte: addDays(new Date(),-7)
+
+            if (tecnicos.length != 0) {
+                let total = 0
+                orderGet.items.map((item) => {
+                    total += item.amount * item.value
+                })
+                if (total > 100) {
+                    const oss = await prismaClient.order.findMany({
+                        where: {
+                            create_at: {
+                                gte: addDays(new Date(),-7)
+                            }
+                        },
+                        include: {
+                            items: true,
+                        },
+                        orderBy: {
+                            create_at: "asc",
                         }
-                    },
-                    include: {
-                        items: true,
+                    })
+            
+                    oss.map((item) => {
+                        let total = 0
+                        item.items.map((item) => {
+                            total += item.amount * item.value
+                        })
+                        if (tecnicosTotal[item.collaborator_id]) {
+                            tecnicosTotal[item.collaborator_id].total += total
+                        }
+                    })
+                    tecnicos.map((item) => {
+                        item["orders"] = tecnicosTotal[item.id].total
+                    })
+        
+                    collaborator = tecnicos.reduce((a,b)=>{
+                        if(b["orders"] < a["orders"]) a = b;
+                        return a;
+                    })
+                } else {
+                    const orders = await prismaClient.order.findMany({
+                    take: tecnicos.length - 1,
+                    where: {
+                        AND: [{
+                                collaborator_id: {
+                                    not: null
+                                }},
+                                {
+                                status: {
+                                    not: "cancelado",
+                                }},
+                                {
+                                status: {
+                                    not: "recusado",
+                                }},
+                                {
+                                status: {
+                                    not: "aberto",
+                                }
+                        }],
+                        id: {
+                            not: orderGet.id 
+                        },
+                        sector: orderGet.sector
                     },
                     orderBy: {
-                        create_at: "asc",
+                        create_at: "desc"
                     }
-                })
-        
-                oss.map((item) => {
-                    let total = 0
-                    item.items.map((item) => {
-                        total += item.amount * item.value
                     })
-                    if (tecnicosTotal[item.collaborator_id]) {
-                        tecnicosTotal[item.collaborator_id].total += total
+                
+                
+                orders.map((item) => {
+                    if (item.collaborator_id && tecnicosTotal[item.collaborator_id] != undefined) {
+                        tecnicosTotal[item.collaborator_id].oss++
                     }
                 })
+    
                 tecnicos.map((item) => {
-                    item["orders"] = tecnicosTotal[item.id].total
+                    item["orders"] = tecnicosTotal[item.id].oss
                 })
     
                 collaborator = tecnicos.reduce((a,b)=>{
                     if(b["orders"] < a["orders"]) a = b;
                     return a;
                 })
-            } else {
-                const orders = await prismaClient.order.findMany({
-                   take: tecnicos.length - 1,
-                   where: {
-                       AND: [{
-                             collaborator_id: {
-                                 not: null
-                             }},
-                             {
-                             status: {
-                                 not: "cancelado",
-                             }},
-                             {
-                             status: {
-                                 not: "recusado",
-                             }},
-                             {
-                             status: {
-                                 not: "aberto",
-                             }
-                       }],
-                       id: {
-                           not: orderGet.id 
-                       },
-                       sector: orderGet.sector
-                   },
-                   orderBy: {
-                       create_at: "desc"
-                   }
-                })
-               
-               
-               orders.map((item) => {
-                   if (item.collaborator_id && tecnicosTotal[item.collaborator_id] != undefined) {
-                       tecnicosTotal[item.collaborator_id].oss++
-                   }
-               })
-   
-               tecnicos.map((item) => {
-                   item["orders"] = tecnicosTotal[item.id].oss
-               })
-   
-               collaborator = tecnicos.reduce((a,b)=>{
-                   if(b["orders"] < a["orders"]) a = b;
-                   return a;
-               })
+                }
             }
         }
+        
         
         const order = await prismaClient.order.update({
             where: {

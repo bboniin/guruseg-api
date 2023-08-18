@@ -30,7 +30,6 @@ class AcceptOrderService {
             throw new Error("Ordem de serviço já foi aceita por outro técnico.")
         }
 
-
         const path = resolve(
             __dirname,
             "..",

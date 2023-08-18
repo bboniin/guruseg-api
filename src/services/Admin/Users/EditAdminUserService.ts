@@ -11,11 +11,12 @@ interface UserRequest {
     id: string;
     courseBoolean: boolean;
     resaleBoolean: boolean;
-    courseRestricted: boolean
+    courseRestricted: boolean;
+    collaborator_id: string;
 }
 
 class EditAdminUserService {
-    async execute({ name, email, phone_number, photo, id, password, courseBoolean, resaleBoolean, courseRestricted}: UserRequest) {
+    async execute({ name, email, collaborator_id, phone_number, photo, id, password, courseBoolean, resaleBoolean, courseRestricted}: UserRequest) {
 
         const user = await prismaClient.user.findUnique({
             where: {
@@ -23,7 +24,7 @@ class EditAdminUserService {
             },
         })
 
-        if (!email || !name || !phone_number) {
+        if (!email || !name || !phone_number ) {
             throw new Error("Preencha todos os campos obrigátorios")
         }
 
@@ -44,6 +45,7 @@ class EditAdminUserService {
             email: email,
             course: courseBoolean,
             phone_number: phone_number,
+            collaborator_id: collaborator_id,
             resale: resaleBoolean,
             course_restricted: courseRestricted
         }
