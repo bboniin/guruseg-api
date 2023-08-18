@@ -7,7 +7,7 @@ interface CollaboratorRequest {
 class DeleteCollaboratorService {
     async execute({ id }: CollaboratorRequest) {
 
-        const service = await prismaClient.collaborator.update({
+        const collaborator = await prismaClient.collaborator.update({
             where: {
                 id: id
             },
@@ -15,9 +15,57 @@ class DeleteCollaboratorService {
                 visible: false,
                 email: id
             }
-
         })
-        return (service)
+
+        const users = await prismaClient.user.findMany({
+            where: {
+                OR: [{
+                        sector1_id: collaborator.id
+                    },
+                    {
+                        sector2_id: collaborator.id
+                    },
+                    {
+                        sector3_id: collaborator.id
+                    },
+                    {
+                        sector4_id: collaborator.id
+                    }
+                ]
+            },
+        })
+
+        users.map(async (item) => {
+            let sector1_id = item.sector1_id
+            if (item.sector1_id == collaborator.id) {
+                sector1_id = ""
+            }
+            let sector2_id = item.sector2_id
+            if (item.sector2_id == collaborator.id) {
+                sector2_id = ""
+            }
+            let sector3_id = item.sector3_id
+            if (item.sector3_id == collaborator.id) {
+                sector3_id = ""
+            }
+            let sector4_id = item.sector4_id
+            if (item.sector4_id == collaborator.id) {
+                sector4_id = ""
+            }
+            await prismaClient.user.update({
+                where: {
+                    id: item.id
+                },
+                data: {
+                    sector1_id,
+                    sector2_id,
+                    sector3_id,
+                    sector4_id
+                }
+            })
+        })
+
+        return (collaborator)
     }
 }
 

@@ -10,7 +10,19 @@ class ListUsersCollaboratorService {
 
         const users = await prismaClient.user.findMany({
             where: {
-                collaborator_id: collaborator_id,
+                OR: [{
+                        sector1_id: collaborator_id
+                    },
+                    {
+                        sector2_id: collaborator_id
+                    },
+                    {
+                        sector3_id: collaborator_id
+                    },
+                    {
+                        sector4_id: collaborator_id
+                    }
+                ],
                 visible: true
             },
             orderBy: {

@@ -11,11 +11,14 @@ interface UserRequest {
     courseBoolean: boolean;
     courseRestricted: boolean;
     resaleBoolean: boolean;
-    collaborator_id: string;
+    sector1_id: string;
+    sector2_id: string;
+    sector3_id: string;
+    sector4_id:  string;
 }
 
 class CreateUserService {
-    async execute({ name, email, collaborator_id, phone_number, password, photo, courseBoolean, resaleBoolean, courseRestricted }: UserRequest) {
+    async execute({ name, email, sector1_id, sector2_id, sector3_id, sector4_id, phone_number, password, photo, courseBoolean, resaleBoolean, courseRestricted }: UserRequest) {
 
 
         if (!email || !name || !phone_number || !password) {
@@ -49,7 +52,10 @@ class CreateUserService {
                 password: passwordHash,
                 phone_number: phone_number,
                 photo: photo,
-                collaborator_id: collaborator_id,
+                sector1_id: sector1_id,
+                sector2_id: sector2_id,
+                sector3_id: sector3_id,
+                sector4_id: sector4_id,
                 course: courseBoolean,
                 resale: resaleBoolean,
                 course_restricted: courseRestricted

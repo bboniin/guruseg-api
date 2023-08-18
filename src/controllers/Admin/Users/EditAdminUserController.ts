@@ -3,7 +3,7 @@ import { EditAdminUserService } from '../../../services/Admin/Users/EditAdminUse
 
 class EditAdminUserController {
     async handle(req: Request, res: Response) {
-        const { name, email, phone_number, collaborator_id, password, course, resale, course_restricted } = req.body
+        const { name, email, phone_number, sector1_id, sector2_id, sector3_id, sector4_id, password, course, resale, course_restricted } = req.body
 
         const { id } = req.params
 
@@ -20,7 +20,7 @@ class EditAdminUserController {
         const editAdminUserService = new EditAdminUserService
 
         const user = await editAdminUserService.execute({
-            name, email, phone_number, collaborator_id, photo, id, password, courseBoolean, resaleBoolean, courseRestricted
+            name, email, phone_number, sector1_id, sector2_id, sector3_id, sector4_id, photo, id, password, courseBoolean, resaleBoolean, courseRestricted
         })
 
         if (user["photo"]) {

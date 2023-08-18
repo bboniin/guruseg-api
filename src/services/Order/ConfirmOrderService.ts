@@ -51,9 +51,16 @@ class ConfirmOrderService {
         let collaborator = {
             id: null
         }
-        
-        if (orderGet.user.collaborator_id) {
-            collaborator.id = orderGet.user.collaborator_id
+
+        const sectores = {
+            "Serviços de segurança do Trabalho":  orderGet.user.sector1_id,
+            "Revenda de treinamentos online": orderGet.user.sector2_id,
+            "Serviços Medicina ocupacional": orderGet.user.sector3_id,
+            "Credenciamento SST": orderGet.user.sector4_id
+        }
+
+        if (sectores[orderGet.sector]) {
+            collaborator.id = sectores[orderGet.sector]
         } else {
             tecnicos.map((item) => {
                 tecnicosTotal[item.id] = {
