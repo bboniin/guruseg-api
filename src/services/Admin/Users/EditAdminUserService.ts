@@ -12,14 +12,16 @@ interface UserRequest {
     courseBoolean: boolean;
     resaleBoolean: boolean;
     courseRestricted: boolean;
+    signature: boolean;
     sector1_id: string;
     sector2_id: string;
     sector3_id: string;
-    sector4_id:  string;
+    sector4_id: string;
+    sector5_id: string;
 }
 
 class EditAdminUserService {
-    async execute({ name, email, sector1_id, sector2_id, sector3_id, sector4_id, phone_number, photo, id, password, courseBoolean, resaleBoolean, courseRestricted}: UserRequest) {
+    async execute({ name, email, signature, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, phone_number, photo, id, password, courseBoolean, resaleBoolean, courseRestricted}: UserRequest) {
 
         const user = await prismaClient.user.findUnique({
             where: {
@@ -47,11 +49,13 @@ class EditAdminUserService {
             name: name,
             email: email,
             course: courseBoolean,
+            signature: signature,
             phone_number: phone_number,
             sector1_id: sector1_id,
             sector2_id: sector2_id,
             sector3_id: sector3_id,
             sector4_id: sector4_id,
+            sector5_id: sector5_id,
             resale: resaleBoolean,
             course_restricted: courseRestricted
         }

@@ -21,6 +21,9 @@ class ListUsersCollaboratorService {
                     },
                     {
                         sector4_id: collaborator_id
+                    },
+                    {
+                        sector5_id: collaborator_id
                     }
                 ],
                 visible: true

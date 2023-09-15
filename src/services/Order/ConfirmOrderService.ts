@@ -56,7 +56,8 @@ class ConfirmOrderService {
             "Serviços de segurança do Trabalho":  orderGet.user.sector1_id,
             "Revenda de treinamentos online": orderGet.user.sector2_id,
             "Serviços Medicina ocupacional": orderGet.user.sector3_id,
-            "Credenciamento SST": orderGet.user.sector4_id
+            "Credenciamento SST": orderGet.user.sector4_id,
+            "Assinatura Documentos SST": orderGet.user.sector5_id
         }
 
         if (sectores[orderGet.sector]) {

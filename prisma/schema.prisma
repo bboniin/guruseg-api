@@ -21,10 +21,12 @@ model User {
   email             String    @unique
   phone_number      String
   password          String
+  signature         Boolean   @default(false)
   sector1_id        String?   @default("")
   sector2_id        String?   @default("")
   sector3_id        String?   @default("")
   sector4_id        String?   @default("")
+  sector5_id        String?   @default("")
   visible           Boolean   @default(true)
   course            Boolean   @default(false)
   resale            Boolean   @default(false)

@@ -30,6 +30,9 @@ class DeleteCollaboratorService {
                     },
                     {
                         sector4_id: collaborator.id
+                    },
+                    {
+                        sector5_id: collaborator.id
                     }
                 ]
             },
@@ -52,6 +55,10 @@ class DeleteCollaboratorService {
             if (item.sector4_id == collaborator.id) {
                 sector4_id = ""
             }
+            let sector5_id = item.sector5_id
+            if (item.sector5_id == collaborator.id) {
+                sector5_id = ""
+            }
             await prismaClient.user.update({
                 where: {
                     id: item.id
@@ -60,7 +67,8 @@ class DeleteCollaboratorService {
                     sector1_id,
                     sector2_id,
                     sector3_id,
-                    sector4_id
+                    sector4_id,
+                    sector5_id
                 }
             })
         })
