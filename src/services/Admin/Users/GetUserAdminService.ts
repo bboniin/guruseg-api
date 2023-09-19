@@ -20,7 +20,7 @@ class GetUserAdminService {
         })
 
         if (!user) {
-            throw new Error("Franquiado não foi encontrado.")
+            throw new Error("Franqueado não foi encontrado.")
         }
 
         return (user)

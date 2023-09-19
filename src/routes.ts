@@ -84,6 +84,7 @@ import { HandlerOrderController } from './controllers/Order/HandlerOrderControll
 import { GetCourseController } from './controllers/Admin/Courses/GetCourseControlle'
 import { ListAdminOrdersPeriodoController } from './controllers/Admin/ListAdminOrdersPeriodoController'
 import { ListUsersCollaboratorController } from './controllers/Admin/Collaborators/ListUsersCollaboratorController'
+import { ServiceOSUserController } from './controllers/Admin/Users/ServiceOSUserController'
 
 
 const upload = multer(uploadConfig)
@@ -195,6 +196,8 @@ router.get('/contracts', new ListContractsController().handle)
 router.get('/contracts/:user_id', new AdminListContractsController().handle)
 router.post('/contract', new CreateContractController().handle)
 router.delete('/contract/:id', new DeleteContractController().handle)
+
+router.post('/service-os/:id', new ServiceOSUserController().handle)
 
 
 
