@@ -28,6 +28,7 @@ class ServiceOSUserService {
 
         const orders = await prismaClient.order.findMany({
             where: {
+                user_id: id,
                 status: "finalizado",
                 AND: [
                     {
