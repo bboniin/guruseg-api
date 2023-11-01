@@ -85,6 +85,13 @@ import { GetCourseController } from './controllers/Admin/Courses/GetCourseContro
 import { ListAdminOrdersPeriodoController } from './controllers/Admin/ListAdminOrdersPeriodoController'
 import { ListUsersCollaboratorController } from './controllers/Admin/Collaborators/ListUsersCollaboratorController'
 import { ServiceOSUserController } from './controllers/Admin/Users/ServiceOSUserController'
+import { GetCompanyController } from './controllers/Company/GetOrderController'
+import { ListCompaniesController } from './controllers/Company/ListCompaniesController'
+import { ListCompaniesConfirmController } from './controllers/Company/ListCompaniesConfirmController'
+import { CreateCompanyController } from './controllers/Company/CreateCompanyController'
+import { DeleteCompanyController } from './controllers/Company/DeleteCompanyController'
+import { ConfirmCompanyController } from './controllers/Company/ConfirmCompanyController'
+import { HandlerCompanyController } from './controllers/Company/HandlerCompanyController'
 
 
 const upload = multer(uploadConfig)
@@ -110,6 +117,9 @@ router.get('/list-credentials', new ListCredentialsController().handle)
 router.post('/credential', upload.single("file"), new CreateCredentialController().handle)
 router.get('/credential/:id', new GetCredentialController().handle)
 router.put('/completed/:id', upload.single("file"), new PublicEditCredentialController().handle)
+
+router.get('/company/:company_id', new GetCompanyController().handle)
+router.put('/company/:company_id', new ConfirmCompanyController().handle)
 
 router.use(isAuthenticated)
 
@@ -196,6 +206,14 @@ router.get('/contracts', new ListContractsController().handle)
 router.get('/contracts/:user_id', new AdminListContractsController().handle)
 router.post('/contract', new CreateContractController().handle)
 router.delete('/contract/:id', new DeleteContractController().handle)
+
+// Companies
+
+router.get('/companies', new ListCompaniesController().handle)
+router.get('/companies-confirm', new ListCompaniesConfirmController().handle)
+router.post('/company', new CreateCompanyController().handle)
+router.delete('/company/:company_id', new DeleteCompanyController().handle)
+router.put('/company-handler/:company_id', new HandlerCompanyController().handle)
 
 router.post('/service-os/:id', new ServiceOSUserController().handle)
 

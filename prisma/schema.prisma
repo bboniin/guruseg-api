@@ -76,6 +76,7 @@ model Order {
   urgent      Boolean   @default(false)
   status      String    @default("pendente")
   month       String    @default("")
+  company_id  String?   @default("")
   sector      String    @default("Serviços de segurança do Trabalho")
   create_at   DateTime? @default(now())
   update_at   DateTime? @default(now())
@@ -250,4 +251,75 @@ model Credential {
   update_at     DateTime? @default(now())
 
   @@map("credentials")
+}
+
+model Company {
+  id                  String    @id @default(uuid())
+  razao_social        String?
+  nome_fantasia       String?
+  cnpj                String?
+  ramo_atividade      String?
+  cep                 String?
+  endereco            String?
+  nome_responsavel    String?
+  cpf_responsavel     String?
+  contato_responsavel String?
+  observation         String?
+  status              String    @default("aguardando")
+  collaborador_id     String  
+  signature           String?
+  signature_date      DateTime? @default(now())  
+  create_at           DateTime? @default(now())
+  update_at           DateTime? @default(now())
+
+  companySector CompanySector[]
+
+  @@map("companies")
+}
+
+model CompanySector {
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  create_at   DateTime? @default(now())
+  update_at   DateTime? @default(now())
+  company     Company?    @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  company_id  String?
+
+  companyEmployees CompanyEmployees[]
+  companyScratchs  CompanyScratchs[]
+
+  @@map("company_sectors")
+}
+
+model CompanyEmployees {
+  id                         String    @id @default(uuid())
+  name                       String
+  cbo                        String?
+  quantidade_colaboradores   Int?
+  quantidade_colaboradores_m Int?
+  quantidade_colaboradores_f Int?
+  description                String?
+  epis                       String?
+  create_at                  DateTime? @default(now())
+  update_at                  DateTime? @default(now())
+
+  company_sector             CompanySector?    @relation(fields: [company_sector_id], references: [id], onDelete: Cascade)
+  company_sector_id          String?
+
+  @@map("company_employees")
+}
+
+model CompanyScratchs {
+  id                 String    @id @default(uuid())
+  name               String
+  description        String
+  type               String   
+  create_at          DateTime? @default(now())
+  update_at          DateTime? @default(now())
+
+  company_sector     CompanySector?    @relation(fields: [company_sector_id], references: [id], onDelete: Cascade)
+  company_sector_id  String?
+
+  @@map("company_scratchs")
 }
