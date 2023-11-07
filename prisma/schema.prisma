@@ -16,6 +16,7 @@ model User {
   id                String    @id @default(uuid())
   name              String
   photo             String?
+  category          String    @default("franqueado")
   type              String    @default("cliente")
   course_restricted Boolean   @default(false)
   email             String    @unique

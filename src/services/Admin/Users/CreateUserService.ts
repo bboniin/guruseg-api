@@ -12,6 +12,7 @@ interface UserRequest {
     courseRestricted: boolean;
     resaleBoolean: boolean;
     signature: boolean;
+    category: string;
     sector1_id: string;
     sector2_id: string;
     sector3_id: string;
@@ -20,10 +21,10 @@ interface UserRequest {
 }
 
 class CreateUserService {
-    async execute({ name, email, signature, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, phone_number, password, photo, courseBoolean, resaleBoolean, courseRestricted }: UserRequest) {
+    async execute({ name, email, signature, category, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, phone_number, password, photo, courseBoolean, resaleBoolean, courseRestricted }: UserRequest) {
 
 
-        if (!email || !name || !phone_number || !password) {
+        if (!email || !name || !phone_number || !category || !password) {
             throw new Error("Preencha todos os campos obrigátorios")
         }
 
@@ -51,6 +52,7 @@ class CreateUserService {
             data: {
                 name: name,
                 email: email,
+                category: category,
                 password: passwordHash,
                 phone_number: phone_number,
                 photo: photo,
