@@ -9,11 +9,11 @@ class DeleteCompanyController {
 
         const deleteCompanyService = new DeleteCompanyService
 
-        const company = await deleteCompanyService.execute({
+        const image = await deleteCompanyService.execute({
             company_id, userId
         })
 
-        return res.json(company)
+        return res.json(image)
     }
 }
 

@@ -265,6 +265,7 @@ model Company {
   cpf_responsavel     String?
   contato_responsavel String?
   observation         String?
+  order_id            Int?      @default(0)
   status              String    @default("aguardando")
   collaborador_id     String  
   signature           String?
@@ -273,6 +274,7 @@ model Company {
   update_at           DateTime? @default(now())
 
   companySector CompanySector[]
+  companyImages  CompanyImages[]
 
   @@map("companies")
 }
@@ -322,4 +324,16 @@ model CompanyScratchs {
   company_sector_id  String?
 
   @@map("company_scratchs")
+}
+
+model CompanyImages {
+  id          String    @id @default(uuid())
+  photo       String
+  index       Int
+  create_at   DateTime? @default(now())
+  update_at   DateTime? @default(now())
+  company     Company?    @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  company_id  String?
+
+  @@map("company_images")
 }

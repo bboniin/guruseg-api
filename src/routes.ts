@@ -85,13 +85,15 @@ import { GetCourseController } from './controllers/Admin/Courses/GetCourseContro
 import { ListAdminOrdersPeriodoController } from './controllers/Admin/ListAdminOrdersPeriodoController'
 import { ListUsersCollaboratorController } from './controllers/Admin/Collaborators/ListUsersCollaboratorController'
 import { ServiceOSUserController } from './controllers/Admin/Users/ServiceOSUserController'
-import { GetCompanyController } from './controllers/Company/GetOrderController'
+import { GetCompanyController } from './controllers/Company/GetCompanyController'
 import { ListCompaniesController } from './controllers/Company/ListCompaniesController'
 import { ListCompaniesConfirmController } from './controllers/Company/ListCompaniesConfirmController'
 import { CreateCompanyController } from './controllers/Company/CreateCompanyController'
 import { DeleteCompanyController } from './controllers/Company/DeleteCompanyController'
 import { ConfirmCompanyController } from './controllers/Company/ConfirmCompanyController'
 import { HandlerCompanyController } from './controllers/Company/HandlerCompanyController'
+import { DeleteImageCompanyController } from './controllers/Company/DeleteImageCompanyController'
+import { CreateImageCompanyController } from './controllers/Company/CreateImageCompanyController'
 
 
 const upload = multer(uploadConfig)
@@ -213,6 +215,8 @@ router.get('/companies', new ListCompaniesController().handle)
 router.get('/companies-confirm', new ListCompaniesConfirmController().handle)
 router.post('/company', new CreateCompanyController().handle)
 router.delete('/company/:company_id', new DeleteCompanyController().handle)
+router.post('/company-image/:company_id', upload.single("file"), new CreateImageCompanyController().handle)
+router.delete('/company-image/:id', new DeleteImageCompanyController().handle)
 router.put('/company-handler/:company_id', new HandlerCompanyController().handle)
 
 router.post('/service-os/:id', new ServiceOSUserController().handle)

@@ -144,9 +144,9 @@ class ConfirmCompanyService {
                         description: data["description"],
                         epis: data["epis"],
                         cbo: data["cbo"],
-                        quantidade_colaboradores: data["quantidade_colaboradores"],
-                        quantidade_colaboradores_m: data["quantidade_colaboradores_m"],
-                        quantidade_colaboradores_f: data["quantidade_colaboradores_f"],
+                        quantidade_colaboradores: parseInt(data["quantidade_colaboradores"]) || 0,
+                        quantidade_colaboradores_m: parseInt(data["quantidade_colaboradores_m"]) || 0,
+                        quantidade_colaboradores_f: parseInt(data["quantidade_colaboradores_f"]) || 0,
                     }
                 })
             })

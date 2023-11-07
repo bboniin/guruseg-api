@@ -32,7 +32,25 @@ class GetCompanyService {
             }
         })
 
-        return (company)
+        const images = await prismaClient.companyImages.findMany({
+            where: {
+                company_id: company_id,
+                index: {
+                    lt: company.companySector.length
+                }
+            }
+        })
+
+        let companyImages = []
+        for (let i = 0; i < company.companySector.length; i++){
+            companyImages.push([])
+        }
+        images.map((item) => {
+            item["photo_url"] = "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + item.photo;
+            companyImages[item.index].push(item) 
+        })
+
+        return ({...company, companyImages: companyImages})
     }
 }
 

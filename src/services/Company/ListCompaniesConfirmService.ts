@@ -11,7 +11,8 @@ class ListCompaniesConfirmService {
         const companies = await prismaClient.company.findMany({
             where: {
                 collaborador_id: userId,
-                status: "confirmado"
+                status: "confirmado",
+                order_id: 0
             },
             orderBy: {
                 update_at: "desc"
