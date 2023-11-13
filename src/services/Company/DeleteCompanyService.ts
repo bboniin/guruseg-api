@@ -20,7 +20,7 @@ class DeleteCompanyService {
         })
 
         if (!companyGet) {
-            throw new Error("Empresa não encontrada")
+            throw new Error("Formulário não encontrado")
         }
 
         const company = await prismaClient.company.delete({

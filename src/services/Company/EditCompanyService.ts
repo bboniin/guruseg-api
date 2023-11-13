@@ -7,15 +7,15 @@ interface CompanyRequest {
     cnpj: string;
     ramo_atividade: string;
     cep: string;
+    userId: string;
     endereco: string;
     nome_responsavel: string;
     cpf_responsavel: string;
     contato_responsavel: string;
-    signature: string;
     companySector: Array<[]>;
 }
 
-class ConfirmCompanyService {
+class EditCompanyService {
     async execute({ 
         company_id,
         razao_social,
@@ -24,10 +24,10 @@ class ConfirmCompanyService {
         ramo_atividade,
         cep,
         endereco,
+        userId,
         nome_responsavel,
         cpf_responsavel,
         contato_responsavel,
-        signature,
         companySector
     }: CompanyRequest) {
         
@@ -35,7 +35,6 @@ class ConfirmCompanyService {
 
         if (!razao_social ||
             companySector.length == 0 ||
-            !signature ||
             !contato_responsavel ||
             !cpf_responsavel ||
             !nome_responsavel ||
@@ -69,9 +68,10 @@ class ConfirmCompanyService {
             throw new Error(error)
         } 
 
-        const companyGet = await prismaClient.company.findUnique({
+        const companyGet = await prismaClient.company.findFirst({
             where: {
-                id: company_id
+                id: company_id,
+                collaborador_id: userId
             },
             include: {
                 companySector: {
@@ -95,7 +95,7 @@ class ConfirmCompanyService {
         })
 
         if (!companyGet) {
-            throw new Error("Formulário não encontrado")
+            throw new Error("Formulário não encontrada")
         }
 
         if (companyGet.status == "confirmado") {
@@ -122,9 +122,6 @@ class ConfirmCompanyService {
                 nome_responsavel: nome_responsavel,
                 cpf_responsavel: cpf_responsavel,
                 contato_responsavel: contato_responsavel,
-                signature: signature,
-                signature_date: new Date(),
-                status: "confirmado"
             }
         })  
 
@@ -167,4 +164,4 @@ class ConfirmCompanyService {
     }
 }
 
-export { ConfirmCompanyService }
+export { EditCompanyService }

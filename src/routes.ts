@@ -94,6 +94,7 @@ import { ConfirmCompanyController } from './controllers/Company/ConfirmCompanyCo
 import { HandlerCompanyController } from './controllers/Company/HandlerCompanyController'
 import { DeleteImageCompanyController } from './controllers/Company/DeleteImageCompanyController'
 import { CreateImageCompanyController } from './controllers/Company/CreateImageCompanyController'
+import { EditCompanyController } from './controllers/Company/EditCompanyController'
 
 
 const upload = multer(uploadConfig)
@@ -218,6 +219,7 @@ router.delete('/company/:company_id', new DeleteCompanyController().handle)
 router.post('/company-image/:company_id', upload.single("file"), new CreateImageCompanyController().handle)
 router.delete('/company-image/:id', new DeleteImageCompanyController().handle)
 router.put('/company-handler/:company_id', new HandlerCompanyController().handle)
+router.put('/company-edit/:company_id', new EditCompanyController().handle)
 
 router.post('/service-os/:id', new ServiceOSUserController().handle)
 
