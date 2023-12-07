@@ -70,23 +70,25 @@ model Admin {
 }
 
 model Order {
-  id          Int       @id @default(autoincrement())
-  observation String?
-  message     String?
-  name        String?   @default("")
-  urgent      Boolean   @default(false)
-  status      String    @default("pendente")
-  month       String    @default("")
-  company_id  String?   @default("")
-  sector      String    @default("Serviços de segurança do Trabalho")
-  create_at   DateTime? @default(now())
-  update_at   DateTime? @default(now())
+  id                 Int       @id @default(autoincrement())
+  observation        String?
+  message            String?
+  order_linked_id    Int?      @default(0)
+  name               String?   @default("")
+  urgent             Boolean   @default(false)
+  order_doc_recused  Boolean   @default(false)
+  status             String    @default("pendente")
+  month              String    @default("")
+  company_id         String?   @default("")
+  sector             String    @default("Serviços de segurança do Trabalho")
+  create_at          DateTime? @default(now())
+  update_at          DateTime? @default(now())
 
-  user    User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id String?
+  user               User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id            String?
 
-  collaborator    Collaborator? @relation(fields: [collaborator_id], references: [id], onDelete: Cascade)
-  collaborator_id String?
+  collaborator       Collaborator? @relation(fields: [collaborator_id], references: [id], onDelete: Cascade)
+  collaborator_id    String?
 
   items Item[]
   docs  Doc[]

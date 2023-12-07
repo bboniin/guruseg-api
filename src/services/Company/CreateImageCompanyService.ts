@@ -10,7 +10,6 @@ interface CompanyRequest {
 class CreateImageCompanyService {
     async execute({ company_id, file, index }: CompanyRequest) {
 
-        console.log(company_id, file)
         if (!company_id || !file) {
             throw new Error("Preencha todos os campos obrigátorios")
         }

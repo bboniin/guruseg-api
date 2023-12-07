@@ -95,6 +95,7 @@ import { HandlerCompanyController } from './controllers/Company/HandlerCompanyCo
 import { DeleteImageCompanyController } from './controllers/Company/DeleteImageCompanyController'
 import { CreateImageCompanyController } from './controllers/Company/CreateImageCompanyController'
 import { EditCompanyController } from './controllers/Company/EditCompanyController'
+import { RecusedDocOrderController } from './controllers/Order/RecusedDocOrderController'
 
 
 const upload = multer(uploadConfig)
@@ -142,6 +143,7 @@ router.put('/collaborator', upload.single("file"), new EditCollaboratorControlle
 
 // Routes Clientes e Técnicos
 
+router.put('/doc-recused-order/:order_id', new RecusedDocOrderController().handle)
 router.get('/orders-open', new ListOpenOrdersController().handle)
 router.get('/orders/:type', new ListOrdersController().handle)
 router.get('/order/:id', new GetOrderController().handle)

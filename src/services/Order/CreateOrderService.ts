@@ -31,7 +31,6 @@ class CreateOrderService {
             }
         })  
 
-        console.log(company_id)
         if (company_id) {
             let company = await prismaClient.company.update({
                 where: {
@@ -41,7 +40,6 @@ class CreateOrderService {
                     order_id: order.id
                 }
             })
-            console.log(company)
         }
 
         order["items"] = [] 
