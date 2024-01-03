@@ -96,6 +96,17 @@ import { DeleteImageCompanyController } from './controllers/Company/DeleteImageC
 import { CreateImageCompanyController } from './controllers/Company/CreateImageCompanyController'
 import { EditCompanyController } from './controllers/Company/EditCompanyController'
 import { RecusedDocOrderController } from './controllers/Order/RecusedDocOrderController'
+import { CreateRenewalController } from './controllers/CompanyRenewal/CreateRenewalController'
+import { ListRenewalsController } from './controllers/CompanyRenewal/ListRenewalsController'
+import { EditRenewalController } from './controllers/CompanyRenewal/EditRenewalController'
+import { DeleteRenewalController } from './controllers/CompanyRenewal/DeleteRenewalController'
+import { CheckRenewalController } from './controllers/CompanyRenewal/CheckRenewalController'
+import { CreateTimelineController } from './controllers/CompanyTimeline/CreateTimelineController'
+import { ListTimelinesController } from './controllers/CompanyTimeline/ListTimelinesController'
+import { EditTimelineController } from './controllers/CompanyTimeline/EditTimelineController'
+import { DeleteTimelineController } from './controllers/CompanyTimeline/DeleteTimelineController'
+import { CheckTimelineController } from './controllers/CompanyTimeline/CheckTimelineController'
+import { GetTimelineController } from './controllers/CompanyTimeline/GetTimelineController'
 
 
 const upload = multer(uploadConfig)
@@ -225,7 +236,19 @@ router.put('/company-edit/:company_id', new EditCompanyController().handle)
 
 router.post('/service-os/:id', new ServiceOSUserController().handle)
 
+router.post('/company-renewal', new CreateRenewalController().handle)
+router.get('/companies-renewal', new ListRenewalsController().handle)
+router.put('/company-renewal/:id', new EditRenewalController().handle)
+router.delete('/company-renewal/:id', new DeleteRenewalController().handle)
+router.put('/renewal/:id', new CheckRenewalController().handle)
 
+
+router.post('/company-timeline', new CreateTimelineController().handle)
+router.get('/companies-timeline', new ListTimelinesController().handle)
+router.put('/company-timeline/:id', new EditTimelineController().handle)
+router.delete('/company-timeline/:id', new DeleteTimelineController().handle)
+router.put('/timeline/:id', new CheckTimelineController().handle)
+router.get('/timeline/:id', new GetTimelineController().handle)
 
 
 export { router }

@@ -1,3 +1,4 @@
+import { endOfHour, startOfHour } from 'date-fns';
 import prismaClient from '../../prisma'
 
 interface OrderRequest {
@@ -7,18 +8,18 @@ interface OrderRequest {
 
 class ListAdminOrdersPeriodoService {
     async execute({ start_date, end_date }: OrderRequest) {
-
+        
         const orders = await prismaClient.order.findMany({
             where: {
                 AND: [
                     {
                       create_at: {
-                        gte: start_date
+                        gte: startOfHour(new Date(start_date))
                       }
                     },
                     {
                       create_at: {
-                        lte: end_date
+                        lte: endOfHour(new Date(end_date))
                       }
                     }
                 ]

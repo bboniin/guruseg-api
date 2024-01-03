@@ -22,6 +22,7 @@ model User {
   email             String    @unique
   phone_number      String
   password          String
+  region            String    @default("")
   signature         Boolean   @default(false)
   sector1_id        String?   @default("")
   sector2_id        String?   @default("")
@@ -37,6 +38,42 @@ model User {
   orders Order[]
 
   @@map("users")
+}
+
+model CompanyRenewal {
+  id                String    @id @default(uuid())
+  razao_social      String?
+  fantasia          String?
+  region            String?   
+  type              String?    
+  cnpj              String?    
+  cpf               String?   
+  phone_number      String?
+  whatsapp          String?
+  observation       String?
+  date_init         DateTime? @default(now())
+  date_renewal      DateTime? @default(now())
+  create_at         DateTime? @default(now())
+  update_at         DateTime? @default(now())
+
+  companyTimeline CompanyTimeline[]
+
+  @@map("company_renewals")
+}
+
+model CompanyTimeline {
+  id             String    @id @default(uuid())
+  name           String
+  observation    String?
+  date_reminder  DateTime? @default(now())
+  check          Boolean   @default(false)
+  renewal        CompanyRenewal     @relation(fields: [renewal_id], references: [id], onDelete: Cascade)
+  renewal_id     String
+  create_at      DateTime? @default(now())
+  update_at      DateTime? @default(now())
+
+
+  @@map("company_timelines")
 }
 
 model Collaborator {

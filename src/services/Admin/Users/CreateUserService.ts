@@ -18,16 +18,15 @@ interface UserRequest {
     sector3_id: string;
     sector4_id: string;
     sector5_id: string;
+    region: string;
 }
 
 class CreateUserService {
-    async execute({ name, email, signature, category, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, phone_number, password, photo, courseBoolean, resaleBoolean, courseRestricted }: UserRequest) {
-
+    async execute({ name, email, region, signature, category, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, phone_number, password, photo, courseBoolean, resaleBoolean, courseRestricted }: UserRequest) {
 
         if (!email || !name || !phone_number || !category || !password) {
             throw new Error("Preencha todos os campos obrigátorios")
         }
-
 
         const userAlreadyExists = await prismaClient.user.findFirst({
             where: {
@@ -56,6 +55,7 @@ class CreateUserService {
                 password: passwordHash,
                 phone_number: phone_number,
                 photo: photo,
+                region: region,
                 signature: signature,
                 sector1_id: sector1_id,
                 sector2_id: sector2_id,
@@ -75,7 +75,6 @@ class CreateUserService {
         })
 
         return (user)
-
     }
 }
 

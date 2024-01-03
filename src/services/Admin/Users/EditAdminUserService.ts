@@ -19,10 +19,11 @@ interface UserRequest {
     sector3_id: string;
     sector4_id: string;
     sector5_id: string;
+    region: string;
 }
 
 class EditAdminUserService {
-    async execute({ name, email, signature, category, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, phone_number, photo, id, password, courseBoolean, resaleBoolean, courseRestricted}: UserRequest) {
+    async execute({ name, email, region, signature, category, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, phone_number, photo, id, password, courseBoolean, resaleBoolean, courseRestricted}: UserRequest) {
 
         const user = await prismaClient.user.findUnique({
             where: {
@@ -59,6 +60,7 @@ class EditAdminUserService {
             sector4_id: sector4_id,
             sector5_id: sector5_id,
             resale: resaleBoolean,
+            region: region,
             course_restricted: courseRestricted
         }
 
@@ -67,11 +69,8 @@ class EditAdminUserService {
             data["password"] = passwordHash
         }
 
-
         if (photo) {
             const s3Storage = new S3Storage()
-
-
 
             if (user["photo"]) {
                 await s3Storage.deleteFile(user["photo"])
@@ -82,7 +81,6 @@ class EditAdminUserService {
             data["photo"] = upload
         }
 
-
         const userRes = await prismaClient.user.update({
             where: {
                 id: id
@@ -91,7 +89,6 @@ class EditAdminUserService {
         })
 
         return (userRes)
-
     }
 }
 
