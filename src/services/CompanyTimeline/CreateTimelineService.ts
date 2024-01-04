@@ -15,7 +15,7 @@ class CreateTimelineService {
             throw new Error("Preencha todos os campos")
         }
         
-        if (isAfter(new Date(), date_reminder)) {
+        if (isAfter(new Date(), new Date(date_reminder))) {
             throw new Error("Nova data de renovação está no passado")
         }
 
