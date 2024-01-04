@@ -107,6 +107,7 @@ import { EditTimelineController } from './controllers/CompanyTimeline/EditTimeli
 import { DeleteTimelineController } from './controllers/CompanyTimeline/DeleteTimelineController'
 import { CheckTimelineController } from './controllers/CompanyTimeline/CheckTimelineController'
 import { GetTimelineController } from './controllers/CompanyTimeline/GetTimelineController'
+import { DeleteAllRenewalController } from './controllers/CompanyRenewal/DeleteAllRenewalController'
 
 
 const upload = multer(uploadConfig)
@@ -240,6 +241,7 @@ router.post('/company-renewal', new CreateRenewalController().handle)
 router.get('/companies-renewal', new ListRenewalsController().handle)
 router.put('/company-renewal/:id', new EditRenewalController().handle)
 router.delete('/company-renewal/:id', new DeleteRenewalController().handle)
+router.delete('/all-renewal', new DeleteAllRenewalController().handle)
 router.put('/renewal/:id', new CheckRenewalController().handle)
 
 

@@ -9,7 +9,7 @@ class ListTimelinesController {
         const listTimelinesService = new ListTimelinesService
 
         const timelines = await listTimelinesService.execute({
-            region: String(region)
+            region: region ? String(region) : ""
         })
 
         return res.json(timelines)
