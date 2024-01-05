@@ -30,6 +30,19 @@ class AcceptOrderService {
             throw new Error("Ordem de serviço já foi aceita por outro técnico.")
         }
 
+        const collaborator = await prismaClient.collaborator.findFirst({
+            where: {
+                id: userId
+            }
+        })
+
+        if (collaborator.user_id) {
+            if (collaborator.user_id != order.user_id) {
+                throw new Error("Você não pode aceitar OS de outro franqueado")
+            }
+            
+        }
+
         const path = resolve(
             __dirname,
             "..",

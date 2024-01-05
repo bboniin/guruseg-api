@@ -84,6 +84,7 @@ model Collaborator {
   email        String    @unique
   phone_number String
   password     String
+  user_id      String?   @default("")
   enabled      Boolean   @default(true)
   sector       String    @default("Serviços de segurança do Trabalho")
   visible      Boolean   @default(true)

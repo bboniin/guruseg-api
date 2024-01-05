@@ -7,7 +7,7 @@ interface ServiceRequest {
 class ListUsersService {
     async execute({ userId }: ServiceRequest) {
 
-        const services = await prismaClient.user.findMany({
+        const users = await prismaClient.user.findMany({
             where: {
                 visible: true
             },
@@ -16,7 +16,7 @@ class ListUsersService {
             }
         })
 
-        return (services)
+        return (users)
     }
 }
 

@@ -22,6 +22,10 @@ class ListOpenOrdersService {
             }
         }
 
+        if (collaborator.user_id) {
+            whereData["user_id"] = collaborator.user_id
+        }
+
         const orders = await prismaClient.order.findMany({
             where: whereData,
             orderBy: {

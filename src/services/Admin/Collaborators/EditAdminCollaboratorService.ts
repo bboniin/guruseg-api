@@ -11,10 +11,11 @@ interface CollaboratorRequest {
     enabled: boolean;
     sector: string
     id: string;
+    user_id: string;
 }
 
 class EditAdminCollaboratorService {
-    async execute({ password, name, email, phone_number, photo, id, sector, enabled }: CollaboratorRequest) {
+    async execute({ password, name, user_id, email, phone_number, photo, id, sector, enabled }: CollaboratorRequest) {
 
         const collaborator = await prismaClient.collaborator.findUnique({
             where: {
@@ -26,15 +27,27 @@ class EditAdminCollaboratorService {
             throw new Error("Preencha todos os campos obrigátorios")
         }
 
-        const collaboratorExist = await prismaClient.collaborator.findUnique({
+        const collaboratorExistEmail = await prismaClient.collaborator.findFirst({
             where: {
                 email: email
             }
         })
 
-        if (collaboratorExist) {
-            if (collaboratorExist.email != collaborator.email) {
+        if (collaboratorExistEmail) {
+            if (collaboratorExistEmail.email != collaborator.email) {
                 throw new Error("Email já está sendo utilizado")
+            }
+        }
+
+        const collaboratorExistUser = await prismaClient.collaborator.findFirst({
+            where: {
+                user_id: user_id
+            }
+        })
+
+        if (collaboratorExistUser) {
+            if (collaboratorExistUser.user_id != collaborator.user_id) {
+                throw new Error("Franqueado já vinculado a outro técnico.")
             }
         }
 
@@ -43,7 +56,8 @@ class EditAdminCollaboratorService {
             email: email,
             enabled: enabled,
             phone_number: phone_number,
-            sector: sector
+            sector: sector,
+            user_id: user_id
         }
 
         if (password) {

@@ -9,25 +9,36 @@ interface CollaboratorRequest {
     photo: string;
     enabled: boolean
     password: string;
-    sector: string
+    sector: string;
+    user_id: string;
 }
 
 class CreateCollaboratorService {
-    async execute({ name, email, phone_number, password, photo, sector, enabled }: CollaboratorRequest) {
+    async execute({ name, email, phone_number, user_id, password, photo, sector, enabled }: CollaboratorRequest) {
 
         if (!email || !name || !phone_number || !password || !sector) {
             throw new Error("Preencha todos os campos obrigátorios")
         }
 
 
-        const collaboratorAlreadyExists = await prismaClient.collaborator.findFirst({
+        const collaboratorAlreadyExistEmail = await prismaClient.collaborator.findFirst({
             where: {
-                email: email
+                email: email,
             }
         })
 
-        if (collaboratorAlreadyExists) {
+        if (collaboratorAlreadyExistEmail) {
             throw new Error("Email já cadastrado.")
+        }
+
+        const collaboratorAlreadyExistUser = await prismaClient.collaborator.findFirst({
+            where: {
+                user_id: user_id
+            }
+        })
+
+        if (collaboratorAlreadyExistUser) {
+            throw new Error("Franqueado já vinculado a outro técnico.")
         }
 
         if (photo) {
@@ -47,7 +58,8 @@ class CreateCollaboratorService {
                 phone_number: phone_number,
                 photo: photo,
                 enabled: enabled,
-                sector: sector
+                sector: sector,
+                user_id: user_id
             },
             select: {
                 id: true,
