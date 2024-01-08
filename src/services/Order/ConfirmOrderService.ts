@@ -34,6 +34,13 @@ class ConfirmOrderService {
 
         const tecnico = await prismaClient.collaborator.findFirst({
             where: {
+                enabled: true,
+                visible: true,
+                OR: [{
+                    sector: "Todos"
+                }, {
+                    sector: orderGet.sector
+                }],
                 user_id: userId
             }, 
         })
