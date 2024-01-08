@@ -56,13 +56,12 @@ class ConfirmOrderService {
                 where: {
                     enabled: true,
                     visible: true,
+                    user_id: "",
                     OR: [{
-                    sector: orderGet.sector
-                    },
-                    {
-                    sector: "Todos"
-                    },
-                    ]
+                            sector: orderGet.sector
+                        },{
+                            sector: "Todos"
+                        }]
                 }
             })
 

@@ -33,12 +33,13 @@ class CreateCollaboratorService {
 
         const collaboratorAlreadyExistUser = await prismaClient.collaborator.findFirst({
             where: {
+                sector: sector,
                 user_id: user_id
             }
         })
 
         if (collaboratorAlreadyExistUser) {
-            throw new Error("Franqueado já vinculado a outro técnico.")
+            throw new Error("Franqueado já vinculado a outro técnico desse setor.")
         }
 
         if (photo) {
