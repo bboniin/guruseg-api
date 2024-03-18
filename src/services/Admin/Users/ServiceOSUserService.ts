@@ -1,4 +1,4 @@
-import { endOfHour, startOfHour } from 'date-fns';
+import { endOfDay, startOfDay } from 'date-fns';
 import prismaClient from '../../../prisma'
 
 interface ServiceRequest {
@@ -34,12 +34,12 @@ class ServiceOSUserService {
                 AND: [
                     {
                       update_at: {
-                        gte: startOfHour(new Date(start_date))
+                        gte: startOfDay(new Date(start_date))
                       }
                     },
                     {
                       update_at: {
-                        lte: endOfHour(new Date(end_date))
+                        lte: endOfDay(new Date(end_date))
                       }
                     }
                 ]

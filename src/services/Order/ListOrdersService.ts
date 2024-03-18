@@ -1,13 +1,16 @@
+import { endOfDay, startOfDay } from 'date-fns';
 import prismaClient from '../../prisma'
 
 interface OrderRequest {
     userId: string;
     type: string;
-    month: string
+    finance: boolean;
+    startDate: Date;
+    endDate: Date;
 }
 
 class ListOrdersService {
-    async execute({ userId, type, month }: OrderRequest) {
+    async execute({ userId, type, finance, startDate, endDate }: OrderRequest) {
 
         let data = {}
 
@@ -25,9 +28,32 @@ class ListOrdersService {
             }
         }
 
-        if (month && month != "undefined") {
-            data["month"] = month
+
+        if (finance) {
             data["status"] = "finalizado"
+            data["AND"] = [
+                {
+                update_at: {
+                    gte: startOfDay(startDate)
+                }
+                },
+                {
+                update_at: {
+                    lte: endOfDay(endDate)
+                }
+            }]
+        } else {
+            data["AND"] = [
+                {
+                  create_at: {
+                    gte: startOfDay(startDate)
+                  }
+                },
+                {
+                  create_at: {
+                    lte: endOfDay(endDate)
+                  }
+            }]
         }
 
         const orders = await prismaClient.order.findMany({
@@ -48,7 +74,7 @@ class ListOrdersService {
             }
         })
 
-        const status = {
+        const statusC = {
             "aberto": 0,
             "andamento": 0,
             "pendente": 0,
@@ -60,7 +86,7 @@ class ListOrdersService {
         }
 
         let ordersStatus = orders.sort(function (a, b) {
-            return status[a.status] < status[b.status] ? -1 : status[a.status] > status[b.status] ? 1 : 0;
+            return statusC[a.status] < statusC[b.status] ? -1 : statusC[a.status] > statusC[b.status] ? 1 : 0;
         })
 
         return (ordersStatus)

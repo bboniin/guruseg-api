@@ -1,4 +1,4 @@
-import { endOfHour, startOfHour } from 'date-fns';
+import { endOfDay, startOfDay } from 'date-fns';
 import prismaClient from '../../prisma'
 
 interface OrderRequest {
@@ -14,12 +14,12 @@ class ListAdminOrdersPeriodoService {
                 AND: [
                     {
                       create_at: {
-                        gte: startOfHour(new Date(start_date))
+                        gte: startOfDay(new Date(start_date))
                       }
                     },
                     {
                       create_at: {
-                        lte: endOfHour(new Date(end_date))
+                        lte: endOfDay(new Date(end_date))
                       }
                     }
                 ]
