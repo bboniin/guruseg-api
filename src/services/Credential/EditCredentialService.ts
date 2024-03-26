@@ -9,8 +9,6 @@ interface CredentialRequest {
     phone_number: string;
     state: string;
     city: string;
-    cpf: string;
-    rg: string;
     served_cities: string;
     birthday: string;
     services: string;
@@ -21,7 +19,7 @@ interface CredentialRequest {
 }
 
 class EditCredentialService {
-    async execute({ userId, email, description, photo, password, name, phone_number, rg, cpf, state, city, served_cities, birthday, services, profession }: CredentialRequest) {
+    async execute({ userId, email, description, photo, password, name, phone_number, state, city, served_cities, birthday, services, profession }: CredentialRequest) {
 
         const credential = await prismaClient.credential.findUnique({
             where: {
@@ -41,14 +39,13 @@ class EditCredentialService {
             }
         }
 
-        if (!email || !description || !name || !phone_number || !rg || !cpf || !state || !city || !served_cities || !birthday || !services || !profession) {
+        if (!email || !description || !name || !phone_number || !state || !city || !served_cities || !birthday || !services || !profession) {
             throw new Error("Preencha todos os campos para salvar.")
         }
 
         let data = {
             name: name,
             email: email,
-            rg: rg,
             phone_number: phone_number,
             state: state,
             city: city,
@@ -56,8 +53,7 @@ class EditCredentialService {
             birthday: birthday,
             services: services,
             profession: profession,
-            description: description,
-            cpf: cpf
+            description: description
         }
 
         if (password) {

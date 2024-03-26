@@ -280,8 +280,6 @@ model Credential {
   city          String?
   enabled       Boolean   @default(false)
   visible       Boolean   @default(true)
-  cpf           String?
-  rg            String?
   served_cities String?
   birthday      String?
   services      String?

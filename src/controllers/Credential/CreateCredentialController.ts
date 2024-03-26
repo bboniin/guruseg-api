@@ -3,7 +3,7 @@ import { CreateCredentialService } from '../../services/Credential/CreateCredent
 
 class CreateCredentialController {
     async handle(req: Request, res: Response) {
-        const { email, description, password, name, phone_number, rg, cpf, state, city, served_cities, birthday, services, profession } = req.body
+        const { email, description, password, name, phone_number, state, city, served_cities, birthday, services, profession } = req.body
 
         let photo = ""
         if (req.file) {
@@ -13,7 +13,7 @@ class CreateCredentialController {
         const createCredentialService = new CreateCredentialService
 
         const credential = await createCredentialService.execute({
-            email, photo, description, password, name, phone_number, rg, cpf, state, city, served_cities, birthday, services, profession
+            email, photo, description, password, name, phone_number, state, city, served_cities, birthday, services, profession
         })
 
         return res.json(credential)

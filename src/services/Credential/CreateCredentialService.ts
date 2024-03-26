@@ -11,8 +11,6 @@ interface CredentialRequest {
     phone_number: string;
     state: string;
     city: string;
-    cpf: string;
-    rg: string;
     served_cities: string;
     birthday: string;
     photo: string;
@@ -22,7 +20,7 @@ interface CredentialRequest {
 }
 
 class CreateCredentialService {
-    async execute({ email, photo, description, password, name, phone_number, rg, cpf, state, city, served_cities, birthday, services, profession }: CredentialRequest) {
+    async execute({ email, photo, description, password, name, phone_number, state, city, served_cities, birthday, services, profession }: CredentialRequest) {
 
         if (!email || !name) {
             throw new Error("Preencha pelo menos o nome e email para cadastrar o credenciado.")
@@ -38,7 +36,7 @@ class CreateCredentialService {
             throw new Error("O email digitado já está sendo usado.")
         }
 
-        if (!email || !photo || !description || !password || !name || !phone_number || !rg || !cpf || !state || !city || !served_cities || !birthday || !services || !profession) {
+        if (!email || !photo || !description || !password || !name || !phone_number || !state || !city || !served_cities || !birthday || !services || !profession) {
             throw new Error("Preencha todos os campos para salvar.")
         }
 
@@ -61,8 +59,6 @@ class CreateCredentialService {
                 password,
                 name,
                 phone_number,
-                rg,
-                cpf,
                 state,
                 photo,
                 description,

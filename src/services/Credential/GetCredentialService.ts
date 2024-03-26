@@ -20,8 +20,6 @@ class GetCredentialService {
                 services: true,
                 served_cities: true,
                 profession: true,
-                rg: true,
-                cpf: true,
                 birthday: true,
                 description: true,
                 photo: true,

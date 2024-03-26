@@ -13,8 +13,6 @@ interface CredentialRequest {
     phone_number: string;
     state: string;
     city: string;
-    cpf: string;
-    rg: string;
     photo: string;
     description: string;
     served_cities: string;
@@ -24,7 +22,7 @@ interface CredentialRequest {
 }
 
 class AdminCreateCredentialService {
-    async execute({ email, photo, description, password, name, phone_number, rg, cpf, state, city, served_cities, birthday, services, profession }: CredentialRequest) {
+    async execute({ email, photo, description, password, name, phone_number, state, city, served_cities, birthday, services, profession }: CredentialRequest) {
 
         if (!email || !name) {
             throw new Error("Preencha pelo menos o nome e email para cadastrar o credenciado.")
@@ -53,15 +51,13 @@ class AdminCreateCredentialService {
             password = passwordHash
         }
 
-        if (email && description && photo && password && name && phone_number && rg && cpf && state && city && served_cities && birthday && services && profession) {
+        if (email && description && photo && password && name && phone_number && state && city && served_cities && birthday && services && profession) {
             const credential = await prismaClient.credential.create({
                 data: {
                     email,
                     password,
                     name,
                     phone_number,
-                    rg,
-                    cpf,
                     state,
                     city,
                     description,
@@ -82,8 +78,6 @@ class AdminCreateCredentialService {
                     password,
                     name,
                     phone_number,
-                    rg,
-                    cpf,
                     state,
                     city,
                     description,
