@@ -168,7 +168,6 @@ model Service {
   value           Float
   commission      Float     @default(0)
   visible         Boolean   @default(true)
-  clients_select  String    @default("")
   description     String?
   sector          String    @default("Serviços de segurança do Trabalho")
   create_at       DateTime? @default(now())
