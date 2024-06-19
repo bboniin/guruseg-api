@@ -18,7 +18,6 @@ class GetUserAdminController {
             }
         }
 
-
         return res.json(user)
     }
 }

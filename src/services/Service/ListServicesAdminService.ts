@@ -1,11 +1,7 @@
 import prismaClient from '../../prisma'
 
-interface ServiceRequest {
-    userId: string;
-}
-
-class ListServicesService {
-    async execute({ userId }: ServiceRequest) {
+class ListServicesAdminService {
+    async execute() {
 
         const services = await prismaClient.service.findMany({
             where: {
@@ -20,4 +16,4 @@ class ListServicesService {
     }
 }
 
-export { ListServicesService }
+export { ListServicesAdminService }

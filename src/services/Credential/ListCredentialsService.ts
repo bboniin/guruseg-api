@@ -1,16 +1,56 @@
 import prismaClient from '../../prisma'
 
+interface CredentialRequest {
+    state: string;
+    city: string;
+    service: string;
+    page: number;
+}
+
 class ListCredentialsService {
-    async execute() {
+    async execute({ state, city, service, page }: CredentialRequest) {
+
+        let filter = {
+            enabled: true,
+            visible: true
+        }
+
+        if (state) {
+            filter["OR"] = [{
+                state: state
+            },{
+                served_cities: { contains: state }
+            }]
+        }
+
+        if (city) {
+            filter["OR"] = [{
+                AND: [{
+                    city: city
+                },
+                {
+                    state: state
+                }]
+            }, {
+                served_cities: { contains: city + ` - ${state};` }
+            }]
+        }
+
+        if (service) {
+            filter["services"] = { contains: service }
+        }
+
+        const credentialsTotal = await prismaClient.credential.count({
+            where: filter
+        })
 
         const credentials = await prismaClient.credential.findMany({
-            where: {
-                enabled: true,
-                visible: true
-            },
+            where: filter,
             orderBy: {
                 update_at: "desc"
             },
+            skip: page * 30,
+            take: 30,
             select: {
                 email: true,
                 name: true,
@@ -28,7 +68,7 @@ class ListCredentialsService {
             }
         })
 
-        return (credentials)
+        return ({credentials, total: credentialsTotal})
     }
 }
 

@@ -18,11 +18,12 @@ interface UserRequest {
     sector3_id: string;
     sector4_id: string;
     sector5_id: string;
+    services: string;
     region: string;
 }
 
 class CreateUserService {
-    async execute({ name, email, region, signature, category, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, phone_number, password, photo, courseBoolean, resaleBoolean, courseRestricted }: UserRequest) {
+    async execute({ name, email, region, signature, category, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, phone_number, password, photo, services, courseBoolean, resaleBoolean, courseRestricted }: UserRequest) {
 
         if (!email || !name || !phone_number || !category || !password) {
             throw new Error("Preencha todos os campos obrigátorios")
@@ -64,6 +65,7 @@ class CreateUserService {
                 sector5_id: sector5_id,
                 course: courseBoolean,
                 resale: resaleBoolean,
+                services: services,
                 course_restricted: courseRestricted
             },
             select: {

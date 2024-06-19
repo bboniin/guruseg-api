@@ -19,6 +19,7 @@ model User {
   category          String    @default("franqueado")
   type              String    @default("cliente")
   course_restricted Boolean   @default(false)
+  services          String    @default("")
   email             String    @unique
   phone_number      String
   password          String
@@ -162,15 +163,16 @@ model Item {
 }
 
 model Service {
-  id          String    @id @default(uuid())
-  name        String
-  value       Float
-  commission  Float     @default(0)
-  visible     Boolean   @default(true)
-  description String?
-  sector      String    @default("Serviços de segurança do Trabalho")
-  create_at   DateTime? @default(now())
-  update_at   DateTime? @default(now())
+  id              String    @id @default(uuid())
+  name            String
+  value           Float
+  commission      Float     @default(0)
+  visible         Boolean   @default(true)
+  clients_select  String    @default("")
+  description     String?
+  sector          String    @default("Serviços de segurança do Trabalho")
+  create_at       DateTime? @default(now())
+  update_at       DateTime? @default(now())
 
   @@map("services")
 }

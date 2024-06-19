@@ -15,7 +15,18 @@ class GetUserAdminService {
                 name: true,
                 email: true,
                 course: true,
-                resale: true
+                resale: true,
+                signature: true,
+                course_restricted: true,
+                sector1_id: true,
+                sector2_id: true,
+                sector3_id: true,
+                sector4_id: true,
+                sector5_id: true,
+                services: true,
+                phone_number: true,
+                category: true,
+                photo: true
             }
         })
 

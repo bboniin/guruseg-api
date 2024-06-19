@@ -12,13 +12,6 @@ interface UserRequest {
 class EditUserService {
     async execute({ name, email, phone_number, photo, userId }: UserRequest) {
 
-        const userRes = await prismaClient.user.findUnique({
-            where: {
-                id: userId
-            }
-        })
-
-
         if (!email || !name || !phone_number) {
             throw new Error("Preencha todos os campos obrigátorios")
         }

@@ -14,7 +14,6 @@ import { EditCollaboratorController } from './controllers/Collaborator/EditColla
 import { isAuthenticated } from './middlewares/isAuthenticated'
 
 import { CreateServiceController } from './controllers/Service/CreateServiceController'
-import { ListServicesController } from './controllers/Service/ListServicesController'
 import { EditServiceController } from './controllers/Service/EditServiceController'
 import { DeleteServiceController } from './controllers/Service/DeleteServiceController'
 
@@ -109,6 +108,9 @@ import { CheckTimelineController } from './controllers/CompanyTimeline/CheckTime
 import { GetTimelineController } from './controllers/CompanyTimeline/GetTimelineController'
 import { DeleteAllRenewalController } from './controllers/CompanyRenewal/DeleteAllRenewalController'
 import { EditAllRenewalsController } from './controllers/CompanyRenewal/EditAllRenewalsController'
+import { ListServicesAdminController } from './controllers/Service/ListServicesAdminController'
+import { ListServicesClientController } from './controllers/Service/ListServicesClientController'
+import { DeleteEmployeController } from './controllers/Company/DeleteEmployeController'
 
 
 const upload = multer(uploadConfig)
@@ -122,7 +124,6 @@ router.post('/user-session', new AuthUserController().handle)
 router.post('/admin-session', new AuthAdminController().handle)
 router.post('/collaborator-session', new AuthCollaboratorController().handle)
 router.post('/credential-session', new AuthCredentialController().handle)
-router.get('/services', new ListServicesController().handle)
 router.get('/banners-public', new ListBannersPublicController().handle)
 router.get('/contract/:id', new GetContractController().handle)
 router.put('/signature-contract/:id', new SignatureContractController().handle)
@@ -141,6 +142,8 @@ router.put('/company/:company_id', new ConfirmCompanyController().handle)
 
 router.use(isAuthenticated)
 
+router.get('/services', new ListServicesAdminController().handle)
+router.get('/services-client', new ListServicesClientController().handle)
 // Credential
 
 router.put('/credential', upload.single("file"), new EditCredentialController().handle)
@@ -236,6 +239,7 @@ router.post('/company-image/:company_id', upload.single("file"), new CreateImage
 router.delete('/company-image/:id', new DeleteImageCompanyController().handle)
 router.put('/company-handler/:company_id', new HandlerCompanyController().handle)
 router.put('/company-edit/:company_id', new EditCompanyController().handle)
+router.delete('/employe/:employe_id', new DeleteEmployeController().handle)
 
 router.post('/service-os/:id', new ServiceOSUserController().handle)
 

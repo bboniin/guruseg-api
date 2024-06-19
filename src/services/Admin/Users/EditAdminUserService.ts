@@ -18,18 +18,23 @@ interface UserRequest {
     sector2_id: string;
     sector3_id: string;
     sector4_id: string;
+    services: string;
     sector5_id: string;
     region: string;
 }
 
 class EditAdminUserService {
-    async execute({ name, email, region, signature, category, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, phone_number, photo, id, password, courseBoolean, resaleBoolean, courseRestricted}: UserRequest) {
+    async execute({ name, email, region, signature, category, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, services, phone_number, photo, id, password, courseBoolean, resaleBoolean, courseRestricted}: UserRequest) {
 
         const user = await prismaClient.user.findUnique({
             where: {
                 id: id
             },
         })
+
+        if (!user ) {
+            throw new Error("Franqueado não encontrado")
+        }
 
         if (!email || !name || !category || !phone_number ) {
             throw new Error("Preencha todos os campos obrigátorios")
@@ -61,6 +66,7 @@ class EditAdminUserService {
             sector5_id: sector5_id,
             resale: resaleBoolean,
             region: region,
+            services: services,
             course_restricted: courseRestricted
         }
 
