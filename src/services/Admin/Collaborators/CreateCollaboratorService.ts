@@ -31,7 +31,7 @@ class CreateCollaboratorService {
             throw new Error("Email já cadastrado.")
         }
 
-        if(sector){
+        if(user_id){
             const collaboratorAlreadyExistUser = await prismaClient.collaborator.findFirst({
                 where: {
                     sector: sector,

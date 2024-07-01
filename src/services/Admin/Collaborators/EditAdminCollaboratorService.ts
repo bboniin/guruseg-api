@@ -40,7 +40,7 @@ class EditAdminCollaboratorService {
         }
 
 
-        if(sector){
+        if(user_id){
             const collaboratorExistUser = await prismaClient.collaborator.findFirst({
                 where: {
                     sector: sector,
