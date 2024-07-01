@@ -39,16 +39,19 @@ class EditAdminCollaboratorService {
             }
         }
 
-        const collaboratorExistUser = await prismaClient.collaborator.findFirst({
-            where: {
-                sector: sector,
-                user_id: user_id
-            }
-        })
 
-        if (collaboratorExistUser) {
-            if (collaboratorExistUser.id != collaborator.id || collaboratorExistUser.user_id != collaborator.user_id) {
-                throw new Error("Franqueado já vinculado a outro técnico desse setor.")
+        if(sector){
+            const collaboratorExistUser = await prismaClient.collaborator.findFirst({
+                where: {
+                    sector: sector,
+                    user_id: user_id
+                }
+            })
+
+            if (collaboratorExistUser) {
+                if (collaboratorExistUser.id != collaborator.id || collaboratorExistUser.user_id != collaborator.user_id) {
+                    throw new Error("Franqueado já vinculado a outro técnico desse setor.")
+                }
             }
         }
 

@@ -31,16 +31,20 @@ class CreateCollaboratorService {
             throw new Error("Email já cadastrado.")
         }
 
-        const collaboratorAlreadyExistUser = await prismaClient.collaborator.findFirst({
-            where: {
-                sector: sector,
-                user_id: user_id
-            }
-        })
+        if(sector){
+            const collaboratorAlreadyExistUser = await prismaClient.collaborator.findFirst({
+                where: {
+                    sector: sector,
+                    user_id: user_id
+                }
+            })
 
-        if (collaboratorAlreadyExistUser) {
-            throw new Error("Franqueado já vinculado a outro técnico desse setor.")
+            if (collaboratorAlreadyExistUser) {
+                throw new Error("Franqueado já vinculado a outro técnico desse setor.")
+            }
         }
+
+        
 
         if (photo) {
             const s3Storage = new S3Storage()
