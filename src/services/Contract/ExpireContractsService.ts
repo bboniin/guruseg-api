@@ -21,8 +21,29 @@ class ExpireContractsService {
                         update_at: new Date(),
                     }
                 })
+
+                if(item.lead_id){
+                    await prismaClient.historic.create({
+                        data: {
+                            lead_id: item.lead_id,
+                            name: "Proposta expirou, Cliente perdido"
+                        }
+                    })
+            
+                    await prismaClient.lead.update({
+                        where: {
+                            id: item.lead_id
+                        },
+                        data: {
+                            status: "Cliente Perdido",
+                            update_at: new Date()
+                        }
+                    })
+                }
             }
         })
+
+
         return ""
     }
 }

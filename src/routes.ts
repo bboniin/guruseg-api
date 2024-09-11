@@ -111,6 +111,15 @@ import { EditAllRenewalsController } from './controllers/CompanyRenewal/EditAllR
 import { ListServicesAdminController } from './controllers/Service/ListServicesAdminController'
 import { ListServicesClientController } from './controllers/Service/ListServicesClientController'
 import { DeleteEmployeController } from './controllers/Company/DeleteEmployeController'
+import { ListLeadsClientController } from './controllers/Lead/ListLeadsClientController'
+import { CreateLeadController } from './controllers/Lead/CreateLeadController'
+import { CreateLeadWebController } from './controllers/Lead/CreateLeadWebController'
+import { EditLeadController } from './controllers/Lead/EditLeadController'
+import { StatusLeadController } from './controllers/Lead/StatusLeadController'
+import { GetLeadController } from './controllers/Lead/GetLeadController'
+import { ListLeadsController } from './controllers/Lead/ListLeadsController'
+import { DeleteLeadController } from './controllers/Lead/DeleteLeadController'
+import { SendLeadsController } from './controllers/Lead/SendLeadsController'
 
 
 const upload = multer(uploadConfig)
@@ -119,6 +128,7 @@ const router = Router()
 
 // Routes Publics
 
+router.post('/lead/web', new CreateLeadWebController().handle)
 router.put('/all-renewal', new EditAllRenewalsController().handle)
 router.post('/user-session', new AuthUserController().handle)
 router.post('/admin-session', new AuthAdminController().handle)
@@ -144,6 +154,7 @@ router.use(isAuthenticated)
 
 router.get('/services', new ListServicesAdminController().handle)
 router.get('/services-client', new ListServicesClientController().handle)
+
 // Credential
 
 router.put('/credential', upload.single("file"), new EditCredentialController().handle)
@@ -228,6 +239,17 @@ router.get('/contracts', new ListContractsController().handle)
 router.get('/contracts/:user_id', new AdminListContractsController().handle)
 router.post('/contract', new CreateContractController().handle)
 router.delete('/contract/:id', new DeleteContractController().handle)
+
+// CRM
+
+router.get('/lead/:id', new GetLeadController().handle)
+router.get('/leads/me', new ListLeadsClientController().handle)
+router.get('/leads', new ListLeadsController().handle)
+router.post('/lead', new CreateLeadController().handle)
+router.put('/lead/send', new SendLeadsController().handle)
+router.put('/lead/:id', new EditLeadController().handle)
+router.put('/lead/status/:id', new StatusLeadController().handle)
+router.delete('/lead/:id', new DeleteLeadController().handle)
 
 // Companies
 

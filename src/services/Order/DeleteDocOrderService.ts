@@ -10,7 +10,7 @@ class DeleteDocOrderService {
     async execute({ type, id }: DocRequest) {
 
         if (!type || !id) {
-            throw new Error("Preencha todos os campos obrigátorios")
+            throw new Error("Preencha todos os campos obrigatórios")
         }
 
         const docFile = await prismaClient.doc.findFirst({

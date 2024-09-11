@@ -30,6 +30,25 @@ class SignatureContractService {
             }
         })
 
+        if(contractSignature.lead_id){
+            await prismaClient.historic.create({
+                data: {
+                    lead_id: contractSignature.lead_id,
+                    name: "Cliente fechado"
+                }
+            })
+    
+            await prismaClient.lead.update({
+                where: {
+                    id: contractSignature.lead_id
+                },
+                data: {
+                    status: "Cliente Fechado",
+                    update_at: new Date()
+                }
+            })
+        }
+
         return (contractSignature)
     }
 }

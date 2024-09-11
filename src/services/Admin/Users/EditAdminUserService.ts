@@ -37,7 +37,7 @@ class EditAdminUserService {
         }
 
         if (!email || !name || !category || !phone_number ) {
-            throw new Error("Preencha todos os campos obrigátorios")
+            throw new Error("Preencha todos os campos obrigatórios")
         }
 
         const userExist = await prismaClient.user.findUnique({

@@ -13,7 +13,7 @@ class EditCollaboratorService {
     async execute({ name, email, phone_number, photo, collaboratorId }: CollaboratorRequest) {
 
         if (!email || !name || !phone_number) {
-            throw new Error("Preencha todos os campos obrigátorios")
+            throw new Error("Preencha todos os campos obrigatórios")
         }
 
         const collaboratorExist = await prismaClient.collaborator.findUnique({

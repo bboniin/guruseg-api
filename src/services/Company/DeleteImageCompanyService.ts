@@ -9,7 +9,7 @@ class DeleteImageCompanyService {
     async execute({ id }: ImageRequest) {
 
         if (!id) {
-            throw new Error("Id da imagem é obrigátorio")
+            throw new Error("Id da imagem é obrigatório")
         }
 
         const image = await prismaClient.companyImages.findFirst({

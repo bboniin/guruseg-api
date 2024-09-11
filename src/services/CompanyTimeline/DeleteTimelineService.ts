@@ -8,7 +8,7 @@ class DeleteTimelineService {
     async execute({ id }: TimelineRequest) {
 
         if (!id) {
-            throw new Error("ID é obrigátorio")
+            throw new Error("ID é obrigatório")
         }
 
         const timelineGet = await prismaClient.companyTimeline.findFirst({

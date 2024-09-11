@@ -24,7 +24,7 @@ class CreateCourseService {
         }
 
         if (!name) {
-            throw new Error("Nome do curso é obrigátorio")
+            throw new Error("Nome do curso é obrigatório")
         }
 
         if (photo) {

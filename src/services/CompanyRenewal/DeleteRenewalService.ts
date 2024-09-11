@@ -8,7 +8,7 @@ class DeleteRenewalService {
     async execute({ id }: RenewalRequest) {
 
         if (!id) {
-            throw new Error("ID é obrigátorio")
+            throw new Error("ID é obrigatório")
         }
 
         const renewalGet = await prismaClient.companyRenewal.findFirst({

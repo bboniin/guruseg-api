@@ -17,7 +17,7 @@ class CreateCollaboratorService {
     async execute({ name, email, phone_number, user_id, password, photo, sector, enabled }: CollaboratorRequest) {
 
         if (!email || !name || !phone_number || !password || !sector) {
-            throw new Error("Preencha todos os campos obrigátorios")
+            throw new Error("Preencha todos os campos obrigatórios")
         }
 
 

@@ -13,6 +13,7 @@ interface ContractrRequest {
     life_value: number;
     initial_value: number;
     discount: number;
+    lead_id: string;
     service_name: string;
     service_value: number;
     service_description: string;
@@ -21,7 +22,7 @@ interface ContractrRequest {
 }
 
 class CreateContractService {
-    async execute({ userId, life_value, initial_value, services_gestao, services, risk, lifes, name, company, contact, consultant, phone_number, banking, discount, service_name, service_value, service_description }: ContractrRequest) {
+    async execute({ userId, life_value, lead_id, initial_value, services_gestao, services, risk, lifes, name, company, contact, consultant, phone_number, banking, discount, service_name, service_value, service_description }: ContractrRequest) {
 
         if (!name || !company || !contact || !consultant || !phone_number || !banking) {
             throw new Error("Preencha as informações básicas do contrato")
@@ -33,7 +34,7 @@ class CreateContractService {
 
         let newContract = {
             user_id: userId,
-            name, company, contact, consultant, phone_number, banking
+            name, company, contact, consultant, phone_number, banking, lead_id
         }
 
         if (risk && lifes && life_value && initial_value) {
@@ -47,7 +48,7 @@ class CreateContractService {
         if (services.length != 0) {
             newContract["discount"] = discount
             if ((!service_name && service_value) || (service_name && !service_value)) {
-                throw new Error("Adicionando serviço extra, é obrigátorio preencher nome e valor.")
+                throw new Error("Adicionando serviço extra, é obrigatório preencher nome e valor.")
             }
             newContract["service_name"] = service_name
             newContract["service_value"] = service_value
@@ -72,6 +73,26 @@ class CreateContractService {
                     }
                 })
                 contract["services"].push(itemcontract)
+            })
+        }
+
+        if(lead_id){
+            await prismaClient.historic.create({
+                data: {
+                    lead_id: lead_id,
+                    name: "Proposta enviada para o lead"
+                }
+            })
+    
+            await prismaClient.lead.update({
+                where: {
+                    id: lead_id
+                },
+                data: {
+                    contract_id: contract.id,
+                    status: "Proposta Enviada",
+                    update_at: new Date()
+                }
             })
         }
 

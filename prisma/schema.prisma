@@ -36,7 +36,8 @@ model User {
   create_at         DateTime? @default(now())
   update_at         DateTime? @default(now())
 
-  orders Order[]
+  orders            Order[]
+  leads             Lead[]
 
   @@map("users")
 }
@@ -176,6 +177,42 @@ model Service {
   @@map("services")
 }
 
+model Lead {
+  id              String    @id @default(uuid())
+  name            String
+  email           String
+  phone_number    String
+  status          String    @default("Oportunidade")
+  send            String?
+  necessity       String?
+  cnpj            String?
+  employees       String?
+  location        String?
+  user_id         String?
+  contract_id     String?
+  value           Float?     
+  observation     String?
+  create_at       DateTime? @default(now())
+  update_at       DateTime? @default(now())
+
+  user            User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  historical      Historic[]
+  
+  @@map("leads")
+}
+
+model Historic {
+  id        String    @id @default(uuid())
+  name      String
+  lead_id   String
+  create_at DateTime? @default(now())
+  update_at DateTime? @default(now())
+  lead      Lead      @relation(fields: [lead_id], references: [id], onDelete: Cascade)
+
+  @@map("historical")
+}
+
 model Banner {
   id        String    @id @default(uuid())
   photo     String
@@ -227,6 +264,7 @@ model Contract {
   consultant          String
   phone_number        String
   banking             String
+  lead_id             String?   @default("")
   services_gestao     String?   @default("")
   status              String    @default("aguardando")
   risk                Int?

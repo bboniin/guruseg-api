@@ -12,7 +12,7 @@ class CreateDocService {
 
 
         if (!file || !type || !id) {
-            throw new Error("Preencha todos os campos obrigátorios")
+            throw new Error("Preencha todos os campos obrigatórios")
         }
 
         const s3Storage = new S3Storage()

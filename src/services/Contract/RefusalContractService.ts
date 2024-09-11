@@ -28,6 +28,24 @@ class RefusalContractService {
             }
         })
 
+        if(contracResusal.lead_id){
+            await prismaClient.historic.create({
+                data: {
+                    lead_id: contracResusal.lead_id,
+                    name: "Cliente perdido"
+                }
+            })
+    
+            await prismaClient.lead.update({
+                where: {
+                    id: contracResusal.lead_id
+                },
+                data: {
+                    status: "Cliente Perdido",
+                    update_at: new Date()
+                }
+            })
+        }
 
         return (contracResusal)
     }

@@ -14,7 +14,7 @@ class EditServiceService {
     async execute({ name, id, description, value, commission, sector }: ServiceRequest) {
 
         if (!name || !value || !commission || !sector) {
-            throw new Error("Nome, valor, setor e comissão é obrigátorio")
+            throw new Error("Nome, valor, setor e comissão é obrigatório")
         }
 
         let data = {

@@ -13,7 +13,7 @@ class CreateServiceService {
     async execute({ name, description, value, commission, sector }: ServiceRequest) {
 
         if (!name || !value || !commission || !sector) {
-            throw new Error("Nome, valor, setor e comissão é obrigátorio")
+            throw new Error("Nome, valor, setor e comissão é obrigatório")
         }
 
         const service = await prismaClient.service.create({

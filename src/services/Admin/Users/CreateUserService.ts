@@ -26,7 +26,7 @@ class CreateUserService {
     async execute({ name, email, region, signature, category, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, phone_number, password, photo, services, courseBoolean, resaleBoolean, courseRestricted }: UserRequest) {
 
         if (!email || !name || !phone_number || !category || !password) {
-            throw new Error("Preencha todos os campos obrigátorios")
+            throw new Error("Preencha todos os campos obrigatórios")
         }
 
         const userAlreadyExists = await prismaClient.user.findFirst({

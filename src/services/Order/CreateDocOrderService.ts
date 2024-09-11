@@ -11,7 +11,7 @@ class CreateDocOrderService {
     async execute({ id, type, file }: OrderRequest) {
 
         if (!type || !id || !file) {
-            throw new Error("Preencha todos os campos obrigátorios")
+            throw new Error("Preencha todos os campos obrigatórios")
         }
 
         const s3Storage = new S3Storage()

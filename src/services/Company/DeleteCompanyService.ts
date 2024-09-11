@@ -9,7 +9,7 @@ class DeleteCompanyService {
     async execute({ userId, company_id }: CompanyRequest) {
 
         if (!userId || !company_id) {
-            throw new Error("Preencha todos os campos obrigátorios")
+            throw new Error("Preencha todos os campos obrigatórios")
         }
 
         const companyGet = await prismaClient.company.findFirst({

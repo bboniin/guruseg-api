@@ -24,7 +24,7 @@ class EditAdminCollaboratorService {
         })
 
         if (!email || !name || !phone_number) {
-            throw new Error("Preencha todos os campos obrigátorios")
+            throw new Error("Preencha todos os campos obrigatórios")
         }
 
         const collaboratorExistEmail = await prismaClient.collaborator.findFirst({
