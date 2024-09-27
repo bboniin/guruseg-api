@@ -1,6 +1,7 @@
 import prismaClient from '../../prisma'
 
 interface LeadRequest {
+    id: string;
     name: string;
     email: string;
     phone_number: string;
@@ -10,17 +11,19 @@ interface LeadRequest {
     cnpj: string;
     necessity: string;
     location: string;
-    tag: string;
 }
 
-class CreateLeadWebService {
-    async execute({ name, observation, tag, value, email, location, cnpj, necessity, phone_number, employees }: LeadRequest) {
+class EditLeadMasterService {
+    async execute({ id,  name, observation, value, email, location, cnpj, necessity, phone_number, employees }: LeadRequest) {
 
         if (!name || !email || !phone_number) {
             throw new Error("Nome, email e telefone são obrigatórios")
         }
 
-        const lead = await prismaClient.leadMaster.create({
+        const lead = await prismaClient.leadMaster.update({
+            where: {
+                id: id
+            },
             data: {
                 name: name,
                 value: value,
@@ -30,8 +33,8 @@ class CreateLeadWebService {
                 employees: employees,
                 necessity: necessity,
                 cnpj: cnpj,
-                tag: tag,
-                location: location
+                location: location,
+                update_at: new Date()
             }
         })
 
@@ -39,4 +42,4 @@ class CreateLeadWebService {
     }
 }
 
-export { CreateLeadWebService }
+export { EditLeadMasterService }

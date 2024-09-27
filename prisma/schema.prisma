@@ -177,29 +177,75 @@ model Service {
   @@map("services")
 }
 
-model Lead {
-  id              String    @id @default(uuid())
+
+model LeadMaster {
+  id              String      @id @default(uuid())
   name            String
   email           String
   phone_number    String
-  status          String    @default("Oportunidade")
-  send            String?
+  tag             String?     @default("Cadastrado")
   necessity       String?
   cnpj            String?
   employees       String?
   location        String?
-  user_id         String?
-  contract_id     String?
   value           Float?     
   observation     String?
-  create_at       DateTime? @default(now())
-  update_at       DateTime? @default(now())
+  create_at       DateTime?   @default(now())
+  update_at       DateTime?   @default(now())
 
-  user            User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  leads           Lead[]
+  
+  @@map("leads_master")
+}
+
+model Lead {
+  id              String        @id @default(uuid())
+  name            String
+  email           String
+  phone_number    String
+  status          String        @default("Oportunidade")
+  tag             String?       @default("Cadastrado")
+  necessity       String?
+  cnpj            String?
+  employees       String?
+  location        String?
+  user_id         String
+  contract_id     String?
+  value           Float?     
+  lead_id         String?
+  observation     String?
+  create_at       DateTime?     @default(now())
+  update_at       DateTime?     @default(now())
+
+  user            User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  lead            LeadMaster?   @relation(fields: [lead_id], references: [id], onDelete: Cascade)
 
   historical      Historic[]
   
   @@map("leads")
+}
+
+model Announcement {
+  id              String   @id @default(uuid())
+  title           String
+  message         String?
+  image           String
+  create_at       DateTime @default(now())
+
+  confirmations   AnnouncementConfirmation[]
+  
+  @@map("announcements") 
+}
+
+model AnnouncementConfirmation {
+  id                String      @id @default(uuid())
+  announcement_id   String
+  user_id           String 
+  confirmed_at       DateTime    @default(now())
+  
+  announcement      Announcement   @relation(fields: [announcement_id], references: [id], onDelete: Cascade)
+  
+  @@map("announcement_confirmations") 
 }
 
 model Historic {

@@ -119,7 +119,10 @@ import { StatusLeadController } from './controllers/Lead/StatusLeadController'
 import { GetLeadController } from './controllers/Lead/GetLeadController'
 import { ListLeadsController } from './controllers/Lead/ListLeadsController'
 import { DeleteLeadController } from './controllers/Lead/DeleteLeadController'
-import { SendLeadsController } from './controllers/Lead/SendLeadsController'
+import { SendLeadController } from './controllers/Lead/SendLeadController'
+import { CreateLeadMasterController } from './controllers/Lead/CreateLeadMasterController'
+import { DeleteLeadMasterController } from './controllers/Lead/DeleteLeadMasterController'
+import { EditLeadMasterController } from './controllers/Lead/EditLeadMasterController'
 
 
 const upload = multer(uploadConfig)
@@ -246,10 +249,13 @@ router.get('/lead/:id', new GetLeadController().handle)
 router.get('/leads/me', new ListLeadsClientController().handle)
 router.get('/leads', new ListLeadsController().handle)
 router.post('/lead', new CreateLeadController().handle)
-router.put('/lead/send', new SendLeadsController().handle)
+router.post('/lead/master', new CreateLeadMasterController().handle)
+router.put('/lead/send', new SendLeadController().handle)
 router.put('/lead/:id', new EditLeadController().handle)
+router.put('/lead/master/:id', new EditLeadMasterController().handle)
 router.put('/lead/status/:id', new StatusLeadController().handle)
 router.delete('/lead/:id', new DeleteLeadController().handle)
+router.delete('/lead/master/:id', new DeleteLeadMasterController().handle)
 
 // Companies
 

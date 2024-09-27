@@ -10,11 +10,10 @@ interface LeadRequest {
     cnpj: string;
     necessity: string;
     location: string;
-    tag: string;
 }
 
-class CreateLeadWebService {
-    async execute({ name, observation, tag, value, email, location, cnpj, necessity, phone_number, employees }: LeadRequest) {
+class CreateLeadMasterService {
+    async execute({ name, observation, value, email, location, cnpj, necessity, phone_number, employees }: LeadRequest) {
 
         if (!name || !email || !phone_number) {
             throw new Error("Nome, email e telefone são obrigatórios")
@@ -30,7 +29,6 @@ class CreateLeadWebService {
                 employees: employees,
                 necessity: necessity,
                 cnpj: cnpj,
-                tag: tag,
                 location: location
             }
         })
@@ -39,4 +37,4 @@ class CreateLeadWebService {
     }
 }
 
-export { CreateLeadWebService }
+export { CreateLeadMasterService }

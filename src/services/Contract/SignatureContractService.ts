@@ -31,22 +31,62 @@ class SignatureContractService {
         })
 
         if(contractSignature.lead_id){
-            await prismaClient.historic.create({
-                data: {
-                    lead_id: contractSignature.lead_id,
-                    name: "Cliente fechado"
-                }
-            })
-    
-            await prismaClient.lead.update({
+
+            const lead = await prismaClient.lead.findUnique({
                 where: {
                     id: contractSignature.lead_id
                 },
-                data: {
-                    status: "Cliente Fechado",
-                    update_at: new Date()
+                include: {
+                    lead: {
+                        include: {
+                            leads: true
+                        }
+                    }
                 }
-            })
+              })
+              
+            if (lead) {
+                await prismaClient.historic.create({
+                    data: {
+                        lead_id: contractSignature.lead_id,
+                        name: "Cliente fechado"
+                    }
+                })
+
+                await prismaClient.lead.update({
+                    where: {
+                        id: contractSignature.lead_id
+                    },
+                    data: {
+                        status: "Cliente Fechado",
+                        update_at: new Date()
+                    }
+                })
+
+                await Promise.all(
+                    lead.lead.leads.map(async item => {
+                        if(item.id != contractSignature.lead_id){
+
+                            await prismaClient.historic.create({
+                                data: {
+                                    lead_id: item.id,
+                                    name: "Cliente perdido"
+                                }
+                            })
+
+                            await prismaClient.lead.update({
+                                where: {
+                                    id: item.id
+                                },
+                                data: {
+                                    status: "Cliente Perdido"
+                                }
+                            });    
+                        }
+                      
+                    })
+                );
+            }
         }
 
         return (contractSignature)

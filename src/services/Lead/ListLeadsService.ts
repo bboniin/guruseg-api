@@ -14,55 +14,68 @@ class ListLeadsService {
 
         if(userId){
             if(userId == "Sem Franqueado"){
-                filter["user_id"] = null
+                if(status){
+                    filter["leads"] = {
+                        none: {},
+                        some: {
+                            status: status
+                        }
+                    }
+                }else{
+                    filter["leads"] = {
+                        none: {},
+                    }
+                }
             }else{
-                filter["user_id"] = userId
-            }
-        }
-
-        if(status){
-            filter["status"] = status
-        }
-
-        const listLeadsTotal = await prismaClient.lead.count({
-            where: filter,
-        })
-
-        if(all){
-
-            const listLeads = await prismaClient.lead.findMany({
-                where: {
-                    user_id: null,
-                },
-                orderBy: {
-                    create_at: "asc"
-                },
-            })
-
-            return (listLeads)
-
-        }else{
-
-            const listLeads = await prismaClient.lead.findMany({
-                where: filter,
-                skip: page,
-                take: 30,
-                orderBy: {
-                    create_at: "asc"
-                },
-                include: {
-                    user: true,
-                    historical: {
-                        orderBy: {
-                            create_at: "asc"
+                if(status){
+                    filter["leads"] = {
+                        some: {
+                            user_id: userId,
+                            status: status
+                        }
+                    }
+                }else{
+                    filter["leads"] = {
+                        some: {
+                            user_id: userId
                         }
                     }
                 }
-            })
-
-            return ({leads: listLeads, leadsTotal: listLeadsTotal})
-                
+            }
+        }else{
+            if(status){
+                filter["leads"] = {
+                    some: {
+                        status: status
+                    }
+                }
+            }
         }
+
+        const listLeadsTotal = await prismaClient.leadMaster.count({
+            where: filter,
+        })
+
+        const listLeads = await prismaClient.leadMaster.findMany({
+            where: filter,
+            skip: page,
+            take: 30,
+            orderBy: {
+                create_at: "asc"
+            },
+            include: {
+                leads: {
+                    include: {
+                        user: true
+                    },
+                    orderBy: {
+                        create_at: "asc"
+                    }
+                }
+            }
+        })
+
+        return ({leads: listLeads, leadsTotal: listLeadsTotal})
     }
 }
 
