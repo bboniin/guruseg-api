@@ -4,7 +4,7 @@ import { CreateLeadWebService } from '../../services/Lead/CreateLeadWebService';
 class CreateLeadWebController {
     async handle(req: Request, res: Response) {
 
-        if(req.query){
+        if(req.query.name){
             const { name, observation, value, email, location, cnpj, necessity, phone_number, employees, tag } = req.query
 
             const createLeadWebService = new CreateLeadWebService

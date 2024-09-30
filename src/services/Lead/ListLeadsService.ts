@@ -58,10 +58,10 @@ class ListLeadsService {
 
         const listLeads = await prismaClient.leadMaster.findMany({
             where: filter,
-            skip: page,
+            skip: page*30,
             take: 30,
             orderBy: {
-                create_at: "asc"
+                create_at: "desc"
             },
             include: {
                 leads: {
@@ -69,7 +69,7 @@ class ListLeadsService {
                         user: true
                     },
                     orderBy: {
-                        create_at: "asc"
+                        create_at: "desc"
                     }
                 }
             }
