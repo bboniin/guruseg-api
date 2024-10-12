@@ -181,8 +181,8 @@ model Service {
 model LeadMaster {
   id              String      @id @default(uuid())
   name            String
-  email           String
-  phone_number    String
+  email           String?     
+  phone_number    String?
   tag             String?     @default("Cadastrado")
   necessity       String?
   cnpj            String?
@@ -190,6 +190,7 @@ model LeadMaster {
   location        String?
   value           Float?     
   observation     String?
+  isLead          Boolean     @default(false)
   create_at       DateTime?   @default(now())
   update_at       DateTime?   @default(now())
 
@@ -201,8 +202,8 @@ model LeadMaster {
 model Lead {
   id              String        @id @default(uuid())
   name            String
-  email           String
-  phone_number    String
+  email           String?
+  phone_number    String?
   status          String        @default("Oportunidade")
   tag             String?       @default("Cadastrado")
   necessity       String?

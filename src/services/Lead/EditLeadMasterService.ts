@@ -16,8 +16,22 @@ interface LeadRequest {
 class EditLeadMasterService {
     async execute({ id,  name, observation, value, email, location, cnpj, necessity, phone_number, employees }: LeadRequest) {
 
-        if (!name || !email || !phone_number) {
-            throw new Error("Nome, email e telefone são obrigatórios")
+        if (!name) {
+            throw new Error("Nome é obrigatório")
+        }
+
+        if(email){
+            const leadMaster = await prismaClient.leadMaster.findFirst({
+                where: {
+                    email: email
+                }
+            })
+
+            if(leadMaster){
+                if(leadMaster.id != id){
+                    throw new Error("Email já está em uso")
+                }
+            }
         }
 
         const lead = await prismaClient.leadMaster.update({

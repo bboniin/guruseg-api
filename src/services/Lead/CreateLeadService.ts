@@ -16,8 +16,8 @@ interface LeadRequest {
 class CreateLeadService {
     async execute({ name, userId, observation, value, email, location, cnpj, necessity, phone_number, employees }: LeadRequest) {
 
-        if (!name || !email || !phone_number) {
-            throw new Error("Nome, email e telefone são obrigatórios")
+        if (!name) {
+            throw new Error("Nome é obrigatório")
         }
 
         const user = await prismaClient.user.findUnique({
@@ -29,6 +29,32 @@ class CreateLeadService {
         if(!user){
             userId = null
         }
+        
+        if(email){
+            const leadMaster = await prismaClient.leadMaster.findFirst({
+                where: {
+                    email: email
+                }
+            })
+
+            if(leadMaster){
+                throw new Error("Email já está em uso")
+            }
+        }
+
+        const leadMaster = await prismaClient.leadMaster.create({
+            data: {
+                name: name,
+                value: value,
+                email: email,
+                phone_number: phone_number,
+                observation: observation,
+                employees: employees,
+                necessity: necessity,
+                cnpj: cnpj,
+                location: location
+            }
+        })
 
         const lead = await prismaClient.lead.create({
             data: {
@@ -41,7 +67,8 @@ class CreateLeadService {
                 employees: employees,
                 necessity: necessity,
                 cnpj: cnpj,
-                location: location
+                location: location,
+                lead_id: leadMaster.id
             }
         })
 
