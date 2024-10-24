@@ -12,7 +12,7 @@ class ListLeadsClientService {
                 user_id: userId
             },
             orderBy: {
-                update_at: "asc"
+                update_at: "desc"
             },
             include: {
                 historical: {

@@ -6,13 +6,11 @@ class RefusalContractController {
 
         const { id } = req.params
 
-
         const refusalContractService = new RefusalContractService
 
         const services = await refusalContractService.execute({
             id
         })
-
 
         return res.json(services)
     }

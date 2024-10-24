@@ -4,7 +4,6 @@ interface LeadRequest {
     name: string;
     email: string;
     phone_number: string;
-    value: number;
     observation: string;
     employees: string;
     cnpj: string;
@@ -13,7 +12,7 @@ interface LeadRequest {
 }
 
 class CreateLeadMasterService {
-    async execute({ name, observation, value, email, location, cnpj, necessity, phone_number, employees }: LeadRequest) {
+    async execute({ name, observation, email, location, cnpj, necessity, phone_number, employees }: LeadRequest) {
 
         if (!name) {
             throw new Error("Nome é obrigatório")
@@ -34,8 +33,8 @@ class CreateLeadMasterService {
         const lead = await prismaClient.leadMaster.create({
             data: {
                 name: name,
-                value: value,
                 email: email,
+                value: 0,
                 phone_number: phone_number,
                 observation: observation,
                 employees: employees,

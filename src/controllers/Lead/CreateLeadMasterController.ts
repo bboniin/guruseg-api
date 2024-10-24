@@ -3,12 +3,12 @@ import { CreateLeadMasterService } from '../../services/Lead/CreateLeadMasterSer
 
 class CreateLeadMasterController {
     async handle(req: Request, res: Response) {
-        const { name, observation, value, email, location, cnpj, necessity, phone_number, employees } = req.body
+        const { name, observation, email, location, cnpj, necessity, phone_number, employees } = req.body
 
         const createLeadMasterService = new CreateLeadMasterService
 
         const lead = await createLeadMasterService.execute({
-            name, observation, value, email, location, cnpj, necessity, phone_number, employees
+            name, observation, email, location, cnpj, necessity, phone_number, employees
         })
 
         return res.json(lead)

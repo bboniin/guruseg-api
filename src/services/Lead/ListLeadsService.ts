@@ -1,3 +1,4 @@
+import { endOfDay, startOfDay } from 'date-fns';
 import prismaClient from '../../prisma'
 
 interface LeadRequest {
@@ -5,12 +6,29 @@ interface LeadRequest {
     status: string;
     all: boolean;
     userId: string;
+    dateStart: string;
+    dateEnd: string;
 }
 
 class ListLeadsService {
-    async execute({ page, userId, status, all }: LeadRequest) {
+    async execute({ page, userId, status, all, dateStart, dateEnd}: LeadRequest) {
 
         let filter = {}
+
+        if(all){
+            const leads = await prismaClient.leadMaster.findMany({
+                where: {
+                  leads: {
+                    none: {},
+                  },
+                },
+                orderBy: {
+                    name: "desc"
+                },
+            })
+
+            return leads
+        }
 
         if(userId){
             if(userId == "Sem Franqueado"){
@@ -49,6 +67,13 @@ class ListLeadsService {
                         status: status
                     }
                 }
+            }
+        }
+
+        if(dateStart){
+            filter["create_at"] = {
+                gte: startOfDay(new Date(dateStart)),
+                lte: endOfDay(new Date(dateEnd))
             }
         }
 

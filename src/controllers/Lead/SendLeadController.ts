@@ -4,12 +4,12 @@ import { SendLeadService } from '../../services/Lead/SendLeadService';
 class SendLeadController {
     async handle(req: Request, res: Response) {
 
-        const { leadId, users } = req.body
+        const { userId, leads } = req.body
 
         const sendLeadService = new SendLeadService
 
         const lead = await sendLeadService.execute({
-            leadId, users
+            userId, leads
         })
 
         return res.json(lead)

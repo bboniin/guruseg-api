@@ -6,6 +6,8 @@ import cron from "node-cron";
 import { router } from "./routes";
 import { FinishedOSsService } from "./services/Order/FinishedOSsService";
 import { ExpireContractsService } from "./services/Contract/ExpireContractsService";
+import { InactiveLeadsService } from "./services/Lead/InactiveLeadsService";
+import { EmailReminderService } from "./services/Reminder/EmailRemindersService";
 
 const app = express()
 
@@ -35,13 +37,20 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 })
 
 cron.schedule("0 8,12,16,20 * * *", () => {
+    const inactiveLeadsService = new InactiveLeadsService();
+    inactiveLeadsService.execute();
+
     const finalizeOSs = new FinishedOSsService();
     finalizeOSs.execute();
-});
 
-cron.schedule("0 8,12,16,20 * * *", () => {
     const expireContracts = new ExpireContractsService();
     expireContracts.execute();
 });
 
-app.listen(3333, () => console.log("rodando v44.1"))
+cron.schedule("0 8 * * *", () => {
+    const emailReminderService = new EmailReminderService();
+    emailReminderService.execute();
+});
+
+
+app.listen(3333, () => console.log("rodando v45"))

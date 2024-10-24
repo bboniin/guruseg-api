@@ -5,7 +5,6 @@ interface LeadRequest {
     name: string;
     email: string;
     phone_number: string;
-    value: number;
     observation: string;
     employees: string;
     cnpj: string;
@@ -14,7 +13,7 @@ interface LeadRequest {
 }
 
 class EditLeadService {
-    async execute({ id,  name, observation, value, email, location, cnpj, necessity, phone_number, employees }: LeadRequest) {
+    async execute({ id,  name, observation, email, location, cnpj, necessity, phone_number, employees }: LeadRequest) {
 
         if (!name || !email || !phone_number) {
             throw new Error("Nome, email e telefone são obrigatórios")
@@ -26,7 +25,6 @@ class EditLeadService {
             },
             data: {
                 name: name,
-                value: value,
                 email: email,
                 phone_number: phone_number,
                 observation: observation,

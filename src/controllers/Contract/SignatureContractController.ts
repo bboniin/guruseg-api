@@ -14,7 +14,6 @@ class SignatureContractController {
             signature, id
         })
 
-
         return res.json(services)
     }
 }

@@ -13,31 +13,32 @@ datasource db {
 // criar migrate yarn prisma migrate dev
 
 model User {
-  id                String    @id @default(uuid())
-  name              String
-  photo             String?
-  category          String    @default("franqueado")
-  type              String    @default("cliente")
-  course_restricted Boolean   @default(false)
-  services          String    @default("")
-  email             String    @unique
-  phone_number      String
-  password          String
-  region            String    @default("")
-  signature         Boolean   @default(false)
-  sector1_id        String?   @default("")
-  sector2_id        String?   @default("")
-  sector3_id        String?   @default("")
-  sector4_id        String?   @default("")
-  sector5_id        String?   @default("")
-  visible           Boolean   @default(true)
-  course            Boolean   @default(false)
-  resale            Boolean   @default(false)
-  create_at         DateTime? @default(now())
-  update_at         DateTime? @default(now())
+  id                   String    @id @default(uuid())
+  name                 String
+  photo                String?
+  category             String    @default("franqueado")
+  type                 String    @default("cliente")
+  course_restricted    Boolean   @default(false)
+  services             String    @default("")
+  email                String    @unique
+  phone_number         String
+  password             String
+  region               String    @default("")
+  signature            Boolean   @default(false)
+  sector1_id           String?   @default("")
+  sector2_id           String?   @default("")
+  sector3_id           String?   @default("")
+  sector4_id           String?   @default("")
+  sector5_id           String?   @default("")
+  visible              Boolean   @default(true)
+  course               Boolean   @default(false)
+  resale               Boolean   @default(false)
+  create_at            DateTime? @default(now())
+  update_at            DateTime? @default(now())
 
-  orders            Order[]
-  leads             Lead[]
+  statement_confirms  StatementConfirm[]
+  orders              Order[]
+  leads               Lead[]
 
   @@map("users")
 }
@@ -190,7 +191,7 @@ model LeadMaster {
   location        String?
   value           Float?     
   observation     String?
-  isLead          Boolean     @default(false)
+  is_user         Boolean     @default(false)
   create_at       DateTime?   @default(now())
   update_at       DateTime?   @default(now())
 
@@ -219,9 +220,11 @@ model Lead {
   update_at       DateTime?     @default(now())
 
   user            User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  lead            LeadMaster?   @relation(fields: [lead_id], references: [id], onDelete: Cascade)
+  leadMaster      LeadMaster?   @relation(fields: [lead_id], references: [id], onDelete: Cascade)
 
   historical      Historic[]
+  lead_reminders  LeadReminders[]
+  contracts       Contract[]
   
   @@map("leads")
 }
@@ -312,6 +315,8 @@ model Contract {
   phone_number        String
   banking             String
   lead_id             String?   @default("")
+  lead                Lead?     @relation(fields: [lead_id], references: [id], onDelete: SetNull)
+  is_crm              Boolean   @default(false)
   services_gestao     String?   @default("")
   status              String    @default("aguardando")
   risk                Int?
@@ -462,3 +467,40 @@ model CompanyImages {
 
   @@map("company_images")
 }
+
+model LeadReminders {
+  id                  String      @id @default(uuid())
+  name                String
+  description         String
+  confirm             Boolean
+  date                DateTime? 
+
+  lead_id             String
+  lead                Lead        @relation(fields: [lead_id], references: [id], onDelete: Cascade)
+
+  @@map("lead_reminders")
+}
+
+model Statement {
+  id                  String    @id @default(uuid())
+  title               String
+  description         String?
+  create_at           DateTime? @default(now())
+  update_at           DateTime? @default(now())
+
+  statement_confirms  StatementConfirm[]
+
+  @@map("statements")
+}
+
+model StatementConfirm {
+  id                String        @id @default(uuid())
+  date              DateTime      @default(now())
+  statement_id      String
+  user_id           String
+  statement         Statement     @relation(fields: [statement_id], references: [id], onDelete: Cascade)
+  user              User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("statement_confirms")
+}
+

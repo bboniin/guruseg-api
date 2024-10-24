@@ -28,7 +28,7 @@ class RefusalContractService {
             }
         })
 
-        if(contracResusal.lead_id){
+        if(contracResusal.lead_id && contracResusal.is_crm){
             await prismaClient.historic.create({
                 data: {
                     lead_id: contracResusal.lead_id,

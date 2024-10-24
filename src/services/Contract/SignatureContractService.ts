@@ -30,14 +30,14 @@ class SignatureContractService {
             }
         })
 
-        if(contractSignature.lead_id){
+        if(contractSignature.lead_id && contractSignature.is_crm){
 
             const lead = await prismaClient.lead.findUnique({
                 where: {
                     id: contractSignature.lead_id
                 },
                 include: {
-                    lead: {
+                    leadMaster: {
                         include: {
                             leads: true
                         }
@@ -64,7 +64,7 @@ class SignatureContractService {
                 })
 
                 await Promise.all(
-                    lead.lead.leads.map(async item => {
+                    lead.leadMaster.leads.map(async item => {
                         if(item.id != contractSignature.lead_id){
 
                             await prismaClient.historic.create({

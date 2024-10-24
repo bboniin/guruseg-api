@@ -123,6 +123,25 @@ import { SendLeadController } from './controllers/Lead/SendLeadController'
 import { CreateLeadMasterController } from './controllers/Lead/CreateLeadMasterController'
 import { DeleteLeadMasterController } from './controllers/Lead/DeleteLeadMasterController'
 import { EditLeadMasterController } from './controllers/Lead/EditLeadMasterController'
+import { ListAdminLeadsClientController } from './controllers/Lead/ListAdminLeadsClientController'
+import { EditContractController } from './controllers/Contract/EditContractController'
+import { NegotiationContractController } from './controllers/Contract/NegotiationContractController'
+import { EndNegotiationContractController } from './controllers/Contract/EndNegotiationContractController'
+import { ListMyLeadsController } from './controllers/Lead/ListMyLeadsController'
+import { ListRemindersController } from './controllers/Reminder/ListRemindersController'
+import { CreateReminderController } from './controllers/Reminder/CreateReminderController'
+import { EditReminderController } from './controllers/Reminder/EditReminderController'
+import { DeleteReminderController } from './controllers/Reminder/DeleteReminderController'
+import { ConfirmReminderController } from './controllers/Reminder/ConfirmReminderController'
+import { ResetLeadController } from './controllers/Lead/ResetLeadController'
+import { ListLeadsCloseController } from './controllers/Lead/ListLeadsCloseController'
+import { CreateStatementController } from './controllers/Statement/CreateStatementController'
+import { ListStatementsController } from './controllers/Statement/ListStatementsController'
+import { EditStatementController } from './controllers/Statement/EditStatementController'
+import { DeleteStatementController } from './controllers/Statement/DeleteStatementController'
+import { ConfirmStatementController } from './controllers/Statement/ConfirmStatementController'
+import { ListStatementsUserController } from './controllers/Statement/ListStatementsUserController'
+import { GetStatementController } from './controllers/Statement/GetStatementController'
 
 
 const upload = multer(uploadConfig)
@@ -141,6 +160,7 @@ router.get('/banners-public', new ListBannersPublicController().handle)
 router.get('/contract/:id', new GetContractController().handle)
 router.put('/signature-contract/:id', new SignatureContractController().handle)
 router.put('/refusal-contract/:id', new RefusalContractController().handle)
+router.put('/negotiation-contract/:id', new NegotiationContractController().handle)
 router.post('/password-forgot', new PasswordForgotController().handle)
 router.post('/password-reset/:code', new PasswordResetController().handle)
 router.get('/password-verify-reset/:code', new PasswordVerifyResetController().handle)
@@ -241,19 +261,25 @@ router.delete('/service/:id', new DeleteServiceController().handle)
 router.get('/contracts', new ListContractsController().handle)
 router.get('/contracts/:user_id', new AdminListContractsController().handle)
 router.post('/contract', new CreateContractController().handle)
+router.put('/contract/:id', new EditContractController().handle)
+router.put('/end-negotiation-contract/:id', new EndNegotiationContractController().handle)
 router.delete('/contract/:id', new DeleteContractController().handle)
 
 // CRM
 
 router.get('/lead/:id', new GetLeadController().handle)
 router.get('/leads/me', new ListLeadsClientController().handle)
+router.get('/leads/:userId', new ListAdminLeadsClientController().handle)
 router.get('/leads', new ListLeadsController().handle)
+router.get('/my-leads', new ListMyLeadsController().handle)
+router.get('/leads-close', new ListLeadsCloseController().handle)
 router.post('/lead', new CreateLeadController().handle)
 router.post('/lead/master', new CreateLeadMasterController().handle)
 router.put('/lead/send', new SendLeadController().handle)
 router.put('/lead/:id', new EditLeadController().handle)
 router.put('/lead/master/:id', new EditLeadMasterController().handle)
 router.put('/lead/status/:id', new StatusLeadController().handle)
+router.put('/reset-lead/:id', new ResetLeadController().handle)
 router.delete('/lead/:id', new DeleteLeadController().handle)
 router.delete('/lead/master/:id', new DeleteLeadMasterController().handle)
 
@@ -278,6 +304,19 @@ router.delete('/company-renewal/:id', new DeleteRenewalController().handle)
 router.delete('/all-renewal', new DeleteAllRenewalController().handle)
 router.put('/renewal/:id', new CheckRenewalController().handle)
 
+router.post('/reminder/:lead_id', new CreateReminderController().handle)
+router.get('/reminders', new ListRemindersController().handle)
+router.put('/reminder/:id', new EditReminderController().handle)
+router.delete('/reminder/:id', new DeleteReminderController().handle)
+router.put('/confirm-reminder/:id', new ConfirmReminderController().handle)
+
+router.get('/statement/:id', new GetStatementController().handle)
+router.post('/statement', new CreateStatementController().handle)
+router.get('/statements', new ListStatementsController().handle)
+router.get('/statements-user', new ListStatementsUserController().handle)
+router.put('/statement/:id', new EditStatementController().handle)
+router.delete('/statement/:id', new DeleteStatementController().handle)
+router.put('/confirm-statement/:id', new ConfirmStatementController().handle)
 
 router.post('/company-timeline', new CreateTimelineController().handle)
 router.get('/companies-timeline', new ListTimelinesController().handle)
