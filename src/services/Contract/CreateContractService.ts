@@ -35,7 +35,7 @@ class CreateContractService {
 
         let newContract = {
             user_id: userId,
-            name, company, contact, consultant, phone_number, banking, lead_id, is_crm
+            name, company, contact, consultant, phone_number, banking, lead_id: lead_id || null, is_crm
         }
 
         if (risk && lifes && life_value && initial_value) {
