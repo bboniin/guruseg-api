@@ -31,7 +31,7 @@ class ListBannersPublicService {
             await contracts.map(async (item)=>{
                 const lead = await prismaClient.lead.findFirst({
                     where: {
-                        id: item.id
+                        id: item.lead_id
                     }
                 })
                 if(!lead){
