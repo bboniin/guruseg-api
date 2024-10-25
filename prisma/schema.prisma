@@ -314,7 +314,7 @@ model Contract {
   consultant          String
   phone_number        String
   banking             String
-  lead_id             String?   @default("")
+  lead_id             String?   
   lead                Lead?     @relation(fields: [lead_id], references: [id], onDelete: SetNull)
   is_crm              Boolean   @default(false)
   services_gestao     String?   @default("")
