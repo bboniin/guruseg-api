@@ -52,6 +52,7 @@ class CreateLeadService {
                 necessity: necessity,
                 cnpj: cnpj,
                 is_user: !!userId,
+                tag: !!userId ? "Franqueado" : "Cadastrado",
                 location: location
             }
         })
@@ -62,6 +63,7 @@ class CreateLeadService {
                 value: 0,
                 email: email,
                 user_id: userId,
+                tag: leadMaster.tag,
                 phone_number: phone_number,
                 observation: observation,
                 employees: employees,

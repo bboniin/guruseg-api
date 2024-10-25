@@ -19,6 +19,27 @@ class ListBannersPublicService {
             }
         })
 
+        const contracts = await prismaClient.contract.findMany({
+            where: {
+                lead_id: {
+                    contains: "-"
+                }
+            }
+        })
+
+        Promise.all(
+            await contracts.map(async (item)=>{
+                const lead = await prismaClient.lead.findFirst({
+                    where: {
+                        id: item.id
+                    }
+                })
+                if(!lead){
+                    console.log(item.id)
+                }
+            })
+        )
+
         return (banners)
     }
 }
