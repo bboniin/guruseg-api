@@ -35,7 +35,14 @@ class ListBannersPublicService {
                     }
                 })
                 if(!lead){
-                    console.log(item.id)
+                    await prismaClient.contract.update({
+                        where: {
+                            id: item.id
+                        },
+                        data: {
+                            lead_id: null
+                        }
+                    })
                 }
             })
         )
