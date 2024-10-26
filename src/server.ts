@@ -53,4 +53,4 @@ cron.schedule("0 8 * * *", () => {
 });
 
 
-app.listen(3333, () => console.log("rodando v49"))
+app.listen(3333, () => console.log("rodando v50"))
