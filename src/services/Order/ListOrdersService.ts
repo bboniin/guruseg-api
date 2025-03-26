@@ -16,7 +16,6 @@ class ListOrdersService {
     if (type == "cliente") {
       data = {
         user_id: userId,
-        asaas_integration: false,
       };
     } else {
       if (type == "tecnico") {
@@ -29,6 +28,7 @@ class ListOrdersService {
     }
 
     if (finance) {
+      data["asaas_integration"] = false;
       data["status"] = "finalizado";
       data["AND"] = [
         {
