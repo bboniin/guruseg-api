@@ -30,6 +30,7 @@ model User {
   sector3_id           String?   @default("")
   sector4_id           String?   @default("")
   sector5_id           String?   @default("")
+  costumer_id          String?   @default("")
   visible              Boolean   @default(true)
   course               Boolean   @default(false)
   resale               Boolean   @default(false)
@@ -119,11 +120,14 @@ model Order {
   urgent             Boolean   @default(false)
   order_doc_recused  Boolean   @default(false)
   status             String    @default("pendente")
+  status_payment     String    @default("pendente")
   month              String    @default("")
   company_id         String?   @default("")
+  asaas_integration  Boolean   @default(false)
   sector             String    @default("Serviços de segurança do Trabalho")
   create_at          DateTime? @default(now())
   update_at          DateTime? @default(now())
+
 
   user               User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id            String?
@@ -133,8 +137,28 @@ model Order {
 
   items Item[]
   docs  Doc[]
+     
+  payment       Payment?   @relation(fields: [payment_id], references: [id], onDelete: SetNull)
+  payment_id    String? 
 
   @@map("orders")
+}
+
+
+
+model Payment {
+  id          String    @id @default(uuid())
+  asaas_id    String    @unique
+  status      String    
+  order_id    Int    
+  value       Float    
+
+  create_at   DateTime? @default(now())
+  update_at   DateTime? @default(now())
+
+  orders Order[]
+
+  @@map("payments")
 }
 
 model Doc {
