@@ -92,6 +92,11 @@ class GetOrderService {
             });
         }
       }
+    } else {
+      order.docs.map((item) => {
+        item["fileName"] = String(item.file).substr(33);
+        item.file = "";
+      });
     }
 
     return order;
