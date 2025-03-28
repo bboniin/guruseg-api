@@ -69,12 +69,15 @@ class GetOrderService {
       }
     }
 
+    order.docs.map((item) => {
+      item["fileName"] = String(item.file).substr(33);
+    });
+
     if (user) {
       if (order.asaas_integration) {
         if (order.status_payment != "confirmado") {
           order.docs.map((item) => {
             if (item.type == "tecnico") {
-              item["fileName"] = String(item.file).substr(33);
               item.file = "";
             }
           });
@@ -92,11 +95,6 @@ class GetOrderService {
             });
         }
       }
-    } else {
-      order.docs.map((item) => {
-        item["fileName"] = String(item.file).substr(33);
-        item.file = "";
-      });
     }
 
     return order;
