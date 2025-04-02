@@ -1,35 +1,72 @@
-import { Request, Response } from 'express';
-import { EditAdminUserService } from '../../../services/Admin/Users/EditAdminUserService';
+import { Request, Response } from "express";
+import { EditAdminUserService } from "../../../services/Admin/Users/EditAdminUserService";
 
 class EditAdminUserController {
-    async handle(req: Request, res: Response) {
-        const { name, email, phone_number, services, region, category, signature, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, password, course, resale, course_restricted } = req.body
+  async handle(req: Request, res: Response) {
+    const {
+      name,
+      email,
+      enable_payment,
+      phone_number,
+      services,
+      region,
+      category,
+      signature,
+      sector1_id,
+      sector2_id,
+      sector3_id,
+      sector4_id,
+      sector5_id,
+      password,
+      course,
+      resale,
+      course_restricted,
+    } = req.body;
 
-        const { id } = req.params
+    const { id } = req.params;
 
-        let photo = ""
+    let photo = "";
 
-        if (req.file) {
-            photo = req.file.filename
-        }
-
-        let courseRestricted = course_restricted == "true" ? true : false
-        let courseBoolean = course == "true" ? true : false
-        let resaleBoolean = resale == "true" ? true : false
-        let signatureBoolean = signature == "true" ? true : false
-
-        const editAdminUserService = new EditAdminUserService
-
-        const user = await editAdminUserService.execute({
-            name, email, phone_number, services, region, category, signature: signatureBoolean, sector1_id, sector2_id, sector3_id, sector4_id, sector5_id, photo, id, password, courseBoolean, resaleBoolean, courseRestricted
-        })
-
-        if (user["photo"]) {
-            user["photo_url"] = "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + user["photo"];
-        }
-
-        return res.json(user)
+    if (req.file) {
+      photo = req.file.filename;
     }
+
+    let courseRestricted = course_restricted == "true" ? true : false;
+    let courseBoolean = course == "true" ? true : false;
+    let resaleBoolean = resale == "true" ? true : false;
+    let signatureBoolean = signature == "true" ? true : false;
+
+    const editAdminUserService = new EditAdminUserService();
+
+    const user = await editAdminUserService.execute({
+      name,
+      email,
+      enable_payment: enable_payment == "true",
+      phone_number,
+      services,
+      region,
+      category,
+      signature: signatureBoolean,
+      sector1_id,
+      sector2_id,
+      sector3_id,
+      sector4_id,
+      sector5_id,
+      photo,
+      id,
+      password,
+      courseBoolean,
+      resaleBoolean,
+      courseRestricted,
+    });
+
+    if (user["photo"]) {
+      user["photo_url"] =
+        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + user["photo"];
+    }
+
+    return res.json(user);
+  }
 }
 
-export { EditAdminUserController }
+export { EditAdminUserController };

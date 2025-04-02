@@ -1,13 +1,17 @@
 import { addDays, format } from "date-fns";
 import api from "../../config/api";
 import prismaClient from "../../prisma";
+import { GetCouponService } from "../Coupon/GetCouponService";
+import { RescueCouponService } from "../Coupon/RescueCouponService";
 
 interface PaymentRequest {
   order_id: number;
   userId: string;
+  code: string;
 }
+
 class CreatePaymentService {
-  async execute({ order_id, userId }: PaymentRequest) {
+  async execute({ order_id, userId, code }: PaymentRequest) {
     const user = await prismaClient.user.findFirst({
       where: {
         id: userId,
@@ -58,9 +62,42 @@ class CreatePaymentService {
     }
 
     let totalOrder = 0;
+    let valueDiscount = 0;
     order.items.map((item) => {
       totalOrder += item.amount * item.value;
     });
+
+    if (code) {
+      const getCouponService = new GetCouponService();
+
+      const coupon = await getCouponService.execute({
+        code,
+        userId,
+      });
+
+      if (coupon.type == "FIXED") {
+        valueDiscount = coupon.value;
+      } else {
+        valueDiscount = totalOrder * (coupon.value / 100);
+      }
+
+      totalOrder -= valueDiscount;
+
+      if (totalOrder < 5) {
+        throw new Error("Valor minimo para gerar cobrança é de R$ 5,00");
+      }
+
+      if (coupon) {
+        const rescueCouponService = new RescueCouponService();
+
+        await rescueCouponService.execute({
+          coupon,
+          userId,
+          orderId: order_id,
+          value: valueDiscount,
+        });
+      }
+    }
 
     if (totalOrder < 5) {
       throw new Error("Valor minimo para gerar cobrança é de R$ 5,00");

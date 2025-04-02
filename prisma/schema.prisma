@@ -33,13 +33,15 @@ model User {
   costumer_id          String?   @default("")
   visible              Boolean   @default(true)
   course               Boolean   @default(false)
+  enable_payment       Boolean   @default(true)
   resale               Boolean   @default(false)
   create_at            DateTime? @default(now())
-  update_at            DateTime? @default(now())
+  update_at            DateTime? @updatedAt
 
   statement_confirms  StatementConfirm[]
   orders              Order[]
   leads               Lead[]
+  redemptions         Redemption[]
 
   @@map("users")
 }
@@ -58,7 +60,7 @@ model CompanyRenewal {
   date_init         DateTime? @default(now())
   date_renewal      DateTime? @default(now())
   create_at         DateTime? @default(now())
-  update_at         DateTime? @default(now())
+  update_at         DateTime? @updatedAt
 
   companyTimeline CompanyTimeline[]
 
@@ -74,7 +76,7 @@ model CompanyTimeline {
   renewal        CompanyRenewal     @relation(fields: [renewal_id], references: [id], onDelete: Cascade)
   renewal_id     String
   create_at      DateTime? @default(now())
-  update_at      DateTime? @default(now())
+  update_at      DateTime? @updatedAt
 
 
   @@map("company_timelines")
@@ -93,7 +95,7 @@ model Collaborator {
   sector       String    @default("Serviços de segurança do Trabalho")
   visible      Boolean   @default(true)
   create_at    DateTime? @default(now())
-  update_at    DateTime? @default(now())
+  update_at    DateTime? @updatedAt
 
   orders Order[]
 
@@ -106,7 +108,7 @@ model Admin {
   type      String    @default("admin")
   email     String    @unique
   create_at DateTime? @default(now())
-  update_at DateTime? @default(now())
+  update_at DateTime? @updatedAt
 
   @@map("admins")
 }
@@ -126,7 +128,7 @@ model Order {
   asaas_integration  Boolean   @default(false)
   sector             String    @default("Serviços de segurança do Trabalho")
   create_at          DateTime? @default(now())
-  update_at          DateTime? @default(now())
+  update_at          DateTime? @updatedAt
 
 
   user               User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
@@ -137,6 +139,7 @@ model Order {
 
   items Item[]
   docs  Doc[]
+  redemptions         Redemption[]
      
   payment       Payment?   @relation(fields: [payment_id], references: [id], onDelete: SetNull)
   payment_id    String? 
@@ -154,7 +157,7 @@ model Payment {
   value       Float    
 
   create_at   DateTime? @default(now())
-  update_at   DateTime? @default(now())
+  update_at   DateTime? @updatedAt
 
   orders Order[]
 
@@ -166,7 +169,7 @@ model Doc {
   type      String
   file      String
   create_at DateTime? @default(now())
-  update_at DateTime? @default(now())
+  update_at DateTime? @updatedAt
   order     Order?    @relation(fields: [order_id], references: [id], onDelete: Cascade)
   order_id  Int?
 
@@ -183,7 +186,7 @@ model Item {
   order       Order     @relation(fields: [order_id], references: [id], onDelete: Cascade)
   order_id    Int
   create_at   DateTime? @default(now())
-  update_at   DateTime? @default(now())
+  update_at   DateTime? @updatedAt
 
   @@map("items")
 }
@@ -197,11 +200,10 @@ model Service {
   description     String?
   sector          String    @default("Serviços de segurança do Trabalho")
   create_at       DateTime? @default(now())
-  update_at       DateTime? @default(now())
+  update_at       DateTime? @updatedAt
 
   @@map("services")
 }
-
 
 model LeadMaster {
   id              String      @id @default(uuid())
@@ -217,7 +219,7 @@ model LeadMaster {
   observation     String?
   is_user         Boolean     @default(false)
   create_at       DateTime?   @default(now())
-  update_at       DateTime?   @default(now())
+  update_at       DateTime?  @updatedAt
 
   leads           Lead[]
   
@@ -241,7 +243,7 @@ model Lead {
   lead_id         String?
   observation     String?
   create_at       DateTime?     @default(now())
-  update_at       DateTime?     @default(now())
+  update_at       DateTime?     @updatedAt
 
   user            User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
   leadMaster      LeadMaster?   @relation(fields: [lead_id], references: [id], onDelete: Cascade)
@@ -281,7 +283,7 @@ model Historic {
   name      String
   lead_id   String
   create_at DateTime? @default(now())
-  update_at DateTime? @default(now())
+  update_at DateTime? @updatedAt
   lead      Lead      @relation(fields: [lead_id], references: [id], onDelete: Cascade)
 
   @@map("historical")
@@ -293,7 +295,7 @@ model Banner {
   url       String
   types     String?   @default("tecnico;admin;franqueado;credenciado;")
   create_at DateTime? @default(now())
-  update_at DateTime? @default(now())
+  update_at DateTime? @updatedAt
 
   @@map("banners")
 }
@@ -306,7 +308,7 @@ model Course {
   photo         String?
   restricted    Boolean   @default(false)
   create_at     DateTime? @default(now())
-  update_at     DateTime? @default(now())
+  update_at     DateTime? @updatedAt
 
   lessons Lesson[]
 
@@ -322,7 +324,7 @@ model Lesson {
   file        String?
   file_name   String?
   create_at   DateTime? @default(now())
-  update_at   DateTime? @default(now())
+  update_at   DateTime? @updatedAt
   course      Course    @relation(fields: [course_id], references: [id], onDelete: Cascade)
   course_id   String
 
@@ -354,7 +356,7 @@ model Contract {
   signature           String?
   signature_date      DateTime?
   create_at           DateTime? @default(now())
-  update_at           DateTime? @default(now())
+  update_at           DateTime? @updatedAt
 
   services ContractServices[]
 
@@ -370,7 +372,7 @@ model ContractServices {
   contract    Contract  @relation(fields: [contract_id], references: [id], onDelete: Cascade)
   contract_id String
   create_at   DateTime? @default(now())
-  update_at   DateTime? @default(now())
+  update_at   DateTime? @updatedAt
 
   @@map("contractServices")
 }
@@ -380,7 +382,7 @@ model PasswordForgot {
   user_email String
   code       String
   create_at  DateTime? @default(now())
-  update_at  DateTime? @default(now())
+  update_at  DateTime? @updatedAt
 
   @@map("passwords_forgot")
 }
@@ -402,7 +404,7 @@ model Credential {
   photo         String?
   description   String?
   create_at     DateTime? @default(now())
-  update_at     DateTime? @default(now())
+  update_at     DateTime? @updatedAt
 
   @@map("credentials")
 }
@@ -425,7 +427,7 @@ model Company {
   signature           String?
   signature_date      DateTime? @default(now())  
   create_at           DateTime? @default(now())
-  update_at           DateTime? @default(now())
+  update_at           DateTime? @updatedAt
 
   companySector CompanySector[]
   companyImages  CompanyImages[]
@@ -438,7 +440,7 @@ model CompanySector {
   name        String
   description String
   create_at   DateTime? @default(now())
-  update_at   DateTime? @default(now())
+  update_at   DateTime? @updatedAt
   company     Company?    @relation(fields: [company_id], references: [id], onDelete: Cascade)
   company_id  String?
 
@@ -458,7 +460,7 @@ model CompanyEmployees {
   description                String?
   epis                       String?
   create_at                  DateTime? @default(now())
-  update_at                  DateTime? @default(now())
+  update_at                  DateTime? @updatedAt
 
   company_sector             CompanySector?    @relation(fields: [company_sector_id], references: [id], onDelete: Cascade)
   company_sector_id          String?
@@ -472,7 +474,7 @@ model CompanyScratchs {
   description        String
   type               String   
   create_at          DateTime? @default(now())
-  update_at          DateTime? @default(now())
+  update_at          DateTime? @updatedAt
 
   company_sector     CompanySector?    @relation(fields: [company_sector_id], references: [id], onDelete: Cascade)
   company_sector_id  String?
@@ -485,7 +487,7 @@ model CompanyImages {
   photo       String
   index       Int
   create_at   DateTime? @default(now())
-  update_at   DateTime? @default(now())
+  update_at   DateTime? @updatedAt
   company     Company?    @relation(fields: [company_id], references: [id], onDelete: Cascade)
   company_id  String?
 
@@ -510,7 +512,7 @@ model Statement {
   title               String
   description         String?
   create_at           DateTime? @default(now())
-  update_at           DateTime? @default(now())
+  update_at           DateTime? @updatedAt
 
   statement_confirms  StatementConfirm[]
 
@@ -528,3 +530,42 @@ model StatementConfirm {
   @@map("statement_confirms")
 }
 
+model Coupon {
+  id             String   @id @default(uuid())
+  name           String
+  code           String   @unique
+  type           CouponType
+  value          Float
+  active         Boolean  @default(true) 
+  isSingleUse    Boolean  @default(false) 
+  minValue       Float?     
+  usageLimit     Int?     
+  expirationDate DateTime? 
+  create_at      DateTime @default(now())
+  update_at      DateTime @updatedAt
+
+  redemptions    Redemption[]
+
+  @@map("coupons")
+}
+
+model Redemption {
+  id        String   @id @default(uuid())
+  name      String
+  userId    String?
+  orderId   Int      @unique
+  couponId  String?
+  value     Float
+  usedAt    DateTime @default(now())
+
+  coupon    Coupon?   @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  user      User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("redemptions")
+}
+
+enum CouponType {
+  FIXED
+  PERCENTAGE
+}

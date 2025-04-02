@@ -148,6 +148,11 @@ import { ConfirmPaymentController } from "./controllers/Payment/ConfirmPaymentCo
 import { ListPaymentsController } from "./controllers/Payment/ListPaymentsController";
 import { ListAdminPaymentsController } from "./controllers/Payment/ListAdminPaymentsController";
 import { CreateCustomerController } from "./controllers/Payment/CreateCustomerController";
+import { CreateCouponController } from "./controllers/Coupon/CreateCouponController";
+import { ListCouponsController } from "./controllers/Coupon/ListCouponsController";
+import { EditCouponController } from "./controllers/Coupon/EditCouponController";
+import { DeleteCouponController } from "./controllers/Coupon/DeleteCouponController";
+import { RescueCouponService } from "./services/Coupon/RescueCouponService";
 
 const upload = multer(uploadConfig);
 
@@ -239,7 +244,7 @@ router.get("/orders-open", new ListOpenOrdersController().handle);
 router.get("/orders/:type", new ListOrdersController().handle);
 router.get("/order/:id", new GetOrderController().handle);
 router.put("/confirm-order/:id", new ConfirmOrderController().handle);
-router.get("/payment-order/:order_id", new CreatePaymentController().handle);
+router.post("/payment-order", new CreatePaymentController().handle);
 router.post("/customer", new CreateCustomerController().handle);
 router.put("/alteracao-order", new HandlerOrderController().handle);
 router.post("/order", new CreateOrderController().handle);
@@ -427,5 +432,10 @@ router.put("/company-timeline/:id", new EditTimelineController().handle);
 router.delete("/company-timeline/:id", new DeleteTimelineController().handle);
 router.put("/timeline/:id", new CheckTimelineController().handle);
 router.get("/timeline/:id", new GetTimelineController().handle);
+
+router.post("/coupon", new CreateCouponController().handle);
+router.get("/coupons", new ListCouponsController().handle);
+router.put("/coupon/:id", new EditCouponController().handle);
+router.delete("/coupon/:id", new DeleteCouponController().handle);
 
 export { router };

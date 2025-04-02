@@ -26,6 +26,16 @@ class CreateOrderService {
       throw new Error("Preencha todos os campos.");
     }
 
+    const user = await prismaClient.user.findFirst({
+      where: {
+        id: userId,
+        type: "cliente",
+      },
+    });
+    if (!user) {
+      throw new Error("Franqueado não encontrado");
+    }
+
     const order = await prismaClient.order.create({
       data: {
         observation: observation,
@@ -34,7 +44,7 @@ class CreateOrderService {
         name: name,
         company_id: company_id,
         sector: sector,
-        asaas_integration: true,
+        asaas_integration: user.enable_payment,
         urgent: urgent,
         status: "pendente",
       },
