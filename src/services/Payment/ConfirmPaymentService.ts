@@ -23,12 +23,6 @@ class ConfirmPaymentService {
       },
     });
 
-    if (!payment) {
-      throw new Error("Pagamento não encontrado");
-    }
-
-    const order = payment.orders[0];
-
     var transport = await nodemailer.createTransport({
       host: "smtp.gmail.com",
       service: "gmail",
@@ -40,40 +34,16 @@ class ConfirmPaymentService {
       },
     });
 
-    if (data["event"] == "PAYMENT_RECEIVED") {
-      const paymentPaid = await prismaClient.payment.update({
-        where: {
-          asaas_id: data["payment"]["id"],
-        },
-        data: {
-          status: "confirmado",
-        },
-      });
-
-      await prismaClient.order.update({
-        where: {
-          id: paymentPaid.order_id,
-        },
-        data: {
-          status_payment: "confirmado",
-        },
-      });
-
-      const path = resolve(
-        __dirname,
-        "..",
-        "..",
-        "views",
-        "confirmedPayment.hbs"
-      );
+    if (!payment) {
+      const path = resolve(__dirname, "..", "..", "views", "errorWebhook.hbs");
 
       const templateFileContent = fs.readFileSync(path).toString("utf-8");
 
       const templateParse = handlebars.compile(templateFileContent);
 
       const templateHTML = templateParse({
-        name: order.user.name,
-        order_id: order.id,
+        name: "Guruseg",
+        data: JSON.stringify(data),
       });
 
       await transport.sendMail({
@@ -82,116 +52,169 @@ class ConfirmPaymentService {
           address: "leonardo@guruseg.com.br",
         },
         to: {
-          name: order.user.name,
-          address: order.user.email,
+          name: "Guruseg",
+          address: "boninho7834@gmail.com",
         },
-        subject: "[Guruseg] Pagamento Confirmado",
+        subject: "[Guruseg] Error Webhook",
         html: templateHTML,
       });
-    }
 
-    if (data["event"] == "PAYMENT_OVERDUE") {
-      const paymentCanceled = await prismaClient.payment.update({
-        where: {
-          asaas_id: data["payment"]["id"],
-        },
-        data: {
-          status: "expirado",
-        },
-      });
+      return;
+    } else {
+      const order = payment.orders[0];
 
-      await prismaClient.order.update({
-        where: {
-          id: paymentCanceled.order_id,
-        },
-        data: {
-          payment_id: null,
-          status_payment: "expirado",
-        },
-      });
+      if (data["event"] == "PAYMENT_RECEIVED") {
+        const paymentPaid = await prismaClient.payment.update({
+          where: {
+            asaas_id: data["payment"]["id"],
+          },
+          data: {
+            status: "confirmado",
+          },
+        });
 
-      const path = resolve(
-        __dirname,
-        "..",
-        "..",
-        "views",
-        "expiredPayment.hbs"
-      );
+        await prismaClient.order.update({
+          where: {
+            id: paymentPaid.order_id,
+          },
+          data: {
+            status_payment: "confirmado",
+          },
+        });
 
-      const templateFileContent = fs.readFileSync(path).toString("utf-8");
+        const path = resolve(
+          __dirname,
+          "..",
+          "..",
+          "views",
+          "confirmedPayment.hbs"
+        );
 
-      const templateParse = handlebars.compile(templateFileContent);
+        const templateFileContent = fs.readFileSync(path).toString("utf-8");
 
-      const templateHTML = templateParse({
-        name: order.user.name,
-        order_id: order.id,
-      });
+        const templateParse = handlebars.compile(templateFileContent);
 
-      await transport.sendMail({
-        from: {
-          name: "Equipe Guruseg",
-          address: "leonardo@guruseg.com.br",
-        },
-        to: {
+        const templateHTML = templateParse({
           name: order.user.name,
-          address: order.user.email,
-        },
-        subject: "[Guruseg] Pagamento Expirado",
-        html: templateHTML,
-      });
-    }
+          order_id: order.id,
+        });
 
-    if (data["event"] == "PAYMENT_DELETED") {
-      const paymentCanceled = await prismaClient.payment.update({
-        where: {
-          asaas_id: data["payment"]["id"],
-        },
-        data: {
-          status: "cancelado",
-        },
-      });
+        await transport.sendMail({
+          from: {
+            name: "Equipe Guruseg",
+            address: "leonardo@guruseg.com.br",
+          },
+          to: {
+            name: order.user.name,
+            address: order.user.email,
+          },
+          subject: "[Guruseg] Pagamento Confirmado",
+          html: templateHTML,
+        });
+      }
 
-      await prismaClient.order.update({
-        where: {
-          id: paymentCanceled.order_id,
-        },
-        data: {
-          payment_id: null,
-          status_payment: "cancelado",
-        },
-      });
+      if (data["event"] == "PAYMENT_OVERDUE") {
+        const paymentCanceled = await prismaClient.payment.update({
+          where: {
+            asaas_id: data["payment"]["id"],
+          },
+          data: {
+            status: "expirado",
+          },
+        });
 
-      const path = resolve(
-        __dirname,
-        "..",
-        "..",
-        "views",
-        "canceledPayment.hbs"
-      );
+        await prismaClient.order.update({
+          where: {
+            id: paymentCanceled.order_id,
+          },
+          data: {
+            payment_id: null,
+            status_payment: "expirado",
+          },
+        });
 
-      const templateFileContent = fs.readFileSync(path).toString("utf-8");
+        const path = resolve(
+          __dirname,
+          "..",
+          "..",
+          "views",
+          "expiredPayment.hbs"
+        );
 
-      const templateParse = handlebars.compile(templateFileContent);
+        const templateFileContent = fs.readFileSync(path).toString("utf-8");
 
-      const templateHTML = templateParse({
-        name: order.user.name,
-        order_id: order.id,
-      });
+        const templateParse = handlebars.compile(templateFileContent);
 
-      await transport.sendMail({
-        from: {
-          name: "Equipe Guruseg",
-          address: "leonardo@guruseg.com.br",
-        },
-        to: {
+        const templateHTML = templateParse({
           name: order.user.name,
-          address: order.user.email,
-        },
-        subject: "[Guruseg] Pagamento Cancelado",
-        html: templateHTML,
-      });
-    }
+          order_id: order.id,
+        });
 
+        await transport.sendMail({
+          from: {
+            name: "Equipe Guruseg",
+            address: "leonardo@guruseg.com.br",
+          },
+          to: {
+            name: order.user.name,
+            address: order.user.email,
+          },
+          subject: "[Guruseg] Pagamento Expirado",
+          html: templateHTML,
+        });
+      }
+
+      if (data["event"] == "PAYMENT_DELETED") {
+        const paymentCanceled = await prismaClient.payment.update({
+          where: {
+            asaas_id: data["payment"]["id"],
+          },
+          data: {
+            status: "cancelado",
+          },
+        });
+
+        await prismaClient.order.update({
+          where: {
+            id: paymentCanceled.order_id,
+          },
+          data: {
+            payment_id: null,
+            status_payment: "cancelado",
+          },
+        });
+
+        const path = resolve(
+          __dirname,
+          "..",
+          "..",
+          "views",
+          "canceledPayment.hbs"
+        );
+
+        const templateFileContent = fs.readFileSync(path).toString("utf-8");
+
+        const templateParse = handlebars.compile(templateFileContent);
+
+        const templateHTML = templateParse({
+          name: order.user.name,
+          order_id: order.id,
+        });
+
+        await transport.sendMail({
+          from: {
+            name: "Equipe Guruseg",
+            address: "leonardo@guruseg.com.br",
+          },
+          to: {
+            name: order.user.name,
+            address: order.user.email,
+          },
+          subject: "[Guruseg] Pagamento Cancelado",
+          html: templateHTML,
+        });
+      }
+    }
     return data;
   }
 }
