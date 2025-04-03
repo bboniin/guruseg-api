@@ -10,7 +10,7 @@ class CreatePaymentController {
     const createPaymentService = new CreatePaymentService();
 
     const Payment = await createPaymentService.execute({
-      order_id: order_id,
+      order_id: parseInt(order_id),
       userId,
       code: code,
     });
