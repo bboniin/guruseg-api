@@ -79,6 +79,7 @@ class ConfirmPaymentService {
           },
           data: {
             status_payment: "confirmado",
+            status: "pendente",
           },
         });
 

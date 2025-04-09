@@ -46,7 +46,7 @@ class CreateOrderService {
         sector: sector,
         asaas_integration: user.enable_payment,
         urgent: urgent,
-        status: "pendente",
+        status: user.enable_payment ? "pagamento" : "pendente",
       },
     });
 

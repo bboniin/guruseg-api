@@ -84,7 +84,19 @@ class CreatePaymentService {
       totalOrder -= valueDiscount;
 
       if (totalOrder < 5) {
-        throw new Error("Valor minimo para gerar cobrança é de R$ 5,00");
+        const order = await prismaClient.order.update({
+          where: {
+            id: order_id,
+          },
+          data: {
+            status: "pendente",
+            asaas_integration: false,
+          },
+          include: {
+            collaborator: true,
+          },
+        });
+        return order;
       }
 
       if (coupon) {
