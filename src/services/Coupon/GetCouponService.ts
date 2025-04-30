@@ -1,16 +1,18 @@
 import { endOfDay, isBefore } from "date-fns";
 import prismaClient from "../../prisma";
+import { getValue } from "../../config/functions";
 
 interface CouponRequest {
   userId: string;
+  value: number;
   code: string;
 }
 
 class GetCouponService {
-  async execute({ userId, code }: CouponRequest) {
+  async execute({ userId, code, value }: CouponRequest) {
     const coupon = await prismaClient.coupon.findFirst({
       where: {
-        code: code,
+        code: { equals: code, mode: "insensitive" },
         active: true,
       },
       include: {
@@ -43,6 +45,14 @@ class GetCouponService {
 
     if (!!coupon.usageLimit && coupon.usageLimit <= coupon.redemptions.length) {
       throw new Error("Cupom de desconto esgotado");
+    }
+
+    if (value < coupon.minValue) {
+      throw new Error(
+        `Valor mínimo para resgatar esse cupom é de ${getValue(
+          coupon.minValue
+        )}`
+      );
     }
 
     return coupon;

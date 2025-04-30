@@ -152,7 +152,7 @@ import { CreateCouponController } from "./controllers/Coupon/CreateCouponControl
 import { ListCouponsController } from "./controllers/Coupon/ListCouponsController";
 import { EditCouponController } from "./controllers/Coupon/EditCouponController";
 import { DeleteCouponController } from "./controllers/Coupon/DeleteCouponController";
-import { RescueCouponService } from "./services/Coupon/RescueCouponService";
+import { GetCouponController } from "./controllers/Coupon/GetCouponController";
 
 const upload = multer(uploadConfig);
 
@@ -162,9 +162,7 @@ const router = Router();
 
 router.post("/lead/web", new CreateLeadWebController().handle);
 router.put("/all-renewal", new EditAllRenewalsController().handle);
-router.post("/user-session", new AuthUserController().handle);
-router.post("/admin-session", new AuthAdminController().handle);
-router.post("/collaborator-session", new AuthCollaboratorController().handle);
+router.post("/session", new AuthUserController().handle);
 router.post("/credential-session", new AuthCredentialController().handle);
 router.get("/banners-public", new ListBannersPublicController().handle);
 router.get("/contract/:id", new GetContractController().handle);
@@ -240,11 +238,13 @@ router.put(
   "/doc-recused-order/:order_id",
   new RecusedDocOrderController().handle
 );
+
+router.post("/get/coupon", new GetCouponController().handle);
 router.get("/orders-open", new ListOpenOrdersController().handle);
 router.get("/orders/:type", new ListOrdersController().handle);
 router.get("/order/:id", new GetOrderController().handle);
 router.put("/confirm-order/:id", new ConfirmOrderController().handle);
-router.post("/payment-order", new CreatePaymentController().handle);
+router.post("/order/payment/:id", new CreatePaymentController().handle);
 router.post("/customer", new CreateCustomerController().handle);
 router.put("/alteracao-order", new HandlerOrderController().handle);
 router.post("/order", new CreateOrderController().handle);
@@ -277,7 +277,7 @@ router.get("/admin/payments", new ListAdminPaymentsController().handle);
 router.post("/credential", new AdminCreateCredentialController().handle);
 router.put("/credential", new AdminEditCredentialController().handle);
 
-router.get("/users", new ListUsersController().handle);
+router.get("/users/:type", new ListUsersController().handle);
 router.post("/user", upload.single("file"), new CreateUserController().handle);
 router.put(
   "/user/:id",

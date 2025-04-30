@@ -3,27 +3,42 @@ import api from "../../config/api";
 import prismaClient from "../../prisma";
 import { GetCouponService } from "../Coupon/GetCouponService";
 import { RescueCouponService } from "../Coupon/RescueCouponService";
+import { CreateCustomerService } from "./CreateCustomerService";
+import { ConfirmOrderService } from "../Order/ConfirmOrderService";
 
 interface PaymentRequest {
   order_id: number;
   userId: string;
   code: string;
+  cpf: number;
 }
 
 class CreatePaymentService {
-  async execute({ order_id, userId, code }: PaymentRequest) {
+  async execute({ order_id, cpf, userId, code }: PaymentRequest) {
     const user = await prismaClient.user.findFirst({
       where: {
         id: userId,
         type: "cliente",
       },
     });
+
     if (!user) {
       throw new Error("Franqueado não encontrado");
     }
 
     if (!user.costumer_id) {
-      throw new Error("Franqueado não cadastrou CPF para nota fiscal");
+      if (cpf) {
+        const createCustomerService = new CreateCustomerService();
+
+        const costumer_id = await createCustomerService.execute({
+          userId,
+          cpf,
+        });
+
+        user.costumer_id = costumer_id;
+      } else {
+        throw new Error("Franqueado não cadastrou CPF para nota fiscal");
+      }
     }
 
     const order = await prismaClient.order.findFirst({
@@ -43,8 +58,8 @@ class CreatePaymentService {
           },
         },
         payment: true,
-        user: true,
         collaborator: true,
+        user: true,
       },
     });
 
@@ -73,6 +88,7 @@ class CreatePaymentService {
       const coupon = await getCouponService.execute({
         code,
         userId,
+        value: totalOrder,
       });
 
       if (coupon.type == "FIXED") {
@@ -82,22 +98,6 @@ class CreatePaymentService {
       }
 
       totalOrder -= valueDiscount;
-
-      if (totalOrder < 5) {
-        const order = await prismaClient.order.update({
-          where: {
-            id: order_id,
-          },
-          data: {
-            status: "pendente",
-            asaas_integration: false,
-          },
-          include: {
-            collaborator: true,
-          },
-        });
-        return order;
-      }
 
       if (coupon) {
         const rescueCouponService = new RescueCouponService();
@@ -111,10 +111,32 @@ class CreatePaymentService {
       }
     }
 
-    if (totalOrder < 5) {
-      throw new Error("Valor minimo para gerar cobrança é de R$ 5,00");
+    if (!user.enable_payment) {
+      const confirmOrderService = new ConfirmOrderService();
+
+      const orderR = await confirmOrderService.execute({
+        userId,
+        id: order.id,
+        message: "",
+      });
+      return orderR;
     }
 
+    if (totalOrder < 5) {
+      const order = await prismaClient.order.update({
+        where: {
+          id: order_id,
+        },
+        data: {
+          status: "pagamento",
+          asaas_integration: false,
+        },
+        include: {
+          collaborator: true,
+        },
+      });
+      return order;
+    }
     let orderPayment = {};
 
     await api
@@ -140,6 +162,7 @@ class CreatePaymentService {
           },
           data: {
             status_payment: "pendente",
+            status: "pagamento",
             payment_id: payment.id,
           },
           include: {

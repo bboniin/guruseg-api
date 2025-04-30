@@ -3,6 +3,7 @@ import { resolve } from "path";
 import fs from "fs";
 import nodemailer from "nodemailer";
 import handlebars from "handlebars";
+import { ConfirmOrderService } from "../Order/ConfirmOrderService";
 
 interface OrderRequest {
   data: object;
@@ -79,8 +80,15 @@ class ConfirmPaymentService {
           },
           data: {
             status_payment: "confirmado",
-            status: "pendente",
           },
+        });
+
+        const confirmOrderService = new ConfirmOrderService();
+
+        await confirmOrderService.execute({
+          userId: order.user_id,
+          id: order.id,
+          message: "",
         });
 
         const path = resolve(

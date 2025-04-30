@@ -1,57 +1,78 @@
-import { addDays } from 'date-fns';
-import prismaClient from '../../../prisma'
+import { addDays } from "date-fns";
+import prismaClient from "../../../prisma";
 
 interface ServiceRequest {
-    userId: string;
+  userId: string;
+  filter: string;
+  page: number;
 }
 
 class ListCollaboratorsService {
-    async execute({ userId }: ServiceRequest) {
+  async execute({ userId, page, filter }: ServiceRequest) {
+    const admin = await prismaClient.admin.findUnique({
+      where: {
+        id: userId,
+      },
+    });
 
-        const tecnicos = await prismaClient.collaborator.findMany({
-            where: {
-                visible: true
-            },
-            orderBy: {
-                create_at: "asc",
-            }
-        })
-
-        let tecnicosTotal = {}
-
-        tecnicos.map((item) => {
-            tecnicosTotal[item.id] = {
-                ...item, total: 0
-            }
-        })
-
-        const oss = await prismaClient.order.findMany({
-            where: {
-                create_at: {
-                    gte: addDays(new Date(),-7)
-                }
-            },
-            include: {
-                items: true,
-            },
-            orderBy: {
-                create_at: "asc",
-            }
-        })
-
-        oss.map((item) => {
-            let total = 0
-            item.items.map((item) => {
-                total += item.amount * item.value
-            })
-            if (tecnicosTotal[item.collaborator_id]) {
-                tecnicosTotal[item.collaborator_id].total += total
-            }
-        })
-        
-
-        return (Object.values(tecnicosTotal))
+    if (!admin) {
+      throw new Error("Rota restrita ao administrador");
     }
+
+    let filterSearch = {};
+
+    if (filter) {
+      filterSearch["name"] = {
+        contains: filter,
+        mode: "insensitive",
+      };
+    }
+
+    const collaboratorsTotal = await prismaClient.collaborator.count({
+      where: {
+        visible: true,
+        ...filterSearch,
+      },
+    });
+
+    const collaborators = await prismaClient.collaborator.findMany({
+      where: {
+        visible: true,
+        ...filterSearch,
+      },
+      orderBy: {
+        create_at: "asc",
+      },
+      skip: page * 30,
+      take: 30,
+      include: {
+        orders: {
+          where: {
+            create_at: {
+              gte: addDays(new Date(), -7),
+            },
+          },
+          include: {
+            items: true,
+          },
+          orderBy: {
+            create_at: "asc",
+          },
+        },
+      },
+    });
+
+    collaborators.map((data) => {
+      data["totalWeek"] = 0;
+      data.orders.map((item) => {
+        item.items.map((item) => {
+          data["totalWeek"] += item.amount * item.commission;
+        });
+      });
+    });
+
+    return { collaborators: collaborators, collaboratorsTotal };
+  }
 }
 
-export { ListCollaboratorsService }
+export { ListCollaboratorsService };

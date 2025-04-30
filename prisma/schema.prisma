@@ -139,6 +139,7 @@ model Order {
 
   items Item[]
   docs  Doc[]
+
   redemptions         Redemption[]
      
   payment       Payment?   @relation(fields: [payment_id], references: [id], onDelete: SetNull)
@@ -560,7 +561,7 @@ model Redemption {
 
   coupon    Coupon?   @relation(fields: [couponId], references: [id], onDelete: SetNull)
   user      User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
-  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order     Order      @relation(fields: [orderId], references: [id], onDelete: SetNull)
 
   @@map("redemptions")
 }

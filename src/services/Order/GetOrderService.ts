@@ -46,12 +46,27 @@ class GetOrderService {
         payment: true,
         user: true,
         collaborator: true,
+        redemptions: true,
       },
     });
+
+    if (order.redemptions[0]) {
+      order["redemption"] = order.redemptions[0];
+    }
+
+    delete order.redemptions;
 
     if (!order) {
       throw new Error("Ordem de serviço não foi encontrada");
     }
+
+    order["totalServices"] = 0;
+    order["totalValue"] = 0;
+
+    order.items.map((item) => {
+      order["totalServices"] += item.amount;
+      order["totalValue"] += item.value * item.amount;
+    });
 
     if (user) {
       if (userId != order.user.id) {
@@ -74,26 +89,17 @@ class GetOrderService {
     });
 
     if (user) {
-      if (order.asaas_integration) {
-        if (order.status_payment != "confirmado") {
-          order.docs.map((item) => {
-            if (item.type == "tecnico") {
-              item.file = "";
-            }
+      if (order.payment_id && order.status_payment == "pendente") {
+        await api
+          .get(`/payments/${order.payment.asaas_id}/pixQrCode`)
+          .then(async (res) => {
+            order["pix"] = res.data;
+          })
+          .catch((e) => {
+            throw new Error(
+              "Ocorreu um gerar QR Code Pix, recarregue a página"
+            );
           });
-        }
-        if (order.payment_id && order.status_payment == "pendente") {
-          await api
-            .get(`/payments/${order.payment.asaas_id}/pixQrCode`)
-            .then(async (res) => {
-              order["pix"] = res.data;
-            })
-            .catch((e) => {
-              throw new Error(
-                "Ocorreu um gerar QR Code Pix, recarregue a página"
-              );
-            });
-        }
       }
     }
 

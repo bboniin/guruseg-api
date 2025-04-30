@@ -3,16 +3,19 @@ import { CreatePaymentService } from "../../services/Payment/CreatePaymentServic
 
 class CreatePaymentController {
   async handle(req: Request, res: Response) {
-    const { code, order_id } = req.body;
+    const { code, cpf } = req.body;
+
+    const { id } = req.params;
 
     let userId = req.userId;
 
     const createPaymentService = new CreatePaymentService();
 
     const Payment = await createPaymentService.execute({
-      order_id: parseInt(order_id),
+      order_id: parseInt(id),
       userId,
       code: code,
+      cpf: cpf,
     });
 
     return res.json(Payment);

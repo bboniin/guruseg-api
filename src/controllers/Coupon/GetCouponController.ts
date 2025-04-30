@@ -3,7 +3,7 @@ import { GetCouponService } from "../../services/Coupon/GetCouponService";
 
 class GetCouponController {
   async handle(req: Request, res: Response) {
-    const { code } = req.params;
+    const { code, value } = req.body;
 
     let userId = req.userId;
 
@@ -11,6 +11,7 @@ class GetCouponController {
 
     const coupon = await getCouponService.execute({
       userId,
+      value,
       code,
     });
 

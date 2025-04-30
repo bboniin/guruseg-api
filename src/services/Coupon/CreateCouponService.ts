@@ -43,7 +43,7 @@ class CreateCouponService {
         code: code,
         name: name,
         value: value,
-        type: type == "fixed" ? "FIXED" : "PERCENTAGE",
+        type: type == "FIXED" ? "FIXED" : "PERCENTAGE",
         isSingleUse: isSingleUse,
         minValue: minValue || 0,
         usageLimit: usageLimit || 0,

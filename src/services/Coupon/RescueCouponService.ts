@@ -1,3 +1,4 @@
+import { getValue } from "../../config/functions";
 import prismaClient from "../../prisma";
 
 interface CouponRequest {
@@ -24,13 +25,17 @@ class RescueCouponService {
       },
     });
 
-    if (!redemptionOS) {
+    if (redemptionOS) {
       throw new Error("OS já tem cupom de desconto");
     }
 
     const redemption = await prismaClient.redemption.create({
       data: {
-        name: coupon["name"],
+        name: `${coupon["name"]} - ${
+          coupon["type"] == "FIXED"
+            ? `${getValue(coupon["value"] || 0)} OFF`
+            : `${coupon["value"]}%`
+        }`,
         value: value,
         couponId: coupon["id"],
         orderId: orderId,

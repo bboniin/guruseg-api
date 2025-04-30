@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import prismaClient from "../../prisma";
 
 interface OrderRequest {
@@ -22,7 +23,7 @@ class CreateOrderService {
     sector,
     company_id,
   }: OrderRequest) {
-    if (items.length == 0 || !userId || !month || !sector) {
+    if (items.length == 0 || !userId || !sector) {
       throw new Error("Preencha todos os campos.");
     }
 
@@ -40,13 +41,15 @@ class CreateOrderService {
       data: {
         observation: observation,
         user_id: userId,
-        month: month,
+        month: format(new Date(), "yyyy-MM"),
         name: name,
         company_id: company_id,
         sector: sector,
         asaas_integration: user.enable_payment,
-        urgent: urgent,
-        status: user.enable_payment ? "pagamento" : "pendente",
+        status: "pendente",
+      },
+      include: {
+        user: true,
       },
     });
 
@@ -61,20 +64,27 @@ class CreateOrderService {
       });
     }
 
-    order["items"] = [];
-    items.map(async (data) => {
-      const itemOrder = await prismaClient.item.create({
-        data: {
-          amount: data["amount"],
-          order_id: order.id,
-          name: data["name"],
-          value: data["value"],
-          commission: data["commission"],
-          description: data["description"],
-        },
-      });
-      order["items"].push(itemOrder);
-    });
+    order["items"] = await [];
+    order["totalServices"] = 0;
+    order["totalValue"] = 0;
+
+    await Promise.all(
+      await items.map(async (data) => {
+        const itemOrder = await prismaClient.item.create({
+          data: {
+            amount: data["amount"],
+            order_id: order.id,
+            name: data["name"],
+            value: data["value"],
+            commission: data["commission"],
+            description: data["description"],
+          },
+        });
+        order["items"].push(itemOrder);
+        order["totalServices"] += data["amount"];
+        order["totalValue"] += data["value"] * data["amount"];
+      })
+    );
 
     return order;
   }

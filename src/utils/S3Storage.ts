@@ -1,52 +1,53 @@
-import aws, { S3 } from 'aws-sdk'
-import fs from 'fs'
-import path from 'path'
-import mime from 'mime'
+import aws, { S3 } from "aws-sdk";
+import fs from "fs";
+import path from "path";
+import mime from "mime";
 
-import multerConfig from '../config/multer';
+import multerConfig from "../config/multer";
 
 class S3Storage {
-    private client: S3;
+  private client: S3;
 
-    constructor() {
-        this.client = new aws.S3({
-            region: 'sa-east-1',
-        })
+  constructor() {
+    this.client = new aws.S3({
+      region: "sa-east-1",
+    });
+  }
+
+  async saveFile(filename: string): Promise<string> {
+    const originalPath = path.resolve(multerConfig.directory, filename);
+
+    const ContentType = mime.getType(originalPath);
+
+    if (!ContentType) {
+      throw new Error("Arquivo não enviado");
     }
 
-    async saveFile(filename: string): Promise<string> {
-        const originalPath = path.resolve(multerConfig.directory, filename)
+    const fileContent = await fs.promises.readFile(originalPath);
 
-        const ContentType = mime.getType(originalPath)
+    await this.client
+      .putObject({
+        Bucket: "guruseg-data",
+        Key: filename,
+        ACL: "public-read",
+        Body: fileContent,
+        ContentType,
+      })
+      .promise();
 
-        if (!ContentType) {
-            throw new Error("Arquivo não enviado")
-        }
+    await fs.promises.unlink(originalPath);
 
-        const fileContent = await fs.promises.readFile(originalPath)
+    return filename;
+  }
 
-
-        await this.client.putObject({
-            Bucket: 'guruseg-data',
-            Key: filename,
-            ACL: 'public-read',
-            Body: fileContent,
-            ContentType
-        }).promise()
-
-        await fs.promises.unlink(originalPath)
-
-        return filename;
-    }
-
-    async deleteFile(file: string): Promise<void> {
-        await this.client
-            .deleteObject({
-                Bucket: "guruseg-data",
-                Key: file,
-            })
-            .promise();
-    }
+  async deleteFile(file: string): Promise<void> {
+    await this.client
+      .deleteObject({
+        Bucket: "guruseg-data",
+        Key: file,
+      })
+      .promise();
+  }
 }
 
-export default S3Storage
+export default S3Storage;

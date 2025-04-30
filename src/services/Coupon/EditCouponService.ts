@@ -11,6 +11,7 @@ interface CouponRequest {
   minValue: number;
   usageLimit: number;
   isSingleUse: boolean;
+  active: boolean;
   expirationDate: Date;
 }
 class EditCouponService {
@@ -24,6 +25,7 @@ class EditCouponService {
     isSingleUse,
     expirationDate,
     usageLimit,
+    active,
     minValue,
   }: CouponRequest) {
     const admin = await prismaClient.admin.findUnique({
@@ -58,8 +60,9 @@ class EditCouponService {
         code: code,
         name: name,
         value: value,
-        type: type == "fixed" ? "FIXED" : "PERCENTAGE",
+        type: type == "FIXED" ? "FIXED" : "PERCENTAGE",
         isSingleUse: isSingleUse,
+        active: active,
         minValue: minValue || 0,
         usageLimit: usageLimit || 0,
         expirationDate: expirationDate || null,

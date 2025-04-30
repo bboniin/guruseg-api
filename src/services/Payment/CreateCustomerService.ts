@@ -26,6 +26,7 @@ class CreateCustomerService {
     if (user.costumer_id) {
       throw new Error("Franqueado já cadastrou CPF");
     }
+    let costumer_id = "";
 
     await api
       .post("/customers", {
@@ -34,12 +35,13 @@ class CreateCustomerService {
         mobilePhone: user.phone_number,
       })
       .then(async (response) => {
+        costumer_id = response.data.id;
         await prismaClient.user.update({
           where: {
             id: user.id,
           },
           data: {
-            costumer_id: response.data.id,
+            costumer_id: costumer_id,
           },
         });
       })
@@ -47,7 +49,8 @@ class CreateCustomerService {
         console.log(e.response.data);
         throw new Error("Ocorreu um erro ao criar cobrança");
       });
-    return "CPF Cadastrado com sucesso";
+
+    return costumer_id;
   }
 }
 

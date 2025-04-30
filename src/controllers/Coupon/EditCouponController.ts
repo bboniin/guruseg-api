@@ -14,6 +14,7 @@ class EditCouponController {
       isSingleUse,
       code,
       usageLimit,
+      active,
     } = req.body;
 
     let userId = req.userId;
@@ -30,6 +31,7 @@ class EditCouponController {
       code,
       usageLimit,
       userId,
+      active,
       id,
     });
 
