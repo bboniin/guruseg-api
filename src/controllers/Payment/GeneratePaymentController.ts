@@ -9,12 +9,26 @@ class GeneratePaymentController {
 
     const generatePaymentService = new GeneratePaymentService();
 
-    const Payment = await generatePaymentService.execute({
+    const order = await generatePaymentService.execute({
       order_id: parseInt(id),
       userId,
     });
 
-    return res.json(Payment);
+    if (order["user"].photo) {
+      order["user"]["photo_url"] =
+        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" +
+        order["user"].photo;
+    }
+
+    if (order["collaborator"]) {
+      if (order["collaborator"].photo) {
+        order["collaborator"]["photo_url"] =
+          "https://guruseg-data.s3.sa-east-1.amazonaws.com/" +
+          order["collaborator"].photo;
+      }
+    }
+
+    return res.json(order);
   }
 }
 

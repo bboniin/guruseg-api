@@ -26,18 +26,20 @@ class CreatePaymentService {
       throw new Error("Franqueado não encontrado");
     }
 
-    if (!user.costumer_id) {
-      if (cpf) {
-        const createCustomerService = new CreateCustomerService();
+    if (user.enable_payment) {
+      if (!user.costumer_id) {
+        if (cpf) {
+          const createCustomerService = new CreateCustomerService();
 
-        const costumer_id = await createCustomerService.execute({
-          userId,
-          cpf,
-        });
+          const costumer_id = await createCustomerService.execute({
+            userId,
+            cpf,
+          });
 
-        user.costumer_id = costumer_id;
-      } else {
-        throw new Error("Franqueado não cadastrou CPF para nota fiscal");
+          user.costumer_id = costumer_id;
+        } else {
+          throw new Error("Franqueado não cadastrou CPF para nota fiscal");
+        }
       }
     }
 
