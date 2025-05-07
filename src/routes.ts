@@ -153,6 +153,7 @@ import { ListCouponsController } from "./controllers/Coupon/ListCouponsControlle
 import { EditCouponController } from "./controllers/Coupon/EditCouponController";
 import { DeleteCouponController } from "./controllers/Coupon/DeleteCouponController";
 import { GetCouponController } from "./controllers/Coupon/GetCouponController";
+import { GeneratePaymentController } from "./controllers/Payment/GeneratePaymentController";
 
 const upload = multer(uploadConfig);
 
@@ -245,6 +246,7 @@ router.get("/orders/:type", new ListOrdersController().handle);
 router.get("/order/:id", new GetOrderController().handle);
 router.put("/confirm-order/:id", new ConfirmOrderController().handle);
 router.post("/order/payment/:id", new CreatePaymentController().handle);
+router.post("/generate/payment/:id", new GeneratePaymentController().handle);
 router.post("/customer", new CreateCustomerController().handle);
 router.put("/alteracao-order", new HandlerOrderController().handle);
 router.post("/order", new CreateOrderController().handle);

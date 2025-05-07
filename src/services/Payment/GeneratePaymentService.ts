@@ -1,50 +1,52 @@
 import { addDays, format } from "date-fns";
 import api from "../../config/api";
 import prismaClient from "../../prisma";
-import { GetCouponService } from "../Coupon/GetCouponService";
-import { RescueCouponService } from "../Coupon/RescueCouponService";
-import { CreateCustomerService } from "./CreateCustomerService";
-import { ConfirmOrderService } from "../Order/ConfirmOrderService";
 
 interface PaymentRequest {
   order_id: number;
   userId: string;
-  code: string;
-  cpf: number;
 }
 
-class CreatePaymentService {
-  async execute({ order_id, cpf, userId, code }: PaymentRequest) {
-    const user = await prismaClient.user.findFirst({
+class GeneratePaymentService {
+  async execute({ order_id, userId }: PaymentRequest) {
+    const admin = await prismaClient.admin.findFirst({
       where: {
         id: userId,
-        type: "cliente",
       },
     });
 
-    if (!user) {
-      throw new Error("Franqueado não encontrado");
+    let user = null;
+
+    if (!admin) {
+      user = await prismaClient.user.findFirst({
+        where: {
+          id: userId,
+          type: "cliente",
+        },
+      });
+
+      if (!user) {
+        throw new Error("Franqueado não encontrado");
+      }
+
+      const order = await prismaClient.order.findFirst({
+        where: {
+          id: order_id,
+          user_id: userId,
+        },
+      });
+      if (!order) {
+        throw new Error("OS não percente a esse usuário");
+      }
     }
 
     if (!user.costumer_id) {
-      if (cpf) {
-        const createCustomerService = new CreateCustomerService();
-
-        const costumer_id = await createCustomerService.execute({
-          userId,
-          cpf,
-        });
-
-        user.costumer_id = costumer_id;
-      } else {
-        throw new Error("Franqueado não cadastrou CPF para nota fiscal");
-      }
+      throw new Error("Franqueado não cadastrou CPF para nota fiscal");
     }
 
     const order = await prismaClient.order.findFirst({
       where: {
         id: order_id,
-        user_id: userId,
       },
       include: {
         items: {
@@ -63,10 +65,6 @@ class CreatePaymentService {
       },
     });
 
-    if (!order) {
-      throw new Error("OS não encontrada");
-    }
-
     if (order.payment_id) {
       if (order.status_payment == "confirmado") {
         throw new Error("Ordem de serviço com pagamento já realizado");
@@ -77,65 +75,18 @@ class CreatePaymentService {
     }
 
     let totalOrder = 0;
-    let valueDiscount = 0;
     order.items.map((item) => {
       totalOrder += item.amount * item.value;
     });
 
-    if (code) {
-      const getCouponService = new GetCouponService();
+    const rescueCode = await prismaClient.redemption.findUnique({
+      where: {
+        orderId: order.id,
+      },
+    });
 
-      const coupon = await getCouponService.execute({
-        code,
-        userId,
-        value: totalOrder,
-      });
-
-      if (coupon.type == "FIXED") {
-        valueDiscount = coupon.value;
-      } else {
-        valueDiscount = totalOrder * (coupon.value / 100);
-      }
-
-      totalOrder -= valueDiscount;
-
-      if (coupon) {
-        const rescueCouponService = new RescueCouponService();
-
-        await rescueCouponService.execute({
-          coupon,
-          userId,
-          orderId: order_id,
-          value: valueDiscount,
-        });
-      }
-    }
-
-    if (!user.enable_payment) {
-      const confirmOrderService = new ConfirmOrderService();
-
-      const orderR = await confirmOrderService.execute({
-        userId,
-        id: order.id,
-        message: "",
-      });
-      return orderR;
-    }
-
-    if (totalOrder < 5) {
-      const order = await prismaClient.order.update({
-        where: {
-          id: order_id,
-        },
-        data: {
-          status: "pagamento",
-          asaas_integration: false,
-        },
-        include: {
-          collaborator: true,
-        },
-      });
-      return order;
+    if (rescueCode) {
+      totalOrder -= rescueCode.value;
     }
 
     let orderPayment = {};
@@ -163,7 +114,6 @@ class CreatePaymentService {
           },
           data: {
             status_payment: "pendente",
-            status: "pagamento",
             payment_id: payment.id,
           },
           include: {
@@ -201,4 +151,4 @@ class CreatePaymentService {
   }
 }
 
-export { CreatePaymentService };
+export { GeneratePaymentService };

@@ -4,8 +4,6 @@ import prismaClient from "../../prisma";
 interface OrderRequest {
   observation: string;
   userId: string;
-  month: string;
-  urgent: boolean;
   name: string;
   company_id: string;
   sector: string;
@@ -18,8 +16,6 @@ class CreateOrderService {
     userId,
     name,
     items,
-    month,
-    urgent,
     sector,
     company_id,
   }: OrderRequest) {
