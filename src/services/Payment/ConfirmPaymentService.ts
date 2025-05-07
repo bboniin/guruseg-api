@@ -83,13 +83,15 @@ class ConfirmPaymentService {
           },
         });
 
-        const confirmOrderService = new ConfirmOrderService();
+        if (!order.collaborator_id) {
+          const confirmOrderService = new ConfirmOrderService();
 
-        await confirmOrderService.execute({
-          userId: order.user_id,
-          id: order.id,
-          message: "",
-        });
+          await confirmOrderService.execute({
+            userId: order.user_id,
+            id: order.id,
+            message: "",
+          });
+        }
 
         const path = resolve(
           __dirname,
