@@ -17,6 +17,27 @@ class GeneratePaymentService {
 
     let user = null;
 
+    const order = await prismaClient.order.findFirst({
+      where: {
+        id: order_id,
+      },
+      include: {
+        items: {
+          orderBy: {
+            create_at: "asc",
+          },
+        },
+        docs: {
+          orderBy: {
+            create_at: "asc",
+          },
+        },
+        payment: true,
+        collaborator: true,
+        user: true,
+      },
+    });
+
     if (!admin) {
       user = await prismaClient.user.findFirst({
         where: {
@@ -38,32 +59,22 @@ class GeneratePaymentService {
       if (!order) {
         throw new Error("OS não percente a esse usuário");
       }
+    } else {
+      user = await prismaClient.user.findFirst({
+        where: {
+          id: order.user_id,
+          type: "cliente",
+        },
+      });
+
+      if (!user) {
+        throw new Error("Franqueado não encontrado");
+      }
     }
 
     if (!user.costumer_id) {
       throw new Error("Franqueado não cadastrou CPF para nota fiscal");
     }
-
-    const order = await prismaClient.order.findFirst({
-      where: {
-        id: order_id,
-      },
-      include: {
-        items: {
-          orderBy: {
-            create_at: "asc",
-          },
-        },
-        docs: {
-          orderBy: {
-            create_at: "asc",
-          },
-        },
-        payment: true,
-        collaborator: true,
-        user: true,
-      },
-    });
 
     if (order.payment_id) {
       if (order.status_payment == "confirmado") {
