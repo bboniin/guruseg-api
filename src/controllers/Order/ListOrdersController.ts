@@ -5,7 +5,7 @@ class ListOrdersController {
   async handle(req: Request, res: Response) {
     const { type } = req.params;
 
-    const { finance, endDate, status, startDate, page } = req.query;
+    const { finance, endDate, status, startDate, page, id } = req.query;
 
     let userId = req.userId;
 
@@ -13,7 +13,7 @@ class ListOrdersController {
 
     const orders = await listOrdersService.execute({
       type,
-      userId,
+      userId: id ? String(id) : userId,
       finance: finance == "true",
       endDate: endDate ? String(endDate) : "",
       status: status ? String(status) : "",
