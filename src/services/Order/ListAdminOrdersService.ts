@@ -3,7 +3,7 @@ import prismaClient from "../../prisma";
 
 interface OrderRequest {
   userId: string;
-  id: string;
+  id: Number;
   user_id: string;
   collaborator_id: string;
   status: string;
@@ -156,7 +156,6 @@ class ListAdminOrdersService {
       totalValue,
       totalServices,
       totalValueComission,
-
       averageTime: averageTime / OSfinish,
     };
   }
