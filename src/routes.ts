@@ -37,7 +37,6 @@ import { DeleteUserController } from "./controllers/Admin/Users/DeleteUserContro
 import { DeleteCollaboratorController } from "./controllers/Admin/Collaborators/DeleteCollaboratorController";
 import { GetUserAdminController } from "./controllers/Admin/Users/GetUserController";
 import { GetCollaboratorAdminController } from "./controllers/Admin/Collaborators/GetCollaboratorAdminController";
-import { ListAdminOrdersController } from "./controllers/Admin/ListAdminOrdersController";
 
 import { ListBannersPublicController } from "./controllers/Admin/Banners/ListBannersPublicController";
 import { ListBannersController } from "./controllers/Admin/Banners/ListBannersController";
@@ -154,6 +153,7 @@ import { EditCouponController } from "./controllers/Coupon/EditCouponController"
 import { DeleteCouponController } from "./controllers/Coupon/DeleteCouponController";
 import { GetCouponController } from "./controllers/Coupon/GetCouponController";
 import { GeneratePaymentController } from "./controllers/Payment/GeneratePaymentController";
+import { ListAdminOrdersController } from "./controllers/Admin/ListAdminOrdersController";
 
 const upload = multer(uploadConfig);
 
@@ -349,7 +349,7 @@ router.get(
   new ListUsersCollaboratorController().handle
 );
 router.get("/collaborator/:id", new GetCollaboratorAdminController().handle);
-router.get("/orders/:type/:id", new ListAdminOrdersController().handle);
+router.get("/orders/:id", new ListAdminOrdersController().handle);
 
 // Services
 

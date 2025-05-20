@@ -3,19 +3,31 @@ import { ListAdminOrdersService } from "../../services/Admin/ListAdminOrdersServ
 
 class ListAdminOrdersController {
   async handle(req: Request, res: Response) {
-    const { type, id } = req.params;
+    const {
+      endDate,
+      id,
+      startDate,
+      page,
+      status,
+      status_payment,
+      user_id,
+      collaborator_id,
+    } = req.query;
 
-    const { finance, endDate, startDate, page } = req.query;
+    let userId = req.userId;
 
     const listAdminOrdersService = new ListAdminOrdersService();
 
     const orders = await listAdminOrdersService.execute({
-      type,
-      id,
-      finance: finance == "true",
-      endDate: new Date(String(endDate)),
+      userId,
+      id: id ? Number(id) : 0,
+      status: status ? String(status) : "",
+      collaborator_id: collaborator_id ? String(collaborator_id) : "",
+      status_payment: status_payment ? String(status_payment) : "",
+      user_id: user_id ? String(user_id) : "",
+      endDate: endDate ? String(endDate) : "",
+      startDate: startDate ? String(startDate) : "",
       page: Number(page) || 0,
-      startDate: new Date(String(startDate)),
     });
 
     return res.json(orders);

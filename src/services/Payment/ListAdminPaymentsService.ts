@@ -58,7 +58,7 @@ class ListAdminPaymentsService {
       skip: page * 30,
       take: 30,
       orderBy: {
-        create_at: "asc",
+        create_at: "desc",
       },
     });
 

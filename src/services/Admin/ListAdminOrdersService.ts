@@ -1,63 +1,70 @@
-import { endOfDay, startOfDay } from "date-fns";
+import { differenceInSeconds, endOfDay, startOfDay } from "date-fns";
 import prismaClient from "../../prisma";
 
 interface OrderRequest {
-  id: string;
-  type: string;
-  finance: boolean;
-  startDate: Date;
-  endDate: Date;
+  userId: string;
+  id: Number;
+  user_id: string;
+  collaborator_id: string;
+  status: string;
+  status_payment: string;
+  startDate: string;
+  endDate: string;
   page: number;
 }
 
 class ListAdminOrdersService {
-  async execute({ id, type, page, finance, startDate, endDate }: OrderRequest) {
-    let data = {};
-    if (type == "cliente") {
-      data = {
-        user_id: id,
-      };
-    } else {
-      if (type == "tecnico") {
-        data = {
-          collaborator_id: id,
-        };
+  async execute({
+    userId,
+    id,
+    collaborator_id,
+    user_id,
+    status,
+    status_payment,
+    startDate,
+    endDate,
+    page,
+  }: OrderRequest) {
+    let filter = {};
+
+    if (id) {
+      filter["id"] = id;
+    }
+    if (collaborator_id) {
+      filter["collaborator_id"] = collaborator_id;
+    }
+    if (user_id) {
+      filter["user_id"] = user_id;
+    }
+    if (status) {
+      filter["status"] = status;
+    }
+
+    if (status_payment) {
+      if (status_payment == "Sem integração") {
+        filter["asaas_integration"] = false;
       } else {
-        throw new Error("Nenhum tipo de usuário foi enviado.");
+        filter["status_payment"] = status_payment;
       }
     }
 
-    if (finance) {
-      data["status"] = "finalizado";
-      data["AND"] = [
+    if (endDate && startDate) {
+      filter["AND"] = [
         {
           update_at: {
-            gte: startOfDay(startDate),
+            gte: startOfDay(new Date(startDate)),
           },
         },
         {
           update_at: {
-            lte: endOfDay(endDate),
-          },
-        },
-      ];
-    } else {
-      data["AND"] = [
-        {
-          create_at: {
-            gte: startOfDay(startDate),
-          },
-        },
-        {
-          create_at: {
-            lte: endOfDay(endDate),
+            lte: endOfDay(new Date(endDate)),
           },
         },
       ];
     }
 
     const ordersTotal = await prismaClient.order.findMany({
-      where: data,
+      where: filter,
       include: {
         items: {
           orderBy: {
@@ -68,7 +75,7 @@ class ListAdminOrdersService {
     });
 
     const orders = await prismaClient.order.findMany({
-      where: data,
+      where: filter,
       orderBy: {
         update_at: "desc",
       },
@@ -89,6 +96,20 @@ class ListAdminOrdersService {
       },
     });
 
+    const statusC = {
+      aberto: 0,
+      andamento: 0,
+      pendente: 0,
+      validacao: 0,
+      alteracao: 0,
+      finalizado: 1,
+      cancelado: 1,
+      recusado: 1,
+    };
+
+    let averageTime = 0;
+    let OSfinish = 0;
+
     orders.map((item) => {
       item["totalValue"] = 0;
       item["totalServices"] = 0;
@@ -98,6 +119,15 @@ class ListAdminOrdersService {
         item["totalValue"] += data.amount * data.value;
         item["totalValueComission"] += data.amount * data.commission;
       });
+
+      if (status == "finalizado") {
+        item["averageTime"] = differenceInSeconds(
+          item.update_at,
+          item.create_at
+        );
+        averageTime += item["averageTime"];
+        OSfinish++;
+      }
     });
 
     let totalServices = 0;
@@ -112,12 +142,21 @@ class ListAdminOrdersService {
       });
     });
 
+    const ordersStatus = orders.sort(function (a, b) {
+      return statusC[a.status] < statusC[b.status]
+        ? -1
+        : statusC[a.status] > statusC[b.status]
+        ? 1
+        : 0;
+    });
+
     return {
-      orders: orders,
+      orders: ordersStatus,
       ordersTotal: ordersTotal.length,
       totalValue,
       totalServices,
       totalValueComission,
+      averageTime: averageTime / OSfinish,
     };
   }
 }
