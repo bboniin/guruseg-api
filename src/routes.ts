@@ -243,7 +243,7 @@ router.put(
 router.post("/get/coupon", new GetCouponController().handle);
 router.get("/orders-admin", new ListAdminOrdersController().handle);
 router.get("/orders-open", new ListOpenOrdersController().handle);
-router.get("/orders/:type/:id", new ListOrdersController().handle);
+router.get("/orders/:type", new ListOrdersController().handle);
 router.get("/order/:id", new GetOrderController().handle);
 router.put("/confirm-order/:id", new ConfirmOrderController().handle);
 router.post("/order/payment/:id", new CreatePaymentController().handle);
