@@ -20,7 +20,8 @@ interface UserRequest {
   sector4_id: string;
   services: string;
   sector5_id: string;
-  region: string;
+  city: string;
+  state: string;
   enable_payment: boolean;
 }
 
@@ -29,7 +30,8 @@ class EditAdminUserService {
     name,
     email,
     enable_payment,
-    region,
+    city,
+    state,
     signature,
     category,
     sector1_id,
@@ -85,7 +87,8 @@ class EditAdminUserService {
       sector4_id: sector4_id,
       sector5_id: sector5_id,
       resale: resaleBoolean,
-      region: region,
+      state: state,
+      city: city,
       enable_payment: enable_payment,
       services: services,
       course_restricted: courseRestricted,

@@ -7,37 +7,18 @@ interface LeadRequest {
   dateStart: string;
   dateEnd: string;
   status: string;
-  all: boolean;
 }
 
-class ListMyLeadsService {
-  async execute({
-    page,
-    userId,
-    status,
-    all,
-    dateStart,
-    dateEnd,
-  }: LeadRequest) {
+class ListLeadsAdminService {
+  async execute({ page, userId, status, dateStart, dateEnd }: LeadRequest) {
     let filter = {};
 
-    filter["user_id"] = userId;
-
+    if (userId) {
+      filter["user_id"] = userId;
+    }
     if (status) {
       filter["status"] = status;
     }
-
-    if (all) {
-      const leads = await prismaClient.lead.findMany({
-        where: filter,
-        orderBy: {
-          name: "desc",
-        },
-      });
-
-      return leads;
-    }
-
     if (dateStart) {
       filter["create_at"] = {
         gte: startOfDay(new Date(dateStart)),
@@ -57,6 +38,7 @@ class ListMyLeadsService {
         create_at: "desc",
       },
       include: {
+        user: true,
         lead_reminders: true,
         contracts: {
           include: {
@@ -70,4 +52,4 @@ class ListMyLeadsService {
   }
 }
 
-export { ListMyLeadsService };
+export { ListLeadsAdminService };

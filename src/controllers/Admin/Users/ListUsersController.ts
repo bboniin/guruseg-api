@@ -3,7 +3,7 @@ import { ListUsersService } from "../../../services/Admin/Users/ListUsersService
 
 class ListUsersController {
   async handle(req: Request, res: Response) {
-    const { type } = req.params;
+    const { type, all } = req.params;
 
     let userId = req.userId;
 
@@ -16,7 +16,7 @@ class ListUsersController {
       type,
       page: page ? Number(page) || 0 : 0,
       filter: filter ? String(filter) : "",
-      all: type == "all",
+      all: all == "all",
     });
 
     users.users.map((item) => {

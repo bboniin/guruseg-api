@@ -3,74 +3,68 @@ import prismaClient from "../../prisma";
 
 interface OrderRequest {
   userId: string;
-  type: string;
-  finance: boolean;
+  id: string;
+  user_id: string;
+  collaborator_id: string;
+  status: string;
+  status_payment: string;
   startDate: string;
   endDate: string;
   page: number;
 }
 
-class ListOrdersService {
+class ListAdminOrdersService {
   async execute({
     userId,
-    type,
-    finance,
+    id,
+    collaborator_id,
+    user_id,
+    status,
+    status_payment,
     startDate,
     endDate,
     page,
   }: OrderRequest) {
-    let data = {};
+    let filter = {};
 
-    if (type == "cliente") {
-      data = {
-        user_id: userId,
-      };
-    } else {
-      if (type == "tecnico") {
-        data = {
-          collaborator_id: userId,
-        };
+    if (id) {
+      filter["id"] = id;
+    }
+    if (collaborator_id) {
+      filter["collaborator_id"] = collaborator_id;
+    }
+    if (user_id) {
+      filter["user_id"] = user_id;
+    }
+    if (status) {
+      filter["status"] = status;
+    }
+
+    if (status_payment) {
+      if (status_payment == "Sem integração") {
+        filter["asaas_integration"] = false;
       } else {
-        throw new Error("Nenhum tipo de usuário foi enviado.");
+        filter["status_payment"] = status_payment;
       }
     }
 
-    if (finance) {
-      data["asaas_integration"] = false;
-      data["status"] = "finalizado";
-      if (endDate && startDate) {
-        data["AND"] = [
-          {
-            update_at: {
-              gte: startOfDay(new Date(startDate)),
-            },
+    if (endDate && startDate) {
+      filter["AND"] = [
+        {
+          update_at: {
+            gte: startOfDay(new Date(startDate)),
           },
-          {
-            update_at: {
-              lte: endOfDay(new Date(endDate)),
-            },
+        },
+        {
+          update_at: {
+            lte: endOfDay(new Date(endDate)),
           },
-        ];
-      }
-    } else {
-      if (endDate && startDate) {
-        data["AND"] = [
-          {
-            update_at: {
-              gte: startOfDay(new Date(startDate)),
-            },
-          },
-          {
-            update_at: {
-              lte: endOfDay(new Date(endDate)),
-            },
-          },
-        ];
-      }
+        },
+      ];
     }
 
     const ordersTotal = await prismaClient.order.findMany({
-      where: data,
+      where: filter,
       include: {
         items: {
           orderBy: {
@@ -81,7 +75,7 @@ class ListOrdersService {
     });
 
     const orders = await prismaClient.order.findMany({
-      where: data,
+      where: filter,
       orderBy: {
         update_at: "desc",
       },
@@ -113,6 +107,9 @@ class ListOrdersService {
       recusado: 1,
     };
 
+    let averageTime = 0;
+    let OSfinish = 0;
+
     orders.map((item) => {
       item["totalValue"] = 0;
       item["totalServices"] = 0;
@@ -122,21 +119,7 @@ class ListOrdersService {
         item["totalValue"] += data.amount * data.value;
         item["totalValueComission"] += data.amount * data.commission;
       });
-    });
 
-    let totalServices = 0;
-    let totalValue = 0;
-    let totalValueComission = 0;
-
-    let averageTime = 0;
-    let OSfinish = 0;
-
-    ordersTotal.map((item) => {
-      item.items.map((data) => {
-        totalValue += data.amount * data.value;
-        totalServices += data.amount;
-        totalValueComission += data.amount * data.commission;
-      });
       if (status == "finalizado") {
         item["averageTime"] = differenceInSeconds(
           item.update_at,
@@ -145,6 +128,18 @@ class ListOrdersService {
         averageTime += item["averageTime"];
         OSfinish++;
       }
+    });
+
+    let totalServices = 0;
+    let totalValue = 0;
+    let totalValueComission = 0;
+
+    ordersTotal.map((item) => {
+      item.items.map((data) => {
+        totalValue += data.amount * data.value;
+        totalServices += data.amount;
+        totalValueComission += data.amount * data.commission;
+      });
     });
 
     const ordersStatus = orders.sort(function (a, b) {
@@ -161,9 +156,10 @@ class ListOrdersService {
       totalValue,
       totalServices,
       totalValueComission,
+
       averageTime: averageTime / OSfinish,
     };
   }
 }
 
-export { ListOrdersService };
+export { ListAdminOrdersService };

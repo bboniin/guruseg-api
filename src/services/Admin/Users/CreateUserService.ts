@@ -19,7 +19,8 @@ interface UserRequest {
   sector4_id: string;
   sector5_id: string;
   services: string;
-  region: string;
+  city: string;
+  state: string;
   enable_payment: boolean;
 }
 
@@ -28,7 +29,8 @@ class CreateUserService {
     name,
     email,
     enable_payment,
-    region,
+    city,
+    state,
     signature,
     category,
     sector1_id,
@@ -75,7 +77,8 @@ class CreateUserService {
         password: passwordHash,
         phone_number: phone_number,
         photo: photo,
-        region: region,
+        city: city,
+        state: state,
         signature: signature,
         sector1_id: sector1_id,
         sector2_id: sector2_id,

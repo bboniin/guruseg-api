@@ -23,7 +23,8 @@ model User {
   email                String    @unique
   phone_number         String
   password             String
-  region               String    @default("")
+  city                 String    @default("")
+  state                String    @default("")
   signature            Boolean   @default(false)
   sector1_id           String?   @default("")
   sector2_id           String?   @default("")
@@ -114,28 +115,29 @@ model Admin {
 }
 
 model Order {
-  id                 Int       @id @default(autoincrement())
-  observation        String?
-  message            String?
-  order_linked_id    Int?      @default(0)
-  name               String?   @default("")
-  urgent             Boolean   @default(false)
-  order_doc_recused  Boolean   @default(false)
-  status             String    @default("pendente")
-  status_payment     String    @default("pendente")
-  month              String    @default("")
-  company_id         String?   @default("")
-  asaas_integration  Boolean   @default(false)
-  sector             String    @default("Serviços de segurança do Trabalho")
-  create_at          DateTime? @default(now())
-  update_at          DateTime? @updatedAt
-
-
-  user               User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id            String?
-
-  collaborator       Collaborator? @relation(fields: [collaborator_id], references: [id], onDelete: Cascade)
-  collaborator_id    String?
+  id                         Int       @id @default(autoincrement())
+  observation                String?
+  observationCollaborator    String?   @default("")
+  message                    String?
+  order_linked_id            Int?      @default(0)
+  name                       String?   @default("")
+  urgent                     Boolean   @default(false)
+  order_doc_recused          Boolean   @default(false)
+  status                     String    @default("pendente")
+  status_payment             String    @default("pendente")
+  month                      String    @default("")
+  company_id                 String?   @default("")
+  asaas_integration          Boolean   @default(false)
+  sector                     String    @default("Serviços de segurança do Trabalho")
+  create_at                  DateTime? @default(now())
+  update_at                  DateTime? @updatedAt
+    
+    
+  user                       User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id                    String?
+    
+  collaborator               Collaborator? @relation(fields: [collaborator_id], references: [id], onDelete: Cascade)
+  collaborator_id            String?
 
   items Item[]
   docs  Doc[]

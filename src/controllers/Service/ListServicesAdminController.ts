@@ -1,15 +1,22 @@
-import { Request, Response } from 'express';
-import { ListServicesAdminService } from '../../services/Service/ListServicesAdminService';
+import { Request, Response } from "express";
+import { ListServicesAdminService } from "../../services/Service/ListServicesAdminService";
 
 class ListServicesAdminController {
-    async handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response) {
+    let { page, search } = req.query;
 
-        const listServicesAdminService = new ListServicesAdminService
+    let userId = req.userId;
 
-        const services = await listServicesAdminService.execute( )
+    const listServicesAdminService = new ListServicesAdminService();
 
-        return res.json(services)
-    }
+    const services = await listServicesAdminService.execute({
+      search: String(search) || "",
+      page: Number(page) > 0 ? Number(page) : 0,
+      userId,
+    });
+
+    return res.json(services);
+  }
 }
 
-export { ListServicesAdminController }
+export { ListServicesAdminController };

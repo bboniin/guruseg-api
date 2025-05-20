@@ -3,33 +3,22 @@ import prismaClient from "../../prisma";
 
 interface LeadRequest {
   page: number;
-  userId: string;
+  all: boolean;
   dateStart: string;
   dateEnd: string;
-  status: string;
-  all: boolean;
 }
 
-class ListMyLeadsService {
-  async execute({
-    page,
-    userId,
-    status,
-    all,
-    dateStart,
-    dateEnd,
-  }: LeadRequest) {
+class ListLeadsSendService {
+  async execute({ page, all, dateStart, dateEnd }: LeadRequest) {
     let filter = {};
 
-    filter["user_id"] = userId;
-
-    if (status) {
-      filter["status"] = status;
-    }
-
     if (all) {
-      const leads = await prismaClient.lead.findMany({
-        where: filter,
+      const leads = await prismaClient.leadMaster.findMany({
+        where: {
+          leads: {
+            none: {},
+          },
+        },
         orderBy: {
           name: "desc",
         },
@@ -45,11 +34,11 @@ class ListMyLeadsService {
       };
     }
 
-    const listLeadsTotal = await prismaClient.lead.count({
+    const listLeadsTotal = await prismaClient.leadMaster.count({
       where: filter,
     });
 
-    const listLeads = await prismaClient.lead.findMany({
+    const listLeads = await prismaClient.leadMaster.findMany({
       where: filter,
       skip: page * 30,
       take: 30,
@@ -57,10 +46,12 @@ class ListMyLeadsService {
         create_at: "desc",
       },
       include: {
-        lead_reminders: true,
-        contracts: {
+        leads: {
           include: {
-            services: true,
+            user: true,
+          },
+          orderBy: {
+            create_at: "desc",
           },
         },
       },
@@ -70,4 +61,4 @@ class ListMyLeadsService {
   }
 }
 
-export { ListMyLeadsService };
+export { ListLeadsSendService };
