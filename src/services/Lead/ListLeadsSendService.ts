@@ -10,7 +10,11 @@ interface LeadRequest {
 
 class ListLeadsSendService {
   async execute({ page, all, dateStart, dateEnd }: LeadRequest) {
-    let filter = {};
+    let filter = {
+      leads: {
+        none: {},
+      },
+    };
 
     if (all) {
       const leads = await prismaClient.leadMaster.findMany({
