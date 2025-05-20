@@ -5,7 +5,7 @@ class ListCollaboratorsController {
   async handle(req: Request, res: Response) {
     let userId = req.userId;
 
-    const { filter, page } = req.query;
+    const { filter, page, all } = req.query;
 
     const listCollaboratorsService = new ListCollaboratorsService();
 
@@ -13,6 +13,7 @@ class ListCollaboratorsController {
       userId,
       page: page ? Number(page) || 0 : 0,
       filter: filter ? String(filter) : "",
+      all: all == "true",
     });
 
     collaborators.collaborators.map((item) => {

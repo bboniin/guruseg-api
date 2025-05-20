@@ -5,10 +5,11 @@ interface ServiceRequest {
   userId: string;
   filter: string;
   page: number;
+  all: boolean;
 }
 
 class ListCollaboratorsService {
-  async execute({ userId, page, filter }: ServiceRequest) {
+  async execute({ userId, page, filter, all }: ServiceRequest) {
     const admin = await prismaClient.admin.findUnique({
       where: {
         id: userId,
@@ -21,6 +22,17 @@ class ListCollaboratorsService {
 
     let filterSearch = {};
 
+    if (all) {
+      const collaborators = await prismaClient.collaborator.findMany({
+        where: {
+          visible: true,
+        },
+        orderBy: {
+          create_at: "asc",
+        },
+      });
+      return { collaborators };
+    }
     if (filter) {
       filterSearch["name"] = {
         contains: filter,
