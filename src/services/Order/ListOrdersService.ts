@@ -127,6 +127,12 @@ class ListOrdersService {
         item["totalValue"] += data.amount * data.value;
         item["totalValueComission"] += data.amount * data.commission;
       });
+      if (item.status == "finalizado") {
+        item["averageTime"] = differenceInSeconds(
+          item.update_at,
+          item.create_at
+        );
+      }
     });
 
     let totalServices = 0;
@@ -143,11 +149,7 @@ class ListOrdersService {
         totalValueComission += data.amount * data.commission;
       });
       if (item.status == "finalizado") {
-        item["averageTime"] = differenceInSeconds(
-          item.update_at,
-          item.create_at
-        );
-        averageTime += item["averageTime"];
+        averageTime += differenceInSeconds(item.update_at, item.create_at);
         OSfinish++;
       }
     });

@@ -125,8 +125,6 @@ class ListAdminOrdersService {
           item.update_at,
           item.create_at
         );
-        averageTime += item["averageTime"];
-        OSfinish++;
       }
     });
 
@@ -140,6 +138,15 @@ class ListAdminOrdersService {
         totalServices += data.amount;
         totalValueComission += data.amount * data.commission;
       });
+
+      if (item.status == "finalizado") {
+        item["averageTime"] = differenceInSeconds(
+          item.update_at,
+          item.create_at
+        );
+        averageTime += item["averageTime"];
+        OSfinish++;
+      }
     });
 
     const ordersStatus = orders.sort(function (a, b) {
