@@ -26,12 +26,12 @@ class ListServicesAdminService {
       };
     }
 
-    const servicesTotal = await prismaClient.service.findMany({
-      where: filter,
+    const servicesTotal = await prismaClient.service.count({
+      where: { visible: true, ...filter },
     });
 
     const services = await prismaClient.service.findMany({
-      where: filter,
+      where: { visible: true, ...filter },
       skip: page * 30,
       take: 30,
       orderBy: {
