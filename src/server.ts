@@ -55,4 +55,4 @@ cron.schedule("0 8 * * *", () => {
   emailReminderService.execute();
 });
 
-app.listen(3333, () => console.log("rodando v60"));
+app.listen(3333, () => console.log("rodando v61"));

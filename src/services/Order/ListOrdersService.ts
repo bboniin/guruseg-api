@@ -7,6 +7,7 @@ interface OrderRequest {
   finance: boolean;
   startDate: string;
   endDate: string;
+  status: string;
   page: number;
 }
 
@@ -17,6 +18,7 @@ class ListOrdersService {
     finance,
     startDate,
     endDate,
+    status,
     page,
   }: OrderRequest) {
     let data = {};
@@ -53,6 +55,9 @@ class ListOrdersService {
         ];
       }
     } else {
+      if (status) {
+        data["status"] = status;
+      }
       if (endDate && startDate) {
         data["AND"] = [
           {
@@ -137,7 +142,7 @@ class ListOrdersService {
         totalServices += data.amount;
         totalValueComission += data.amount * data.commission;
       });
-      if (status == "finalizado") {
+      if (item.status == "finalizado") {
         item["averageTime"] = differenceInSeconds(
           item.update_at,
           item.create_at

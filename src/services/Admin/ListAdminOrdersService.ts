@@ -120,7 +120,7 @@ class ListAdminOrdersService {
         item["totalValueComission"] += data.amount * data.commission;
       });
 
-      if (status == "finalizado") {
+      if (item.status == "finalizado") {
         item["averageTime"] = differenceInSeconds(
           item.update_at,
           item.create_at
