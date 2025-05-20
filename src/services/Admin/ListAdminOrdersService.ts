@@ -93,6 +93,8 @@ class ListAdminOrdersService {
             create_at: "asc",
           },
         },
+        user: true,
+        collaborator: true,
       },
     });
 

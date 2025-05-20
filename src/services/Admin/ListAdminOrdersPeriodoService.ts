@@ -1,43 +1,44 @@
-import { endOfDay, startOfDay } from 'date-fns';
-import prismaClient from '../../prisma'
+import { endOfDay, startOfDay } from "date-fns";
+import prismaClient from "../../prisma";
 
 interface OrderRequest {
-    start_date: Date;
-    end_date: Date;
+  start_date: Date;
+  end_date: Date;
 }
 
 class ListAdminOrdersPeriodoService {
-    async execute({ start_date, end_date }: OrderRequest) {
-        
-        const orders = await prismaClient.order.findMany({
-            where: {
-                AND: [
-                    {
-                      create_at: {
-                        gte: startOfDay(new Date(start_date))
-                      }
-                    },
-                    {
-                      create_at: {
-                        lte: endOfDay(new Date(end_date))
-                      }
-                    }
-                ]
+  async execute({ start_date, end_date }: OrderRequest) {
+    const orders = await prismaClient.order.findMany({
+      where: {
+        AND: [
+          {
+            create_at: {
+              gte: startOfDay(new Date(start_date)),
             },
-            orderBy: {
-                create_at: "desc"
+          },
+          {
+            create_at: {
+              lte: endOfDay(new Date(end_date)),
             },
-            include: {
-                items: {
-                    orderBy: {
-                        create_at: "asc"
-                    }
-                }
-            }
-        })
+          },
+        ],
+      },
+      orderBy: {
+        create_at: "desc",
+      },
+      include: {
+        items: {
+          orderBy: {
+            create_at: "asc",
+          },
+        },
+        user: true,
+        collaborator: true,
+      },
+    });
 
-        return (orders)
-    }
+    return orders;
+  }
 }
 
-export { ListAdminOrdersPeriodoService }
+export { ListAdminOrdersPeriodoService };
