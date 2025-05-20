@@ -10,7 +10,7 @@ class ListServicesAdminController {
     const listServicesAdminService = new ListServicesAdminService();
 
     const services = await listServicesAdminService.execute({
-      search: String(search) || "",
+      search: search ? String(search) : "",
       page: Number(page) > 0 ? Number(page) : 0,
       userId,
     });

@@ -10,7 +10,7 @@ class ListAdminPaymentsController {
 
     const payments = await listAdminPaymentsService.execute({
       userId,
-      search: String(search) || "",
+      search: search ? String(search) : "",
       order_id: Number(order_id) > 0 ? Number(order_id) : 0,
       page: Number(page) > 0 ? Number(page) : 0,
     });
