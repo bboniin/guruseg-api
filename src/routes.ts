@@ -1,15 +1,12 @@
 import { Router } from "express";
 import multer from "multer";
 
-import { AuthAdminController } from "./controllers/Admin/AuthAdminController";
-
 import uploadConfig from "./config/multer";
 
 import { AuthUserController } from "./controllers/User/AuthUserController";
 import { CreateUserController } from "./controllers/Admin/Users/CreateUserController";
 import { EditUserController } from "./controllers/User/EditUserController";
 
-import { AuthCollaboratorController } from "./controllers/Collaborator/AuthCollaboratorController";
 import { CreateCollaboratorController } from "./controllers/Admin/Collaborators/CreateCollaboratorController";
 import { EditCollaboratorController } from "./controllers/Collaborator/EditCollaboratorController";
 
@@ -79,7 +76,6 @@ import { DeleteContractController } from "./controllers/Contract/DeleteCredentia
 import { GetCollaboratorController } from "./controllers/Collaborator/GetCollaboratorController";
 import { GetUserController } from "./controllers/User/GetUserController";
 import { ConfirmOrderController } from "./controllers/Order/ConfirmOrderController";
-import { HandlerOrderController } from "./controllers/Order/HandlerOrderController";
 import { GetCourseController } from "./controllers/Admin/Courses/GetCourseControlle";
 import { ListAdminOrdersPeriodoController } from "./controllers/Admin/ListAdminOrdersPeriodoController";
 import { ListUsersCollaboratorController } from "./controllers/Admin/Collaborators/ListUsersCollaboratorController";
@@ -249,7 +245,6 @@ router.put("/confirm-order/:id", new ConfirmOrderController().handle);
 router.post("/order/payment/:id", new CreatePaymentController().handle);
 router.post("/generate/payment/:id", new GeneratePaymentController().handle);
 router.post("/customer", new CreateCustomerController().handle);
-router.put("/alteracao-order", new HandlerOrderController().handle);
 router.post("/order", new CreateOrderController().handle);
 router.put("/accept-order/:id", new AcceptOrderController().handle);
 router.put("/recused-order/:id", new RecusedOrderController().handle);

@@ -30,6 +30,7 @@ class EditCollaboratorOrderService {
       },
       include: {
         items: true,
+        messages: true,
       },
     });
 

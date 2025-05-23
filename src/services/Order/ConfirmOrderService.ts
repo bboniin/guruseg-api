@@ -24,6 +24,7 @@ class ConfirmOrderService {
       include: {
         user: true,
         items: true,
+        messages: true,
       },
     });
 
@@ -102,6 +103,7 @@ class ConfirmOrderService {
               },
               include: {
                 items: true,
+                messages: true,
               },
               orderBy: {
                 create_at: "asc",
@@ -190,12 +192,12 @@ class ConfirmOrderService {
         id: id,
       },
       data: {
-        message: message,
         status: collaborator.id ? "andamento" : "aberto",
         collaborator_id: collaborator.id,
       },
       include: {
         items: true,
+        messages: true,
         collaborator: true,
       },
     });

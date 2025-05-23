@@ -72,14 +72,24 @@ class RecusedOrderService {
       },
       data: {
         status: "recusado",
-        message: message,
         update_at: new Date(),
         collaborator_id: userId,
       },
       include: {
         items: true,
+        messages: true,
       },
     });
+
+    if (message) {
+      await prismaClient.oSMessages.create({
+        data: {
+          message: message,
+          orderId: id,
+          type: "tecnico",
+        },
+      });
+    }
 
     orderD["totalServices"] = 0;
     orderD["totalValue"] = 0;

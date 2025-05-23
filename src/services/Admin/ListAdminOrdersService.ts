@@ -102,7 +102,6 @@ class ListAdminOrdersService {
       aberto: 0,
       andamento: 0,
       pendente: 0,
-      validacao: 0,
       alteracao: 0,
       finalizado: 1,
       cancelado: 1,

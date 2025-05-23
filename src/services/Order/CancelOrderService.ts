@@ -27,6 +27,7 @@ class CancelOrderService {
       },
       include: {
         items: true,
+        messages: true,
       },
     });
 

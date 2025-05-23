@@ -34,6 +34,7 @@ class EditOrderService {
       },
       include: {
         items: true,
+        messages: true,
       },
     });
 

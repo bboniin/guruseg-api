@@ -23,8 +23,8 @@ class StatusOrderService {
       },
     });
 
-    if (order.status == "aberto" || order.status == "finalizado") {
-      throw new Error("Ordem de serviço está aberta ou já foi finalizada.");
+    if (order.status == "aberto") {
+      throw new Error("Ordem de serviço ainda não foi iniciada");
     }
 
     var transport = await nodemailer.createTransport({
@@ -96,29 +96,13 @@ class StatusOrderService {
       });
     }
 
-    if (status == "validacao") {
-      const path = resolve(__dirname, "..", "..", "views", "validationOS.hbs");
-
-      const templateFileContent = fs.readFileSync(path).toString("utf-8");
-
-      const templateParse = handlebars.compile(templateFileContent);
-
-      const templateHTML = templateParse({
-        id: order.id,
-        name: order.user.name,
-      });
-
-      await transport.sendMail({
-        from: {
-          name: "Equipe Guruseg",
-          address: "leonardo@guruseg.com.br",
+    if (message) {
+      await prismaClient.oSMessages.create({
+        data: {
+          message: message,
+          orderId: id,
+          type: userId == order.user_id ? "franqueado" : "tecnico",
         },
-        to: {
-          name: order.user.name,
-          address: order.user.email,
-        },
-        subject: "[Guruseg] Atualização Ordem de Serviço",
-        html: templateHTML,
       });
     }
 
@@ -128,11 +112,11 @@ class StatusOrderService {
       },
       data: {
         status: status,
-        message: message,
         update_at: new Date(),
       },
       include: {
         items: true,
+        messages: true,
       },
     });
 

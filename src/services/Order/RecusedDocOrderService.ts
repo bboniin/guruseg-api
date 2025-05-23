@@ -21,6 +21,7 @@ class RecusedDocOrderService {
       },
       include: {
         items: true,
+        messages: true,
         user: true,
         collaborator: true,
       },

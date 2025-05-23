@@ -66,6 +66,7 @@ class ListCollaboratorsService {
           },
           include: {
             items: true,
+            messages: true,
           },
           orderBy: {
             create_at: "asc",

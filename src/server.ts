@@ -4,7 +4,6 @@ import cors from "cors";
 import cron from "node-cron";
 
 import { router } from "./routes";
-import { FinishedOSsService } from "./services/Order/FinishedOSsService";
 import { ExpireContractsService } from "./services/Contract/ExpireContractsService";
 import { InactiveLeadsService } from "./services/Lead/InactiveLeadsService";
 import { EmailReminderService } from "./services/Reminder/EmailRemindersService";
@@ -43,9 +42,6 @@ cron.schedule("0 8,12,16,20 * * *", () => {
   const inactiveLeadsService = new InactiveLeadsService();
   inactiveLeadsService.execute();
 
-  const finalizeOSs = new FinishedOSsService();
-  finalizeOSs.execute();
-
   const expireContracts = new ExpireContractsService();
   expireContracts.execute();
 });
@@ -55,4 +51,4 @@ cron.schedule("0 8 * * *", () => {
   emailReminderService.execute();
 });
 
-app.listen(3333, () => console.log("rodando v61"));
+app.listen(3333, () => console.log("rodando v62"));

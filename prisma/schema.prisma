@@ -118,7 +118,6 @@ model Order {
   id                         Int       @id @default(autoincrement())
   observation                String?
   observationCollaborator    String?   @default("")
-  message                    String?
   order_linked_id            Int?      @default(0)
   name                       String?   @default("")
   urgent                     Boolean   @default(false)
@@ -139,13 +138,13 @@ model Order {
   collaborator               Collaborator? @relation(fields: [collaborator_id], references: [id], onDelete: Cascade)
   collaborator_id            String?
 
-  items Item[]
-  docs  Doc[]
-
-  redemptions         Redemption[]
+  items                     Item[]
+  docs                      Doc[]
+  messages                  OSMessages[]
+  redemptions               Redemption[]
      
-  payment       Payment?   @relation(fields: [payment_id], references: [id], onDelete: SetNull)
-  payment_id    String? 
+  payment                   Payment?   @relation(fields: [payment_id], references: [id], onDelete: SetNull)
+  payment_id                String? 
 
   @@map("orders")
 }
@@ -432,20 +431,20 @@ model Company {
   create_at           DateTime? @default(now())
   update_at           DateTime? @updatedAt
 
-  companySector CompanySector[]
-  companyImages  CompanyImages[]
+  companySector       CompanySector[]
+  companyImages       CompanyImages[]
 
   @@map("companies")
 }
 
 model CompanySector {
-  id          String    @id @default(uuid())
-  name        String
-  description String
-  create_at   DateTime? @default(now())
-  update_at   DateTime? @updatedAt
-  company     Company?    @relation(fields: [company_id], references: [id], onDelete: Cascade)
-  company_id  String?
+  id               String    @id @default(uuid())
+  name             String
+  description      String
+  create_at        DateTime? @default(now())
+  update_at        DateTime? @updatedAt
+  company          Company?    @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  company_id       String?
 
   companyEmployees CompanyEmployees[]
   companyScratchs  CompanyScratchs[]
@@ -553,19 +552,32 @@ model Coupon {
 }
 
 model Redemption {
-  id        String   @id @default(uuid())
+  id        String     @id @default(uuid())
   name      String
   userId    String?
-  orderId   Int      @unique
+  orderId   Int        @unique
   couponId  String?
   value     Float
-  usedAt    DateTime @default(now())
+  usedAt    DateTime   @default(now())
 
-  coupon    Coupon?   @relation(fields: [couponId], references: [id], onDelete: SetNull)
-  user      User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  coupon    Coupon?    @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  user      User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
   order     Order      @relation(fields: [orderId], references: [id], onDelete: SetNull)
 
   @@map("redemptions")
+}
+
+
+model OSMessages {
+  id          String    @id @default(uuid())
+  message     String
+  type        String?
+  orderId     Int      
+  create_at   DateTime  @default(now())
+
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("os_messages")
 }
 
 enum CouponType {

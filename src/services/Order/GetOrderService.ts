@@ -46,6 +46,7 @@ class GetOrderService {
         payment: true,
         user: true,
         collaborator: true,
+        messages: true,
         redemptions: true,
       },
     });
