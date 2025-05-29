@@ -11,14 +11,28 @@ class EditOrderController {
 
     const editOrderService = new EditOrderService();
 
-    const services = await editOrderService.execute({
+    const order = await editOrderService.execute({
       observation,
       company_id,
       userId,
       id: parseInt(id),
     });
 
-    return res.json(services);
+    if (order["user"].photo) {
+      order["user"]["photo_url"] =
+        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" +
+        order["user"].photo;
+    }
+
+    if (order["collaborator"]) {
+      if (order["collaborator"].photo) {
+        order["collaborator"]["photo_url"] =
+          "https://guruseg-data.s3.sa-east-1.amazonaws.com/" +
+          order["collaborator"].photo;
+      }
+    }
+
+    return res.json(order);
   }
 }
 
