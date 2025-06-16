@@ -8,6 +8,7 @@ interface OrderRequest {
   startDate: string;
   endDate: string;
   status: string;
+  collaborator_id: string;
   page: number;
 }
 
@@ -20,6 +21,7 @@ class ListOrdersService {
     endDate,
     status,
     page,
+    collaborator_id,
   }: OrderRequest) {
     let data = {};
 
@@ -57,6 +59,9 @@ class ListOrdersService {
     } else {
       if (status) {
         data["status"] = status;
+      }
+      if (collaborator_id) {
+        data["collaborator_id"] = collaborator_id;
       }
       if (endDate && startDate) {
         data["AND"] = [

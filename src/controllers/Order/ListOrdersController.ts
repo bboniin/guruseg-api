@@ -5,7 +5,8 @@ class ListOrdersController {
   async handle(req: Request, res: Response) {
     const { type } = req.params;
 
-    const { finance, endDate, status, startDate, page, id } = req.query;
+    const { finance, endDate, status, startDate, page, collaborator_id, id } =
+      req.query;
 
     let userId = req.userId;
 
@@ -18,6 +19,7 @@ class ListOrdersController {
       endDate: endDate ? String(endDate) : "",
       status: status ? String(status) : "",
       startDate: startDate ? String(startDate) : "",
+      collaborator_id: collaborator_id ? String(collaborator_id) : "",
       page: Number(page) || 0,
     });
 

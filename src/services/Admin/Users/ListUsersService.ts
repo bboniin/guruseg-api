@@ -16,7 +16,7 @@ class ListUsersService {
       },
     });
 
-    if (!admin) {
+    if (!admin && type != "all") {
       throw new Error("Rota restrita ao administrador");
     }
 

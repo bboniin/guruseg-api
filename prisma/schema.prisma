@@ -43,6 +43,7 @@ model User {
   orders              Order[]
   leads               Lead[]
   redemptions         Redemption[]
+  lessonConfirms      LessonConfirm[]
 
   @@map("users")
 }
@@ -308,13 +309,30 @@ model Course {
   description   String
   order         Int       @default(0)
   photo         String?
-  restricted    Boolean   @default(false)
   create_at     DateTime? @default(now())
   update_at     DateTime? @updatedAt
+
+  module      Module?    @relation(fields: [module_id], references: [id], onDelete: Cascade)
+  module_id   String?    
 
   lessons Lesson[]
 
   @@map("courses")
+}
+
+
+model Module {
+  id            String    @id @default(uuid())
+  name          String
+  description   String
+  order         Int       @default(0)
+  restricted    Boolean   @default(false)
+  create_at     DateTime? @default(now())
+  update_at     DateTime? @updatedAt
+
+  courses       Course[]
+
+  @@map("modules")
 }
 
 model Lesson {
@@ -329,8 +347,22 @@ model Lesson {
   update_at   DateTime? @updatedAt
   course      Course    @relation(fields: [course_id], references: [id], onDelete: Cascade)
   course_id   String
+  confirms    LessonConfirm[]
 
   @@map("lessons")
+}
+
+
+model LessonConfirm {
+  id          String    @id @default(uuid())
+  user_id     String
+  user        User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  create_at   DateTime? @default(now())
+  lesson      Lesson    @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
+  lesson_id   String    
+
+  @@unique([user_id, lesson_id])
+  @@map("lessonConfirms")
 }
 
 model Contract {

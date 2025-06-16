@@ -2,17 +2,32 @@ import prismaClient from "../../prisma";
 
 interface CompanyRequest {
   userId: string;
+  search: string;
+  status: string;
+  page: number;
 }
 
 class ListCompaniesService {
-  async execute({ userId }: CompanyRequest) {
+  async execute({ userId, search, page, status }: CompanyRequest) {
+    let filter = { collaborador_id: userId };
+
+    if (search) {
+      filter["razao_social"] = {
+        contains: search,
+        mode: "insensitive",
+      };
+    }
+    if (status) {
+      filter["status"] = status;
+    }
+
     const companies = await prismaClient.company.findMany({
-      where: {
-        collaborador_id: userId,
-      },
+      where: filter,
       orderBy: {
         update_at: "desc",
       },
+      skip: page * 30,
+      take: 30,
       include: {
         companySector: {
           orderBy: {
@@ -22,22 +37,36 @@ class ListCompaniesService {
       },
     });
 
-    const status = {
-      expirado: 0,
-      aguardando: 1,
-      confirmado: 2,
-      alteracao: 1,
-    };
-
-    let companiesStatus = companies.sort(function (a, b) {
-      return status[a.status] < status[b.status]
-        ? -1
-        : status[a.status] > status[b.status]
-        ? 1
-        : 0;
+    const totalCompanies = await prismaClient.company.count({
+      where: filter,
+      orderBy: {
+        update_at: "desc",
+      },
     });
 
-    return companiesStatus;
+    const totalCompaniesConfirmed = await prismaClient.company.count({
+      where: { ...filter, status: "confirmado" },
+    });
+    const totalCompaniesExpired = await prismaClient.company.count({
+      where: { ...filter, status: "expirado" },
+    });
+    const totalCompaniesPedding = await prismaClient.company.count({
+      where: { ...filter, status: "aguardando" },
+    });
+    const totalCompaniesHandler = await prismaClient.company.count({
+      where: { ...filter, status: "alteracao" },
+    });
+
+    return {
+      companies,
+      totalCompanies,
+      infosTotalCompanies: {
+        totalCompaniesConfirmed,
+        totalCompaniesExpired,
+        totalCompaniesPedding,
+        totalCompaniesHandler,
+      },
+    };
   }
 }
 

@@ -16,7 +16,7 @@ class ListCollaboratorsService {
       },
     });
 
-    if (!admin) {
+    if (!admin && !all) {
       throw new Error("Rota restrita ao administrador");
     }
 

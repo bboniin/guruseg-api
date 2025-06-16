@@ -1,21 +1,23 @@
-import { Request, Response } from 'express';
-import { AdminListContractsService } from '../../services/Contract/AdminListContractsService';
+import { Request, Response } from "express";
+import { AdminListContractsService } from "../../services/Contract/AdminListContractsService";
 
 class AdminListContractsController {
-    async handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response) {
+    const { user_id, search, page } = req.params;
 
-        const { user_id } = req.params
+    let userId = req.userId;
 
-        let userId = req.userId
+    const adminListContractsService = new AdminListContractsService();
 
-        const adminListContractsService = new AdminListContractsService
+    const orders = await adminListContractsService.execute({
+      user_id,
+      userId,
+      search: search ? String(search) : "",
+      page: Number(page) || 0,
+    });
 
-        const orders = await adminListContractsService.execute({
-            user_id, userId
-        })
-
-        return res.json(orders)
-    }
+    return res.json(orders);
+  }
 }
 
-export { AdminListContractsController }
+export { AdminListContractsController };

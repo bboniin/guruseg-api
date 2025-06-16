@@ -1,24 +1,21 @@
 import prismaClient from "../../../prisma";
-import S3Storage from "../../../utils/S3Storage";
 
-interface CourseRequest {
+interface ModuleRequest {
   name: string;
   userId: string;
-  photo: string;
   order: string;
-  module_id: string;
+  restricted: boolean;
   description: string;
 }
 
-class CreateCourseService {
+class CreateModuleService {
   async execute({
     userId,
     name,
-    photo,
     order,
-    module_id,
+    restricted,
     description,
-  }: CourseRequest) {
+  }: ModuleRequest) {
     const admin = await prismaClient.admin.findUnique({
       where: {
         id: userId,
@@ -29,13 +26,8 @@ class CreateCourseService {
       throw new Error("Rota restrita ao administrador");
     }
 
-    if (!name) {
-      throw new Error("Nome do curso é obrigatório");
-    }
-
-    if (photo) {
-      const s3Storage = new S3Storage();
-      await s3Storage.saveFile(photo);
+    if (!name || !description) {
+      throw new Error("Nome do Modulo e descroção são obrigatórios");
     }
 
     let orderC = parseInt(order);
@@ -44,18 +36,17 @@ class CreateCourseService {
       orderC = 0;
     }
 
-    const courseRes = await prismaClient.course.create({
+    const moduleRes = await prismaClient.module.create({
       data: {
         name: name,
         description: description,
-        photo: photo,
-        module_id: module_id,
+        restricted: restricted,
         order: orderC,
       },
     });
 
-    return courseRes;
+    return moduleRes;
   }
 }
 
-export { CreateCourseService };
+export { CreateModuleService };

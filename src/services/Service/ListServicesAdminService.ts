@@ -4,9 +4,10 @@ interface ServiceRequest {
   search: string;
   userId: string;
   page: number;
+  all: boolean;
 }
 class ListServicesAdminService {
-  async execute({ userId, page, search }: ServiceRequest) {
+  async execute({ userId, page, search, all }: ServiceRequest) {
     const admin = await prismaClient.admin.findUnique({
       where: {
         id: userId,
@@ -15,6 +16,16 @@ class ListServicesAdminService {
 
     if (!admin) {
       throw new Error("Rota restrita ao administrador");
+    }
+
+    if (all) {
+      const services = await prismaClient.service.findMany({
+        orderBy: {
+          name: "asc",
+        },
+      });
+
+      return services;
     }
 
     let filter = {};

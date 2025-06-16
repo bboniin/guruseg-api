@@ -1,25 +1,30 @@
-import { Request, Response } from 'express';
-import { ListCoursesService } from '../../../services/Admin/Courses/ListCoursesService';
+import { Request, Response } from "express";
+import { ListCoursesService } from "../../../services/Admin/Courses/ListCoursesService";
 
 class ListCoursesController {
-    async handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response) {
+    const { search } = req.query;
 
-        let userId = req.userId
+    let userId = req.userId;
 
-        const listCoursesService = new ListCoursesService
+    const listCoursesService = new ListCoursesService();
 
-        const courses = await listCoursesService.execute({
-            userId
-        })
+    const modules = await listCoursesService.execute({
+      userId,
+      search: search ? String(search) : "",
+    });
 
-        courses.map((item) => {
-            if (item["photo"]) {
-                item["photo_url"] = "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + item["photo"];
-            }
-        })
+    modules.map((item) => {
+      item.courses.map((data) => {
+        if (data["photo"]) {
+          data["photo_url"] =
+            "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + data["photo"];
+        }
+      });
+    });
 
-        return res.json(courses)
-    }
+    return res.json(modules);
+  }
 }
 
-export { ListCoursesController }
+export { ListCoursesController };

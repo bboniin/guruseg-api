@@ -46,7 +46,6 @@ class CreateCustomerService {
         });
       })
       .catch((e) => {
-        console.log(e.response.data);
         throw new Error("Ocorreu um erro ao criar cobrança");
       });
 

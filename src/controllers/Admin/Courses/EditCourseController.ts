@@ -1,32 +1,39 @@
-import { Request, Response } from 'express';
-import { EditCourseService } from '../../../services/Admin/Courses/EditCourseService';
+import { Request, Response } from "express";
+import { EditCourseService } from "../../../services/Admin/Courses/EditCourseService";
 
 class EditCourseController {
-    async handle(req: Request, res: Response) {
-        const { name, description, order, restricted } = req.body
+  async handle(req: Request, res: Response) {
+    const { name, description, order, module_id } = req.body;
 
-        const { id } = req.params
+    const { id } = req.params;
 
-        let userId = req.userId
+    let userId = req.userId;
 
-        let photo = ""
+    let photo = "";
 
-        if (req.file) {
-            photo = req.file.filename
-        }
-
-        const editCourseService = new EditCourseService
-
-        const course = await editCourseService.execute({
-            name, description, order, photo, id, restricted: restricted == "true" ? true : false, userId
-        })
-
-        if (course["photo"]) {
-            course["photo_url"] = "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + course["photo"];
-        }
-
-        return res.json(course)
+    if (req.file) {
+      photo = req.file.filename;
     }
+
+    const editCourseService = new EditCourseService();
+
+    const course = await editCourseService.execute({
+      name,
+      description,
+      order,
+      photo,
+      id,
+      module_id,
+      userId,
+    });
+
+    if (course["photo"]) {
+      course["photo_url"] =
+        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + course["photo"];
+    }
+
+    return res.json(course);
+  }
 }
 
-export { EditCourseController }
+export { EditCourseController };

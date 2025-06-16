@@ -151,6 +151,9 @@ import { GetCouponController } from "./controllers/Coupon/GetCouponController";
 import { GeneratePaymentController } from "./controllers/Payment/GeneratePaymentController";
 import { ListAdminOrdersController } from "./controllers/Admin/ListAdminOrdersController";
 import { EditOrderController } from "./controllers/Order/EditOrderController";
+import { CreateModuleController } from "./controllers/Admin/Courses/CreateModuleController";
+import { EditModuleController } from "./controllers/Admin/Courses/EditModuleController";
+import { ConfirmLessonController } from "./controllers/Admin/Lessons/ConfirmLessonController";
 
 const upload = multer(uploadConfig);
 
@@ -324,6 +327,8 @@ router.put(
   upload.single("file"),
   new EditCourseController().handle
 );
+router.post("/module", new CreateModuleController().handle);
+router.put("/module/:id", new EditModuleController().handle);
 router.delete("/course/:id", new DeleteCourseController().handle);
 
 router.get("/lesson/:id", new GetLessonController().handle);
@@ -333,6 +338,7 @@ router.post(
   upload.single("file"),
   new CreateLessonController().handle
 );
+router.post("/confirm-lesson/:id", new ConfirmLessonController().handle);
 router.put(
   "/lesson/:id",
   upload.single("file"),

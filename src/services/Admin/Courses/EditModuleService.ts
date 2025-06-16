@@ -1,26 +1,24 @@
 import prismaClient from "../../../prisma";
 import S3Storage from "../../../utils/S3Storage";
 
-interface CourseRequest {
+interface moduleRequest {
   name: string;
   userId: string;
-  photo: string;
   description: string;
   id: string;
-  module_id: string;
+  restricted: boolean;
   order: string;
 }
 
-class EditCourseService {
+class EditModuleService {
   async execute({
     name,
     description,
-    module_id,
+    restricted,
     userId,
     order,
-    photo,
     id,
-  }: CourseRequest) {
+  }: moduleRequest) {
     const admin = await prismaClient.admin.findUnique({
       where: {
         id: userId,
@@ -31,18 +29,18 @@ class EditCourseService {
       throw new Error("Rota restrita ao administrador");
     }
 
-    const course = await prismaClient.course.findUnique({
+    const module = await prismaClient.module.findUnique({
       where: {
         id: id,
       },
     });
 
     if (!name) {
-      throw new Error("Nome do curso é obrigatório");
+      throw new Error("Nome do Modulo e descroção são obrigatórios");
     }
 
-    if (!course) {
-      throw new Error("course não existe");
+    if (!module) {
+      throw new Error("Modulo não existe");
     }
 
     let orderC = parseInt(order);
@@ -53,32 +51,20 @@ class EditCourseService {
 
     let data = {
       name: name,
-      module_id: module_id,
+      restricted: restricted,
       description: description,
       order: orderC,
     };
 
-    if (photo) {
-      const s3Storage = new S3Storage();
-
-      if (course["photo"]) {
-        await s3Storage.deleteFile(course["photo"]);
-      }
-
-      const upload = await s3Storage.saveFile(photo);
-
-      data["photo"] = upload;
-    }
-
-    const courseRes = await prismaClient.course.update({
+    const moduleRes = await prismaClient.module.update({
       where: {
         id: id,
       },
       data: data,
     });
 
-    return courseRes;
+    return moduleRes;
   }
 }
 
-export { EditCourseService };
+export { EditModuleService };

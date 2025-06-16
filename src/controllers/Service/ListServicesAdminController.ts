@@ -3,7 +3,7 @@ import { ListServicesAdminService } from "../../services/Service/ListServicesAdm
 
 class ListServicesAdminController {
   async handle(req: Request, res: Response) {
-    let { page, search } = req.query;
+    let { page, search, all } = req.query;
 
     let userId = req.userId;
 
@@ -12,6 +12,7 @@ class ListServicesAdminController {
     const services = await listServicesAdminService.execute({
       search: search ? String(search) : "",
       page: Number(page) > 0 ? Number(page) : 0,
+      all: all == "true",
       userId,
     });
 
