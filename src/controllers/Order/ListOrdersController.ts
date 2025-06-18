@@ -20,6 +20,7 @@ class ListOrdersController {
       status: status ? String(status) : "",
       startDate: startDate ? String(startDate) : "",
       collaborator_id: collaborator_id ? String(collaborator_id) : "",
+      user_id: id ? String(id) : "",
       page: Number(page) || 0,
     });
 

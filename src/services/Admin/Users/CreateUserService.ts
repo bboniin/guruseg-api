@@ -9,7 +9,7 @@ interface UserRequest {
   photo: string;
   password: string;
   courseBoolean: boolean;
-  courseRestricted: boolean;
+  modules: string;
   resaleBoolean: boolean;
   signature: boolean;
   category: string;
@@ -44,7 +44,7 @@ class CreateUserService {
     services,
     courseBoolean,
     resaleBoolean,
-    courseRestricted,
+    modules,
   }: UserRequest) {
     if (!email || !name || !phone_number || !category || !password) {
       throw new Error("Preencha todos os campos obrigatórios");
@@ -88,7 +88,7 @@ class CreateUserService {
         course: courseBoolean,
         resale: resaleBoolean,
         services: services,
-        course_restricted: courseRestricted,
+        modules: modules,
         enable_payment: enable_payment,
       },
       select: {

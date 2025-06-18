@@ -21,7 +21,7 @@ class EditAdminUserController {
       password,
       course,
       resale,
-      course_restricted,
+      modules,
     } = req.body;
 
     const { id } = req.params;
@@ -32,7 +32,6 @@ class EditAdminUserController {
       photo = req.file.filename;
     }
 
-    let courseRestricted = course_restricted == "true" ? true : false;
     let courseBoolean = course == "true" ? true : false;
     let resaleBoolean = resale == "true" ? true : false;
     let signatureBoolean = signature == "true" ? true : false;
@@ -59,7 +58,7 @@ class EditAdminUserController {
       password,
       courseBoolean,
       resaleBoolean,
-      courseRestricted,
+      modules,
     });
 
     if (user["photo"]) {

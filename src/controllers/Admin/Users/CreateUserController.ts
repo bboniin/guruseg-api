@@ -21,7 +21,7 @@ class CreateUserController {
       phone_number,
       resale,
       course,
-      course_restricted,
+      modules,
     } = req.body;
 
     let photo = "";
@@ -30,7 +30,6 @@ class CreateUserController {
       photo = req.file.filename;
     }
 
-    let courseRestricted = course_restricted == "true" ? true : false;
     let courseBoolean = course == "true" ? true : false;
     let resaleBoolean = resale == "true" ? true : false;
     let signatureBoolean = signature == "true" ? true : false;
@@ -56,7 +55,7 @@ class CreateUserController {
       photo,
       courseBoolean,
       resaleBoolean,
-      courseRestricted,
+      modules,
     });
 
     return res.json(user);

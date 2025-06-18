@@ -16,7 +16,7 @@ class ListUsersController {
       type,
       page: page ? Number(page) || 0 : 0,
       filter: filter ? String(filter) : "",
-      all: all == "all",
+      all: all == "true",
     });
 
     users.users.map((item) => {

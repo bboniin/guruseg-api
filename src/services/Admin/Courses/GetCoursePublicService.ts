@@ -31,7 +31,7 @@ class GetCoursePublicService {
       },
     });
 
-    if (user.course_restricted) {
+    if (user.modules) {
       if (!course.module.restricted) {
         throw new Error("Você não tem acesso a esse curso");
       }

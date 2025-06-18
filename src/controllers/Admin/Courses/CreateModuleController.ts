@@ -3,7 +3,7 @@ import { CreateModuleService } from "../../../services/Admin/Courses/CreateModul
 
 class CreateModuleController {
   async handle(req: Request, res: Response) {
-    const { name, description, order, restricted } = req.body;
+    const { name, description, order } = req.body;
 
     let userId = req.userId;
 
@@ -14,7 +14,6 @@ class CreateModuleController {
       name,
       order,
       description,
-      restricted,
     });
 
     return res.json(module);

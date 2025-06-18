@@ -18,7 +18,7 @@ model User {
   photo                String?
   category             String    @default("franqueado")
   type                 String    @default("cliente")
-  course_restricted    Boolean   @default(false)
+  modules              String?   
   services             String    @default("")
   email                String    @unique
   phone_number         String
@@ -312,8 +312,8 @@ model Course {
   create_at     DateTime? @default(now())
   update_at     DateTime? @updatedAt
 
-  module      Module?    @relation(fields: [module_id], references: [id], onDelete: Cascade)
-  module_id   String?    
+  module        Module?    @relation(fields: [module_id], references: [id], onDelete: SetNull)
+  module_id     String?    
 
   lessons Lesson[]
 

@@ -154,6 +154,7 @@ import { EditOrderController } from "./controllers/Order/EditOrderController";
 import { CreateModuleController } from "./controllers/Admin/Courses/CreateModuleController";
 import { EditModuleController } from "./controllers/Admin/Courses/EditModuleController";
 import { ConfirmLessonController } from "./controllers/Admin/Lessons/ConfirmLessonController";
+import { GetResumeController } from "./controllers/Resume/GetResumeController";
 
 const upload = multer(uploadConfig);
 
@@ -202,6 +203,7 @@ router.use(isAuthenticated);
 router.get("/services", new ListServicesAdminController().handle);
 router.get("/payments", new ListPaymentsController().handle);
 router.get("/services-client", new ListServicesClientController().handle);
+router.post("/resume", new GetResumeController().handle);
 
 // Credential
 

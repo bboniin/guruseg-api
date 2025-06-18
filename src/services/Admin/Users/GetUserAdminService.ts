@@ -16,7 +16,7 @@ class GetUserAdminService {
         course: true,
         resale: true,
         signature: true,
-        course_restricted: true,
+        modules: true,
         sector1_id: true,
         sector2_id: true,
         sector3_id: true,

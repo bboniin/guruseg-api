@@ -4,18 +4,11 @@ interface ModuleRequest {
   name: string;
   userId: string;
   order: string;
-  restricted: boolean;
   description: string;
 }
 
 class CreateModuleService {
-  async execute({
-    userId,
-    name,
-    order,
-    restricted,
-    description,
-  }: ModuleRequest) {
+  async execute({ userId, name, order, description }: ModuleRequest) {
     const admin = await prismaClient.admin.findUnique({
       where: {
         id: userId,
@@ -40,7 +33,6 @@ class CreateModuleService {
       data: {
         name: name,
         description: description,
-        restricted: restricted,
         order: orderC,
       },
     });

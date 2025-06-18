@@ -12,7 +12,7 @@ interface UserRequest {
   category: string;
   courseBoolean: boolean;
   resaleBoolean: boolean;
-  courseRestricted: boolean;
+  modules: string;
   signature: boolean;
   sector1_id: string;
   sector2_id: string;
@@ -46,7 +46,7 @@ class EditAdminUserService {
     password,
     courseBoolean,
     resaleBoolean,
-    courseRestricted,
+    modules,
   }: UserRequest) {
     const user = await prismaClient.user.findUnique({
       where: {
@@ -91,7 +91,7 @@ class EditAdminUserService {
       city: city,
       enable_payment: enable_payment,
       services: services,
-      course_restricted: courseRestricted,
+      modules: modules,
     };
 
     if (password) {
