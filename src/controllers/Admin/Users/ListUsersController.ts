@@ -3,11 +3,11 @@ import { ListUsersService } from "../../../services/Admin/Users/ListUsersService
 
 class ListUsersController {
   async handle(req: Request, res: Response) {
-    const { type, all } = req.params;
+    const { type } = req.params;
 
     let userId = req.userId;
 
-    const { filter, page } = req.query;
+    const { filter, page, all } = req.query;
 
     const listUsersService = new ListUsersService();
 
