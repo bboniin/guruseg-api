@@ -74,7 +74,10 @@ class StatusOrderService {
       const templateHTML = templateParse({
         id: order.id,
         name: order.user.name,
+        type: "clientes",
       });
+
+      console.log(order);
 
       await transport.sendMail({
         from: {
@@ -86,13 +89,30 @@ class StatusOrderService {
             name: order.user.name,
             address: order.user.email,
           },
+        ],
+        subject: "[Guruseg] Atualização Ordem de Serviço",
+        html: templateHTML,
+      });
+
+      const templateHTMLTecnico = templateParse({
+        id: order.id,
+        name: order.collaborator.name,
+        type: "tecnicos",
+      });
+
+      await transport.sendMail({
+        from: {
+          name: "Equipe Guruseg",
+          address: "leonardo@guruseg.com.br",
+        },
+        to: [
           {
             name: order.collaborator.name,
             address: order.collaborator.email,
           },
         ],
         subject: "[Guruseg] Atualização Ordem de Serviço",
-        html: templateHTML,
+        html: templateHTMLTecnico,
       });
     }
 
