@@ -1,8 +1,8 @@
 import prismaClient from "../../prisma";
 import { resolve } from "path";
 import fs from "fs";
-import nodemailer from "nodemailer";
 import handlebars from "handlebars";
+import { Resend } from "resend";
 
 interface OrderRequest {
   id: number;
@@ -27,16 +27,7 @@ class StatusOrderService {
       throw new Error("Ordem de serviço ainda não foi iniciada");
     }
 
-    var transport = await nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      service: "gmail",
-      port: 465,
-      secure: true,
-      auth: {
-        user: "leonardo@guruseg.com.br",
-        pass: "suimoooumyjdbqct",
-      },
-    });
+    const resend = new Resend(process.env.RESEND_KEY);
 
     if (status == "alteracao") {
       const path = resolve(__dirname, "..", "..", "views", "changeOS.hbs");
@@ -50,15 +41,9 @@ class StatusOrderService {
         name: order.collaborator.name,
       });
 
-      await transport.sendMail({
-        from: {
-          name: "Equipe Guruseg",
-          address: "leonardo@guruseg.com.br",
-        },
-        to: {
-          name: order.collaborator.name,
-          address: order.collaborator.email,
-        },
+      await resend.emails.send({
+        from: "Equipe Guruseg <noreply@gurusegead.com.br>",
+        to: order.collaborator.email,
         subject: "[Guruseg] Atualização Ordem de Serviço",
         html: templateHTML,
       });
@@ -77,19 +62,9 @@ class StatusOrderService {
         type: "clientes",
       });
 
-      console.log(order);
-
-      await transport.sendMail({
-        from: {
-          name: "Equipe Guruseg",
-          address: "leonardo@guruseg.com.br",
-        },
-        to: [
-          {
-            name: order.user.name,
-            address: order.user.email,
-          },
-        ],
+      await resend.emails.send({
+        from: "Equipe Guruseg <noreply@gurusegead.com.br>",
+        to: order.user.email,
         subject: "[Guruseg] Atualização Ordem de Serviço",
         html: templateHTML,
       });
@@ -100,17 +75,9 @@ class StatusOrderService {
         type: "tecnicos",
       });
 
-      await transport.sendMail({
-        from: {
-          name: "Equipe Guruseg",
-          address: "leonardo@guruseg.com.br",
-        },
-        to: [
-          {
-            name: order.collaborator.name,
-            address: order.collaborator.email,
-          },
-        ],
+      await resend.emails.send({
+        from: "Equipe Guruseg <noreply@gurusegead.com.br>",
+        to: order.collaborator.email,
         subject: "[Guruseg] Atualização Ordem de Serviço",
         html: templateHTMLTecnico,
       });

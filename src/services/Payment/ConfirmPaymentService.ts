@@ -1,9 +1,9 @@
 import prismaClient from "../../prisma";
 import { resolve } from "path";
 import fs from "fs";
-import nodemailer from "nodemailer";
 import handlebars from "handlebars";
 import { ConfirmOrderService } from "../Order/ConfirmOrderService";
+import { Resend } from "resend";
 
 interface OrderRequest {
   data: object;
@@ -24,16 +24,7 @@ class ConfirmPaymentService {
       },
     });
 
-    var transport = await nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      service: "gmail",
-      port: 465,
-      secure: true,
-      auth: {
-        user: "leonardo@guruseg.com.br",
-        pass: "suimoooumyjdbqct",
-      },
-    });
+    const resend = new Resend(process.env.RESEND_KEY);
 
     if (!payment) {
       const path = resolve(__dirname, "..", "..", "views", "errorWebhook.hbs");
@@ -47,15 +38,9 @@ class ConfirmPaymentService {
         data: JSON.stringify(data),
       });
 
-      await transport.sendMail({
-        from: {
-          name: "Equipe Guruseg",
-          address: "leonardo@guruseg.com.br",
-        },
-        to: {
-          name: "Guruseg",
-          address: "boninho7834@gmail.com",
-        },
+      await resend.emails.send({
+        from: "Equipe Guruseg <noreply@gurusegead.com.br>",
+        to: "boninho7834@gmail.com",
         subject: "[Guruseg] Error Webhook",
         html: templateHTML,
       });
@@ -110,15 +95,9 @@ class ConfirmPaymentService {
           order_id: order.id,
         });
 
-        await transport.sendMail({
-          from: {
-            name: "Equipe Guruseg",
-            address: "leonardo@guruseg.com.br",
-          },
-          to: {
-            name: order.user.name,
-            address: order.user.email,
-          },
+        await resend.emails.send({
+          from: "Equipe Guruseg <noreply@gurusegead.com.br>",
+          to: order.user.email,
           subject: "[Guruseg] Pagamento Confirmado",
           html: templateHTML,
         });
@@ -161,15 +140,9 @@ class ConfirmPaymentService {
           order_id: order.id,
         });
 
-        await transport.sendMail({
-          from: {
-            name: "Equipe Guruseg",
-            address: "leonardo@guruseg.com.br",
-          },
-          to: {
-            name: order.user.name,
-            address: order.user.email,
-          },
+        await resend.emails.send({
+          from: "Equipe Guruseg <noreply@gurusegead.com.br>",
+          to: order.user.email,
           subject: "[Guruseg] Pagamento Expirado",
           html: templateHTML,
         });
@@ -212,15 +185,9 @@ class ConfirmPaymentService {
           order_id: order.id,
         });
 
-        await transport.sendMail({
-          from: {
-            name: "Equipe Guruseg",
-            address: "leonardo@guruseg.com.br",
-          },
-          to: {
-            name: order.user.name,
-            address: order.user.email,
-          },
+        await resend.emails.send({
+          from: "Equipe Guruseg <noreply@gurusegead.com.br>",
+          to: order.user.email,
           subject: "[Guruseg] Pagamento Cancelado",
           html: templateHTML,
         });
