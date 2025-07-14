@@ -20,6 +20,7 @@ model User {
   type                 String    @default("cliente")
   modules              String?   
   services             String    @default("")
+  courses              String    @default("")
   email                String    @unique
   phone_number         String
   password             String

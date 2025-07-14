@@ -29,6 +29,7 @@ class GetUserAdminService {
         city: true,
         state: true,
         photo: true,
+        courses: true,
       },
     });
 

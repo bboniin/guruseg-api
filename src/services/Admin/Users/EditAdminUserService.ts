@@ -22,6 +22,7 @@ interface UserRequest {
   sector5_id: string;
   city: string;
   state: string;
+  courses: string;
   enable_payment: boolean;
 }
 
@@ -45,6 +46,7 @@ class EditAdminUserService {
     id,
     password,
     courseBoolean,
+    courses,
     resaleBoolean,
     modules,
   }: UserRequest) {
@@ -92,6 +94,7 @@ class EditAdminUserService {
       enable_payment: enable_payment,
       services: services,
       modules: modules,
+      courses: courses,
     };
 
     if (password) {

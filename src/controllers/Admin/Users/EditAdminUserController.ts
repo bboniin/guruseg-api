@@ -22,6 +22,7 @@ class EditAdminUserController {
       course,
       resale,
       modules,
+      courses,
     } = req.body;
 
     const { id } = req.params;
@@ -54,6 +55,7 @@ class EditAdminUserController {
       sector4_id,
       sector5_id,
       photo,
+      courses,
       id,
       password,
       courseBoolean,

@@ -22,6 +22,7 @@ class CreateUserController {
       resale,
       course,
       modules,
+      courses,
     } = req.body;
 
     let photo = "";
@@ -44,6 +45,7 @@ class CreateUserController {
       enable_payment: enable_payment == "true",
       phone_number,
       services,
+      courses,
       category,
       signature: signatureBoolean,
       sector1_id,

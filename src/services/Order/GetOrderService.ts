@@ -51,6 +51,12 @@ class GetOrderService {
       },
     });
 
+    if (userId == order.user.id && order.status != "finalizado") {
+      order.docs = order.docs.filter((item) => {
+        item.type != "tecnico";
+      });
+    }
+
     if (order.redemptions[0]) {
       order["redemption"] = order.redemptions[0];
     }

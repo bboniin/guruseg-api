@@ -155,6 +155,7 @@ import { CreateModuleController } from "./controllers/Admin/Courses/CreateModule
 import { EditModuleController } from "./controllers/Admin/Courses/EditModuleController";
 import { ConfirmLessonController } from "./controllers/Admin/Lessons/ConfirmLessonController";
 import { GetResumeController } from "./controllers/Resume/GetResumeController";
+import { DeleteModuleController } from "./controllers/Admin/Courses/DeleteModuleController";
 
 const upload = multer(uploadConfig);
 
@@ -329,9 +330,10 @@ router.put(
   upload.single("file"),
   new EditCourseController().handle
 );
+router.delete("/course/:id", new DeleteCourseController().handle);
 router.post("/module", new CreateModuleController().handle);
 router.put("/module/:id", new EditModuleController().handle);
-router.delete("/course/:id", new DeleteCourseController().handle);
+router.delete("/module/:id", new DeleteModuleController().handle);
 
 router.get("/lesson/:id", new GetLessonController().handle);
 router.get("/lessons/:course_id", new ListLessonsController().handle);

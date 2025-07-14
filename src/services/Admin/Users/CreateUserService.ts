@@ -21,6 +21,7 @@ interface UserRequest {
   services: string;
   city: string;
   state: string;
+  courses: string;
   enable_payment: boolean;
 }
 
@@ -45,6 +46,7 @@ class CreateUserService {
     courseBoolean,
     resaleBoolean,
     modules,
+    courses,
   }: UserRequest) {
     if (!email || !name || !phone_number || !category || !password) {
       throw new Error("Preencha todos os campos obrigatórios");
@@ -90,6 +92,7 @@ class CreateUserService {
         services: services,
         modules: modules,
         enable_payment: enable_payment,
+        courses: courses,
       },
       select: {
         id: true,
