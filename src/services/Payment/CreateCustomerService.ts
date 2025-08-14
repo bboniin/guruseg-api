@@ -1,4 +1,4 @@
-import api from "../../config/api";
+import { api } from "../../config/api";
 import { validateCpf } from "../../config/functions";
 import prismaClient from "../../prisma";
 

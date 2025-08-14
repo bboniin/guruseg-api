@@ -1,5 +1,5 @@
 import { addDays, format } from "date-fns";
-import api from "../../config/api";
+import { api } from "../../config/api";
 import prismaClient from "../../prisma";
 import { GetCouponService } from "../Coupon/GetCouponService";
 import { RescueCouponService } from "../Coupon/RescueCouponService";

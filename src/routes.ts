@@ -156,12 +156,16 @@ import { EditModuleController } from "./controllers/Admin/Courses/EditModuleCont
 import { ConfirmLessonController } from "./controllers/Admin/Lessons/ConfirmLessonController";
 import { GetResumeController } from "./controllers/Resume/GetResumeController";
 import { DeleteModuleController } from "./controllers/Admin/Courses/DeleteModuleController";
+import { GetOccupationalController } from "./controllers/IA/GetFunctionController";
+import { GetRisksController } from "./controllers/IA/GetRisksController";
 
 const upload = multer(uploadConfig);
 
 const router = Router();
 
 // Routes Publics
+router.get("/ia/risks", new GetRisksController().handle);
+router.get("/ia/occupation", new GetOccupationalController().handle);
 
 router.post("/lead/web", new CreateLeadWebController().handle);
 router.put("/all-renewal", new EditAllRenewalsController().handle);

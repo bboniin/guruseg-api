@@ -508,6 +508,12 @@ model CompanyScratchs {
   name               String
   description        String
   type               String   
+  fonte_geradora     String?
+  perigos            String?
+  avaliacao_risco    String?
+  epis               String?
+  epcs               String?
+  medidas_controle   String?
   create_at          DateTime? @default(now())
   update_at          DateTime? @updatedAt
 

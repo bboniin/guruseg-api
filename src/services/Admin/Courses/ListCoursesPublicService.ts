@@ -46,7 +46,11 @@ class ListCoursesPublicService {
           include: {
             lessons: {
               include: {
-                confirms: true,
+                confirms: {
+                  where: {
+                    user_id: userId,
+                  },
+                },
               },
             },
           },
