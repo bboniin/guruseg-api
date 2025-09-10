@@ -1,6 +1,4 @@
-import { apiChatgpt } from "../../config/api";
 import OpenAI from "openai";
-import prismaClient from "../../prisma";
 
 interface OccupationalRequest {
   name: string;

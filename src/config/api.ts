@@ -7,10 +7,3 @@ export const api: AxiosInstance = axios.create({
     access_token: process.env.ASAAS_SECRETE_KEY,
   },
 });
-
-export const apiChatgpt: AxiosInstance = axios.create({
-  baseURL: "https://api.asaas.com/v3/",
-  headers: {
-    access_token: process.env.OPENAI_API_KEY,
-  },
-});

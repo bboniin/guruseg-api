@@ -39,29 +39,6 @@ Evite variações. Não inclua explicações, apenas o Array válido.
     });
 
     return JSON.parse(response.output_text);
-    /*
-    await apiChatgpt
-      .post("/customers", {
-        name: user.name,
-        cpfCnpj: cpf,
-        mobilePhone: user.phone_number,
-      })
-      .then(async (response) => {
-        costumer_id = response.data.id;
-        await prismaClient.user.update({
-          where: {
-            id: user.id,
-          },
-          data: {
-            costumer_id: costumer_id,
-          },
-        });
-      })
-      .catch((e) => {
-        throw new Error("Ocorreu um erro ao criar cobrança");
-      });
-
-    return occupational;*/
   }
 }
 

@@ -156,6 +156,9 @@ class CreatePaymentService {
             value: totalOrder,
             order_id: order.id,
             status: "pendente",
+            user_id: userId,
+            type: "OS",
+            method: "PIX",
           },
         });
 

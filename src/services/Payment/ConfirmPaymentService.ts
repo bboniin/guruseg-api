@@ -24,6 +24,12 @@ class ConfirmPaymentService {
       },
     });
 
+    const user = await prismaClient.user.findUnique({
+      where: {
+        id: payment.user_id,
+      },
+    });
+
     const resend = new Resend(process.env.RESEND_KEY);
 
     if (!payment) {
@@ -59,23 +65,50 @@ class ConfirmPaymentService {
           },
         });
 
-        await prismaClient.order.update({
-          where: {
-            id: paymentPaid.order_id,
-          },
-          data: {
-            status_payment: "confirmado",
-          },
-        });
-
-        if (!order.collaborator_id) {
-          const confirmOrderService = new ConfirmOrderService();
-
-          await confirmOrderService.execute({
-            userId: order.user_id,
-            id: order.id,
-            message: "",
+        if (payment.type == "OS") {
+          await prismaClient.order.update({
+            where: {
+              id: paymentPaid.order_id,
+            },
+            data: {
+              status_payment: "confirmado",
+            },
           });
+
+          if (!order.collaborator_id && !order.urgent) {
+            const confirmOrderService = new ConfirmOrderService();
+
+            await confirmOrderService.execute({
+              userId: order.user_id,
+              id: order?.id,
+              message: "",
+            });
+          }
+        } else {
+          const depositGet = await prismaClient.deposit.findUnique({
+            where: {
+              id: paymentPaid.deposit_id,
+            },
+          });
+          const deposit = await prismaClient.deposit.update({
+            where: {
+              id: paymentPaid.deposit_id,
+            },
+            data: {
+              status: "confirmado",
+            },
+          });
+
+          if (depositGet.status != "confirmado") {
+            await prismaClient.user.update({
+              where: {
+                id: user.id,
+              },
+              data: {
+                balance: user.balance + deposit.value + deposit.bonus,
+              },
+            });
+          }
         }
 
         const path = resolve(
@@ -91,13 +124,14 @@ class ConfirmPaymentService {
         const templateParse = handlebars.compile(templateFileContent);
 
         const templateHTML = templateParse({
-          name: order.user.name,
-          order_id: order.id,
+          name: user.name,
+          order_id: order?.id,
+          type: payment.type,
         });
 
         await resend.emails.send({
           from: "Equipe Guruseg <noreply@gurusegead.com.br>",
-          to: order.user.email,
+          to: user.email,
           subject: "[Guruseg] Pagamento Confirmado",
           html: templateHTML,
         });
@@ -113,7 +147,7 @@ class ConfirmPaymentService {
           },
         });
 
-        if (order) {
+        if (payment.type == "OS") {
           await prismaClient.order.update({
             where: {
               id: paymentCanceled.order_id,
@@ -123,7 +157,18 @@ class ConfirmPaymentService {
               status_payment: "expirado",
             },
           });
+        } else {
+          await prismaClient.deposit.update({
+            where: {
+              id: paymentCanceled.deposit_id,
+            },
+            data: {
+              status: "expirado",
+            },
+          });
+        }
 
+        if ((payment.type == "OS" && order) || payment.type == "DEPOSIT") {
           const path = resolve(
             __dirname,
             "..",
@@ -137,13 +182,14 @@ class ConfirmPaymentService {
           const templateParse = handlebars.compile(templateFileContent);
 
           const templateHTML = templateParse({
-            name: order.user.name,
-            order_id: order.id,
+            name: user.name,
+            order_id: order?.id,
+            type: payment.type,
           });
 
           await resend.emails.send({
             from: "Equipe Guruseg <noreply@gurusegead.com.br>",
-            to: order.user.email,
+            to: user.email,
             subject: "[Guruseg] Pagamento Expirado",
             html: templateHTML,
           });
@@ -160,7 +206,7 @@ class ConfirmPaymentService {
           },
         });
 
-        if (order) {
+        if (payment.type == "OS") {
           await prismaClient.order.update({
             where: {
               id: paymentCanceled.order_id,
@@ -170,7 +216,17 @@ class ConfirmPaymentService {
               status_payment: "cancelado",
             },
           });
-
+        } else {
+          await prismaClient.deposit.update({
+            where: {
+              id: paymentCanceled.deposit_id,
+            },
+            data: {
+              status: "expirado",
+            },
+          });
+        }
+        if ((payment.type == "OS" && order) || payment.type == "DEPOSIT") {
           const path = resolve(
             __dirname,
             "..",
@@ -184,13 +240,14 @@ class ConfirmPaymentService {
           const templateParse = handlebars.compile(templateFileContent);
 
           const templateHTML = templateParse({
-            name: order.user.name,
-            order_id: order.id,
+            name: user.name,
+            order_id: order?.id,
+            type: payment.type,
           });
 
           await resend.emails.send({
             from: "Equipe Guruseg <noreply@gurusegead.com.br>",
-            to: order.user.email,
+            to: user.email,
             subject: "[Guruseg] Pagamento Cancelado",
             html: templateHTML,
           });

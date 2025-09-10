@@ -6,6 +6,7 @@ interface OrderRequest {
   userId: string;
   name: string;
   company_id: string;
+  urgent: boolean;
   sector: string;
   items: Array<[]>;
 }
@@ -17,6 +18,7 @@ class CreateOrderService {
     name,
     items,
     sector,
+    urgent,
     company_id,
   }: OrderRequest) {
     if (items.length == 0 || !userId || !sector) {
@@ -41,6 +43,7 @@ class CreateOrderService {
         name: name,
         company_id: company_id,
         sector: sector,
+        urgent: urgent,
         asaas_integration: user.enable_payment,
         status: "pendente",
       },
@@ -81,6 +84,22 @@ class CreateOrderService {
         order["totalValue"] += data["value"] * data["amount"];
       })
     );
+
+    if (urgent) {
+      const itemOrder = await prismaClient.item.create({
+        data: {
+          amount: 1,
+          order_id: order.id,
+          name: "Taxa de Urgencia",
+          value: 145,
+          commission: 0,
+          description: "OS finalizada em menos de 24hrs",
+        },
+      });
+      order["items"].push(itemOrder);
+      order["totalServices"] += 1;
+      order["totalValue"] += 145;
+    }
 
     return order;
   }

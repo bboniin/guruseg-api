@@ -158,6 +158,17 @@ import { GetResumeController } from "./controllers/Resume/GetResumeController";
 import { DeleteModuleController } from "./controllers/Admin/Courses/DeleteModuleController";
 import { GetOccupationalController } from "./controllers/IA/GetFunctionController";
 import { GetRisksController } from "./controllers/IA/GetRisksController";
+import { CreateDepositController } from "./controllers/Deposit/CreateDepositController";
+import { CreatePackageController } from "./controllers/Deposit/CreatePackageController";
+import { ListPackagesController } from "./controllers/Deposit/ListPackagesController";
+import { EditPackageController } from "./controllers/Deposit/EditPackageController";
+import { DeletePackageController } from "./controllers/Deposit/DeletePackageController";
+import { GetPaymentController } from "./controllers/Payment/GetPaymentController";
+import { ListLeadsBuyController } from "./controllers/Lead/ListLeadsBuyController";
+import { BuyLeadController } from "./controllers/Lead/BuyLeadController";
+import { ListAdminOrdersUrgentController } from "./controllers/Admin/ListAdminOrdersUrgentController";
+import { SendOrderUrgentController } from "./controllers/Order/SendOrderUrgentController";
+import { GetPaymentUserController } from "./controllers/Payment/GetPaymentUserController";
 
 const upload = multer(uploadConfig);
 
@@ -167,6 +178,7 @@ const router = Router();
 router.get("/ia/risks", new GetRisksController().handle);
 router.get("/ia/occupation", new GetOccupationalController().handle);
 
+router.get("/payments/user", new GetPaymentUserController().handle);
 router.post("/lead/web", new CreateLeadWebController().handle);
 router.put("/all-renewal", new EditAllRenewalsController().handle);
 router.post("/session", new AuthUserController().handle);
@@ -249,12 +261,14 @@ router.put(
 
 router.post("/get/coupon", new GetCouponController().handle);
 router.get("/orders-admin", new ListAdminOrdersController().handle);
+router.get("/orders-urgente", new ListAdminOrdersUrgentController().handle);
 router.get("/orders-open", new ListOpenOrdersController().handle);
 router.get("/orders/:type", new ListOrdersController().handle);
 router.get("/order/:id", new GetOrderController().handle);
 router.put("/order/:id", new EditOrderController().handle);
 router.put("/confirm-order/:id", new ConfirmOrderController().handle);
 router.post("/order/payment/:id", new CreatePaymentController().handle);
+router.put("/send-order/:id", new SendOrderUrgentController().handle);
 router.post("/generate/payment/:id", new GeneratePaymentController().handle);
 router.post("/customer", new CreateCustomerController().handle);
 router.post("/order", new CreateOrderController().handle);
@@ -384,6 +398,7 @@ router.delete("/contract/:id", new DeleteContractController().handle);
 
 router.get("/lead/:id", new GetLeadController().handle);
 router.get("/leads/me", new ListLeadsClientController().handle);
+router.get("/leads-buy", new ListLeadsBuyController().handle);
 router.get("/leads/:userId", new ListAdminLeadsClientController().handle);
 router.get("/leads-send", new ListLeadsSendController().handle);
 router.get("/my-leads", new ListMyLeadsController().handle);
@@ -391,6 +406,7 @@ router.get("/leads", new ListLeadsAdminController().handle);
 router.post("/lead", new CreateLeadController().handle);
 router.post("/lead/master", new CreateLeadMasterController().handle);
 router.put("/lead/send", new SendLeadController().handle);
+router.put("/buy-lead/:id", new BuyLeadController().handle);
 router.put("/lead/:id", new EditLeadController().handle);
 router.put("/lead/master/:id", new EditLeadMasterController().handle);
 router.put("/lead/status/:id", new StatusLeadController().handle);
@@ -451,5 +467,12 @@ router.post("/coupon", new CreateCouponController().handle);
 router.get("/coupons", new ListCouponsController().handle);
 router.put("/coupon/:id", new EditCouponController().handle);
 router.delete("/coupon/:id", new DeleteCouponController().handle);
+
+router.post("/deposit", new CreateDepositController().handle);
+router.post("/package", new CreatePackageController().handle);
+router.get("/packages", new ListPackagesController().handle);
+router.put("/package/:id", new EditPackageController().handle);
+router.get("/payment/:id", new GetPaymentController().handle);
+router.delete("/package/:id", new DeletePackageController().handle);
 
 export { router };

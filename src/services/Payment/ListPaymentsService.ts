@@ -8,33 +8,57 @@ interface PaymentRequest {
 
 class ListPaymentsService {
   async execute({ userId, page, order_id }: PaymentRequest) {
+    const userBalance = await prismaClient.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!userBalance) {
+      throw new Error("Franqueado não encontrado");
+    }
+
     const paymentsTotal = await prismaClient.payment.findMany({
       where: {
-        orders: {
-          some: order_id
-            ? {
-                id: order_id,
-                user_id: userId,
-              }
-            : {
-                user_id: userId,
-              },
-        },
+        OR: [
+          {
+            orders: {
+              some: order_id
+                ? {
+                    id: order_id,
+                    user_id: userId,
+                  }
+                : {
+                    user_id: userId,
+                  },
+            },
+          },
+          {
+            user_id: userId,
+          },
+        ],
       },
     });
 
     const payments = await prismaClient.payment.findMany({
       where: {
-        orders: {
-          some: order_id
-            ? {
-                id: order_id,
-                user_id: userId,
-              }
-            : {
-                user_id: userId,
-              },
-        },
+        OR: [
+          {
+            orders: {
+              some: order_id
+                ? {
+                    id: order_id,
+                    user_id: userId,
+                  }
+                : {
+                    user_id: userId,
+                  },
+            },
+          },
+          {
+            user_id: userId,
+          },
+        ],
       },
       skip: page * 30,
       take: 30,
@@ -48,7 +72,12 @@ class ListPaymentsService {
       0
     );
 
-    return { payments, paymentsTotal: paymentsTotal.length, totalValue };
+    return {
+      payments,
+      paymentsTotal: paymentsTotal.length,
+      totalValue,
+      balance: userBalance.balance,
+    };
   }
 }
 
