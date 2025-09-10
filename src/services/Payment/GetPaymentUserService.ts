@@ -13,14 +13,16 @@ class GetPaymentUserService {
 
     await Promise.all(
       payments.map(async (data) => {
-        await prismaClient.payment.update({
-          where: {
-            id: data.id,
-          },
-          data: {
-            user_id: data.orders[0].user_id,
-          },
-        });
+        if (data.orders.length) {
+          await prismaClient.payment.update({
+            where: {
+              id: data.id,
+            },
+            data: {
+              user_id: data.orders[0].user_id,
+            },
+          });
+        }
       })
     );
 
