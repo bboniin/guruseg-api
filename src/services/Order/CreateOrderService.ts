@@ -91,14 +91,14 @@ class CreateOrderService {
           amount: 1,
           order_id: order.id,
           name: "Taxa de Urgencia",
-          value: 145,
+          value: 147,
           commission: 0,
           description: "OS finalizada em menos de 24hrs",
         },
       });
       order["items"].push(itemOrder);
       order["totalServices"] += 1;
-      order["totalValue"] += 145;
+      order["totalValue"] += 147;
     }
 
     return order;

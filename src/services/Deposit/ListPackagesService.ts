@@ -4,7 +4,7 @@ class ListPackagesService {
   async execute() {
     const packages = await prismaClient.depositPackage.findMany({
       orderBy: {
-        name: "asc",
+        value: "desc",
       },
     });
 

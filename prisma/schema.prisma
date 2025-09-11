@@ -265,7 +265,7 @@ model LeadMaster {
   employees       String?
   location        String?
   value           Float?  
-  price           Float       @default(45)       
+  price           Float       @default(0)       
   observation     String?
   is_user         Boolean     @default(false)
   create_at       DateTime?   @default(now())
