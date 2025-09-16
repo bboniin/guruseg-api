@@ -8,11 +8,10 @@ import { Resend } from "resend";
 interface OrderRequest {
   id: number;
   userId: string;
-  message: string;
 }
 
 class ConfirmOrderService {
-  async execute({ userId, id, message }: OrderRequest) {
+  async execute({ userId, id }: OrderRequest) {
     if (!id || !userId) {
       throw new Error("Preencha todos os campos.");
     }
@@ -25,11 +24,18 @@ class ConfirmOrderService {
         user: true,
         items: true,
         messages: true,
+        docs: true,
       },
     });
 
     if (orderGet.collaborator_id) {
       throw new Error("Ordem de serviço já tem um técnico vinculado");
+    }
+
+    if (!orderGet.docs.length) {
+      throw new Error(
+        "Envie pelo menos um documento para confirmar o envio da documentação"
+      );
     }
 
     const tecnico = await prismaClient.collaborator.findFirst({
@@ -192,8 +198,12 @@ class ConfirmOrderService {
         id: id,
       },
       data: {
-        status: collaborator.id ? "andamento" : "aberto",
-        collaborator_id: collaborator.id,
+        status: orderGet.urgent
+          ? "aberto"
+          : collaborator.id
+            ? "andamento"
+            : "aberto",
+        collaborator_id: orderGet.urgent ? null : collaborator.id,
       },
       include: {
         items: true,
@@ -210,7 +220,7 @@ class ConfirmOrderService {
       order["totalValue"] += item.value * item.amount;
     });
 
-    if (collaborator.id) {
+    if (!orderGet.urgent && collaborator.id) {
       const path = resolve(__dirname, "..", "..", "views", "receivedOS.hbs");
 
       const templateFileContent = fs.readFileSync(path).toString("utf-8");

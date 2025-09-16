@@ -86,21 +86,6 @@ class EditOrderService {
       orderD["totalValue"] += item.value * item.amount;
     });
 
-    if (userId == orderD.user_id) {
-      if (orderD.payment_id && orderD.status_payment == "pendente") {
-        await api
-          .get(`/payments/${orderD.payment.asaas_id}/pixQrCode`)
-          .then(async (res) => {
-            orderD["pix"] = res.data;
-          })
-          .catch((e) => {
-            throw new Error(
-              "Ocorreu um gerar QR Code Pix, recarregue a página"
-            );
-          });
-      }
-    }
-
     return orderD;
   }
 }

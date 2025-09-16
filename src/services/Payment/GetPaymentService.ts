@@ -20,7 +20,11 @@ class GetPaymentService {
       },
     });
 
-    if (!admin && payment.user_id != userId) {
+    if (!payment) {
+      throw new Error("Pagamento não encontrado");
+    }
+
+    if (!admin && payment?.user_id != userId) {
       throw new Error("Pagamento não encontrado");
     }
 

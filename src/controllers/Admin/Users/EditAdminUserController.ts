@@ -6,7 +6,6 @@ class EditAdminUserController {
     const {
       name,
       email,
-      enable_payment,
       phone_number,
       services,
       city,
@@ -42,7 +41,6 @@ class EditAdminUserController {
     const user = await editAdminUserService.execute({
       name,
       email,
-      enable_payment: enable_payment == "true",
       phone_number,
       services,
       city,

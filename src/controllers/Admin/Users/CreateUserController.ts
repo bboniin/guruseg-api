@@ -6,7 +6,6 @@ class CreateUserController {
     const {
       name,
       email,
-      enable_payment,
       signature,
       services,
       city,
@@ -42,7 +41,6 @@ class CreateUserController {
       email,
       city,
       state,
-      enable_payment: enable_payment == "true",
       phone_number,
       services,
       courses,

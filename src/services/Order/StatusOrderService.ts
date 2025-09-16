@@ -3,6 +3,7 @@ import { resolve } from "path";
 import fs from "fs";
 import handlebars from "handlebars";
 import { Resend } from "resend";
+import { ConfirmOrderService } from "./ConfirmOrderService";
 
 interface OrderRequest {
   id: number;
@@ -93,29 +94,40 @@ class StatusOrderService {
       });
     }
 
-    const orderD = await prismaClient.order.update({
-      where: {
-        id: id,
-      },
-      data: {
-        status: status,
-        update_at: new Date(),
-      },
-      include: {
-        items: true,
-        messages: true,
-      },
-    });
+    if (status == "confirm") {
+      const confirmOrderService = new ConfirmOrderService();
 
-    orderD["totalServices"] = 0;
-    orderD["totalValue"] = 0;
+      const orderD = await confirmOrderService.execute({
+        userId: order.user_id,
+        id: order?.id,
+      });
 
-    orderD.items.map((item) => {
-      orderD["totalServices"] += item.amount;
-      orderD["totalValue"] += item.value * item.amount;
-    });
+      return orderD;
+    } else {
+      const orderD = await prismaClient.order.update({
+        where: {
+          id: id,
+        },
+        data: {
+          status: status,
+          update_at: new Date(),
+        },
+        include: {
+          items: true,
+          messages: true,
+        },
+      });
 
-    return orderD;
+      orderD["totalServices"] = 0;
+      orderD["totalValue"] = 0;
+
+      orderD.items.map((item) => {
+        orderD["totalServices"] += item.amount;
+        orderD["totalValue"] += item.value * item.amount;
+      });
+
+      return orderD;
+    }
   }
 }
 

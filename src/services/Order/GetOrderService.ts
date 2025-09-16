@@ -89,21 +89,6 @@ class GetOrderService {
       item["fileName"] = String(item.file).substr(33);
     });
 
-    if (user) {
-      if (order.payment_id && order.status_payment == "pendente") {
-        await api
-          .get(`/payments/${order.payment.asaas_id}/pixQrCode`)
-          .then(async (res) => {
-            order["pix"] = res.data;
-          })
-          .catch((e) => {
-            throw new Error(
-              "Ocorreu um gerar QR Code Pix, recarregue a página"
-            );
-          });
-      }
-    }
-
     return order;
   }
 }

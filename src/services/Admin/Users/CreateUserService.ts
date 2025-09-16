@@ -22,14 +22,12 @@ interface UserRequest {
   city: string;
   state: string;
   courses: string;
-  enable_payment: boolean;
 }
 
 class CreateUserService {
   async execute({
     name,
     email,
-    enable_payment,
     city,
     state,
     signature,
@@ -91,7 +89,6 @@ class CreateUserService {
         resale: resaleBoolean,
         services: services,
         modules: modules,
-        enable_payment: enable_payment,
         courses: courses,
       },
       select: {

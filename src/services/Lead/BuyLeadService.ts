@@ -31,10 +31,24 @@ class BuyLeadService {
       throw new Error("Lead não está mais disponível para compra");
     }
 
-    if (leadMaster.price > user.balance) {
+    if (leadMaster.price > user.balance + user.bonus) {
       throw new Error(
         "Saldo insuficiente para comprar o Lead, efetue um deposito para continuar"
       );
+    }
+
+    let newBalance = user.balance;
+    let newBonus = user.bonus;
+
+    if (newBonus) {
+      if (leadMaster.price <= newBonus) {
+        newBonus -= leadMaster.price;
+      } else {
+        newBalance -= leadMaster.price - newBonus;
+        newBonus = 0;
+      }
+    } else {
+      newBalance -= leadMaster.price;
     }
 
     await prismaClient.user.update({
@@ -42,7 +56,8 @@ class BuyLeadService {
         id: userId,
       },
       data: {
-        balance: user.balance - leadMaster.price,
+        balance: parseFloat(newBalance.toFixed(2)),
+        bonus: parseFloat(newBonus.toFixed(2)),
       },
     });
 

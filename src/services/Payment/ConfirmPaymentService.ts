@@ -24,12 +24,6 @@ class ConfirmPaymentService {
       },
     });
 
-    const user = await prismaClient.user.findUnique({
-      where: {
-        id: payment.user_id,
-      },
-    });
-
     const resend = new Resend(process.env.RESEND_KEY);
 
     if (!payment) {
@@ -54,6 +48,12 @@ class ConfirmPaymentService {
       return;
     } else {
       const order = payment.orders[0];
+
+      const user = await prismaClient.user.findUnique({
+        where: {
+          id: payment.user_id,
+        },
+      });
 
       if (data["event"] == "PAYMENT_RECEIVED") {
         const paymentPaid = await prismaClient.payment.update({
@@ -81,7 +81,6 @@ class ConfirmPaymentService {
             await confirmOrderService.execute({
               userId: order.user_id,
               id: order?.id,
-              message: "",
             });
           }
         } else {
@@ -105,7 +104,8 @@ class ConfirmPaymentService {
                 id: user.id,
               },
               data: {
-                balance: user.balance + deposit.value + deposit.bonus,
+                balance: parseFloat((user.balance + deposit.value).toFixed(2)),
+                bonus: parseFloat((user.bonus + deposit.bonus).toFixed(2)),
               },
             });
           }

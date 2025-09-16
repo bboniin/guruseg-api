@@ -3,7 +3,7 @@ import { CreatePackageService } from "../../services/Deposit/CreatePackageServic
 
 class CreatePackageController {
   async handle(req: Request, res: Response) {
-    const { name, value, description, bonus } = req.body;
+    const { name, value, description, bonus, type } = req.body;
 
     let userId = req.userId;
 
@@ -15,6 +15,7 @@ class CreatePackageController {
       bonus,
       description,
       userId,
+      type,
     });
 
     return res.json(packageRes);

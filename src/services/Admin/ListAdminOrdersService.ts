@@ -41,11 +41,7 @@ class ListAdminOrdersService {
     }
 
     if (status_payment) {
-      if (status_payment == "Sem integração") {
-        filter["asaas_integration"] = false;
-      } else {
-        filter["status_payment"] = status_payment;
-      }
+      filter["status_payment"] = status_payment;
     }
 
     if (endDate && startDate) {
@@ -154,8 +150,8 @@ class ListAdminOrdersService {
       return statusC[a.status] < statusC[b.status]
         ? -1
         : statusC[a.status] > statusC[b.status]
-        ? 1
-        : 0;
+          ? 1
+          : 0;
     });
 
     return {

@@ -31,13 +31,39 @@ class CancelOrderService {
       },
     });
 
-    orderD["totalServices"] = 0;
-    orderD["totalValue"] = 0;
+    orderD["totalServices"] = order.urgent ? 1 : 0;
+    orderD["totalValue"] = order.urgent ? 147 : 0;
 
     orderD.items.map((item) => {
       orderD["totalServices"] += item.amount;
       orderD["totalValue"] += item.value * item.amount;
     });
+
+    if (order.payment_id) {
+      const user = await prismaClient.user.findUnique({
+        where: {
+          id: orderD.user_id,
+        },
+      });
+
+      const payment = await prismaClient.payment.update({
+        where: {
+          id: order.payment_id,
+        },
+        data: {
+          status: "cancelado",
+        },
+      });
+
+      await prismaClient.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          balance: parseFloat((user.balance + payment.value).toFixed(2)),
+        },
+      });
+    }
 
     return orderD;
   }

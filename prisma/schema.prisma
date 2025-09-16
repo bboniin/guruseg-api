@@ -25,6 +25,7 @@ model User {
   phone_number         String
   password             String
   balance              Float     @default(0)
+  bonus                Float     @default(0)
   city                 String    @default("")
   state                String    @default("")
   signature            Boolean   @default(false)
@@ -36,7 +37,6 @@ model User {
   costumer_id          String?   @default("")
   visible              Boolean   @default(true)
   course               Boolean   @default(false)
-  enable_payment       Boolean   @default(true)
   resale               Boolean   @default(false)
   create_at            DateTime? @default(now())
   update_at            DateTime? @updatedAt
@@ -131,7 +131,7 @@ model Order {
   status_payment             String    @default("pendente")
   month                      String    @default("")
   company_id                 String?   @default("")
-  asaas_integration          Boolean   @default(false)
+  collaborators              Int       @default(0)
   sector                     String    @default("Serviços de segurança do Trabalho")
   create_at                  DateTime? @default(now())
   update_at                  DateTime? @updatedAt
@@ -142,13 +142,13 @@ model Order {
   collaborator               Collaborator? @relation(fields: [collaborator_id], references: [id], onDelete: Cascade)
   collaborator_id            String?
 
-  items                     Item[]
-  docs                      Doc[]
-  messages                  OSMessages[]
-  redemptions               Redemption[]
+  items                      Item[]
+  docs                       Doc[]
+  messages                   OSMessages[]
+  redemptions                Redemption[]
      
-  payment                   Payment?   @relation(fields: [payment_id], references: [id], onDelete: SetNull)
-  payment_id                String? 
+  payment                    Payment?   @relation(fields: [payment_id], references: [id], onDelete: SetNull)
+  payment_id                 String? 
 
   @@map("orders")
 }
@@ -200,6 +200,7 @@ model Deposit {
 
 model DepositPackage {
   id          String    @id @default(uuid())
+  type        String    @default("services")
   name        String
   description String?
   value       Float    
@@ -241,15 +242,17 @@ model Item {
 }
 
 model Service {
-  id              String    @id @default(uuid())
-  name            String
-  value           Float
-  commission      Float     @default(0)
-  visible         Boolean   @default(true)
-  description     String?
-  sector          String    @default("Serviços de segurança do Trabalho")
-  create_at       DateTime? @default(now())
-  update_at       DateTime? @updatedAt
+  id                  String    @id @default(uuid())
+  name                String
+  value               Float
+  commission          Float     @default(0)
+  min_collaborators   Int       @default(0)
+  max_collaborators   Int       @default(0)
+  visible             Boolean   @default(true)
+  description         String?
+  sector              String    @default("Serviços de segurança do Trabalho")
+  create_at           DateTime? @default(now())
+  update_at           DateTime? @updatedAt
 
   @@map("services")
 }

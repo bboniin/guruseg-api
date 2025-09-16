@@ -3,7 +3,7 @@ import { validateCpf } from "../../config/functions";
 import prismaClient from "../../prisma";
 
 interface PaymentRequest {
-  cpf: number;
+  cpf: string;
   userId: string;
 }
 class CreateCustomerService {

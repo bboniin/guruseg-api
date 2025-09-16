@@ -94,6 +94,7 @@ class ListLeadsBuyService {
       leads: listLeads,
       leadsTotal: listLeadsTotal,
       balance: userBalance.balance,
+      bonus: userBalance.bonus,
     };
   }
 }

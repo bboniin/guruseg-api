@@ -77,6 +77,7 @@ class ListPaymentsService {
       paymentsTotal: paymentsTotal.length,
       totalValue,
       balance: userBalance.balance,
+      bonus: userBalance.bonus,
     };
   }
 }

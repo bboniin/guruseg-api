@@ -48,7 +48,6 @@ class RecusedDocOrderService {
         month: orderGet.month,
         name: orderGet.name,
         company_id: orderGet.company_id,
-        asaas_integration: orderGet.asaas_integration,
         order_doc_recused: true,
         sector: "OS após Reprovação de documentos",
         urgent: orderGet.urgent,

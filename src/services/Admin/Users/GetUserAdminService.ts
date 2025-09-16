@@ -25,7 +25,6 @@ class GetUserAdminService {
         services: true,
         phone_number: true,
         category: true,
-        enable_payment: true,
         city: true,
         state: true,
         photo: true,

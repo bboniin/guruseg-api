@@ -42,7 +42,6 @@ class ListOrdersService {
     }
 
     if (finance) {
-      data["asaas_integration"] = false;
       data["status"] = "finalizado";
       if (endDate && startDate) {
         data["AND"] = [
@@ -169,8 +168,8 @@ class ListOrdersService {
       return statusC[a.status] < statusC[b.status]
         ? -1
         : statusC[a.status] > statusC[b.status]
-        ? 1
-        : 0;
+          ? 1
+          : 0;
     });
 
     return {

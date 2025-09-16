@@ -5,7 +5,7 @@ class EditPackageController {
   async handle(req: Request, res: Response) {
     const { id } = req.params;
 
-    const { name, value, description, bonus } = req.body;
+    const { name, value, description, bonus, type } = req.body;
 
     let userId = req.userId;
 
@@ -18,6 +18,7 @@ class EditPackageController {
       bonus,
       userId,
       id,
+      type,
     });
 
     return res.json(packageRes);

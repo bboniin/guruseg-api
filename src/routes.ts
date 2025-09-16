@@ -75,7 +75,6 @@ import { PublicEditCredentialController } from "./controllers/Credential/PublicE
 import { DeleteContractController } from "./controllers/Contract/DeleteCredentialController";
 import { GetCollaboratorController } from "./controllers/Collaborator/GetCollaboratorController";
 import { GetUserController } from "./controllers/User/GetUserController";
-import { ConfirmOrderController } from "./controllers/Order/ConfirmOrderController";
 import { GetCourseController } from "./controllers/Admin/Courses/GetCourseControlle";
 import { ListAdminOrdersPeriodoController } from "./controllers/Admin/ListAdminOrdersPeriodoController";
 import { ListUsersCollaboratorController } from "./controllers/Admin/Collaborators/ListUsersCollaboratorController";
@@ -138,7 +137,6 @@ import { DeleteStatementController } from "./controllers/Statement/DeleteStateme
 import { ConfirmStatementController } from "./controllers/Statement/ConfirmStatementController";
 import { ListStatementsUserController } from "./controllers/Statement/ListStatementsUserController";
 import { GetStatementController } from "./controllers/Statement/GetStatementController";
-import { CreatePaymentController } from "./controllers/Payment/CreatePaymentController";
 import { ConfirmPaymentController } from "./controllers/Payment/ConfirmPaymentController";
 import { ListPaymentsController } from "./controllers/Payment/ListPaymentsController";
 import { ListAdminPaymentsController } from "./controllers/Payment/ListAdminPaymentsController";
@@ -148,7 +146,6 @@ import { ListCouponsController } from "./controllers/Coupon/ListCouponsControlle
 import { EditCouponController } from "./controllers/Coupon/EditCouponController";
 import { DeleteCouponController } from "./controllers/Coupon/DeleteCouponController";
 import { GetCouponController } from "./controllers/Coupon/GetCouponController";
-import { GeneratePaymentController } from "./controllers/Payment/GeneratePaymentController";
 import { ListAdminOrdersController } from "./controllers/Admin/ListAdminOrdersController";
 import { EditOrderController } from "./controllers/Order/EditOrderController";
 import { CreateModuleController } from "./controllers/Admin/Courses/CreateModuleController";
@@ -169,6 +166,9 @@ import { BuyLeadController } from "./controllers/Lead/BuyLeadController";
 import { ListAdminOrdersUrgentController } from "./controllers/Admin/ListAdminOrdersUrgentController";
 import { SendOrderUrgentController } from "./controllers/Order/SendOrderUrgentController";
 import { GetPaymentUserController } from "./controllers/Payment/GetPaymentUserController";
+import { ListDepositsController } from "./controllers/Deposit/ListDepositsController";
+import { CreateDepositAdminController } from "./controllers/Deposit/CreateDepositAdminController";
+import { ListDepositsAdminController } from "./controllers/Deposit/ListDepositsAdminController";
 
 const upload = multer(uploadConfig);
 
@@ -266,10 +266,7 @@ router.get("/orders-open", new ListOpenOrdersController().handle);
 router.get("/orders/:type", new ListOrdersController().handle);
 router.get("/order/:id", new GetOrderController().handle);
 router.put("/order/:id", new EditOrderController().handle);
-router.put("/confirm-order/:id", new ConfirmOrderController().handle);
-router.post("/order/payment/:id", new CreatePaymentController().handle);
 router.put("/send-order/:id", new SendOrderUrgentController().handle);
-router.post("/generate/payment/:id", new GeneratePaymentController().handle);
 router.post("/customer", new CreateCustomerController().handle);
 router.post("/order", new CreateOrderController().handle);
 router.put("/accept-order/:id", new AcceptOrderController().handle);
@@ -471,6 +468,9 @@ router.delete("/coupon/:id", new DeleteCouponController().handle);
 router.post("/deposit", new CreateDepositController().handle);
 router.post("/package", new CreatePackageController().handle);
 router.get("/packages", new ListPackagesController().handle);
+router.get("/deposits", new ListDepositsController().handle);
+router.post("/admin/deposit", new CreateDepositAdminController().handle);
+router.get("/admin/deposits", new ListDepositsAdminController().handle);
 router.put("/package/:id", new EditPackageController().handle);
 router.get("/payment/:id", new GetPaymentController().handle);
 router.delete("/package/:id", new DeletePackageController().handle);

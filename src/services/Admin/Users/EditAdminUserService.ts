@@ -23,14 +23,12 @@ interface UserRequest {
   city: string;
   state: string;
   courses: string;
-  enable_payment: boolean;
 }
 
 class EditAdminUserService {
   async execute({
     name,
     email,
-    enable_payment,
     city,
     state,
     signature,
@@ -91,7 +89,6 @@ class EditAdminUserService {
       resale: resaleBoolean,
       state: state,
       city: city,
-      enable_payment: enable_payment,
       services: services,
       modules: modules,
       courses: courses,

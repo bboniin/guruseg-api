@@ -7,6 +7,12 @@ interface DepositRequest {
 
 class ListDepositsService {
   async execute({ userId, page }: DepositRequest) {
+    const depositsTotal = await prismaClient.deposit.count({
+      where: {
+        user_id: userId,
+      },
+    });
+
     const deposits = await prismaClient.deposit.findMany({
       where: {
         user_id: userId,
@@ -18,7 +24,7 @@ class ListDepositsService {
       take: 30,
     });
 
-    return deposits;
+    return { deposits, depositsTotal };
   }
 }
 

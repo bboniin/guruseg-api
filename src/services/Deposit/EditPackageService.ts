@@ -6,6 +6,7 @@ interface PackageRequest {
   name: string;
   userId: string;
   value: number;
+  type: string;
   bonus: number;
 }
 class EditPackageService {
@@ -15,6 +16,7 @@ class EditPackageService {
     name,
     value,
     description,
+    type,
     bonus,
   }: PackageRequest) {
     const admin = await prismaClient.admin.findUnique({
@@ -49,6 +51,7 @@ class EditPackageService {
         description,
         name,
         value,
+        type,
         bonus: bonus || 0,
       },
     });

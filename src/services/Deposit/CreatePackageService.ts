@@ -6,10 +6,18 @@ interface PackageRequest {
   userId: string;
   value: number;
   bonus: number;
+  type: string;
 }
 
 class CreatePackageService {
-  async execute({ description, userId, name, value, bonus }: PackageRequest) {
+  async execute({
+    description,
+    type,
+    userId,
+    name,
+    value,
+    bonus,
+  }: PackageRequest) {
     const admin = await prismaClient.admin.findUnique({
       where: {
         id: userId,
@@ -29,6 +37,7 @@ class CreatePackageService {
         description,
         name,
         value,
+        type,
         bonus: bonus || 0,
       },
     });

@@ -3,7 +3,7 @@ import { CreateDepositService } from "../../services/Deposit/CreateDepositServic
 
 class CreateDepositController {
   async handle(req: Request, res: Response) {
-    const { package_id, value } = req.body;
+    const { package_id, cpf } = req.body;
 
     let userId = req.userId;
 
@@ -11,8 +11,8 @@ class CreateDepositController {
 
     const deposit = await createDepositService.execute({
       package_id,
-      value,
       userId,
+      cpf,
     });
 
     return res.json(deposit);

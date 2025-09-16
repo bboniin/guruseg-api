@@ -1,44 +1,45 @@
-import prismaClient from '../../prisma'
+import prismaClient from "../../prisma";
 
 interface ServiceRequest {
-    userId: string;
+  userId: string;
 }
 
 class ListServicesClientService {
-    async execute({ userId }: ServiceRequest) {
+  async execute({ userId }: ServiceRequest) {
+    const user = await prismaClient.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
 
-        const user = await prismaClient.user.findUnique({
-            where: {
-                id: userId
-            }
-        })
+    let servicesFilter = [];
 
-        let servicesFilter = []
-
-        if(user.services){
-            user.services.split(";").map((item)=>{
-                if(item){
-                    servicesFilter.push({
-                        id: item
-                    })
-                }
-            })
+    if (user.services) {
+      user.services.split(";").map((item) => {
+        if (item) {
+          servicesFilter.push({
+            id: item,
+          });
         }
-
-        const services = await prismaClient.service.findMany({
-            where: user.services ? {
-                visible: true,
-                OR: servicesFilter
-            } : {
-                visible: true
-            },
-            orderBy: {
-                create_at: "asc"
-            }
-        })
-
-        return (services)
+      });
     }
+
+    const services = await prismaClient.service.findMany({
+      where: user.services
+        ? {
+            visible: true,
+            OR: servicesFilter,
+          }
+        : {
+            visible: true,
+          },
+      orderBy: {
+        create_at: "asc",
+      },
+    });
+
+    return { services, balance: user.balance };
+  }
 }
 
-export { ListServicesClientService }
+export { ListServicesClientService };

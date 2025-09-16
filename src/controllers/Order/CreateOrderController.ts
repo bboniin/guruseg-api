@@ -3,7 +3,16 @@ import { CreateOrderService } from "../../services/Order/CreateOrderService";
 
 class CreateOrderController {
   async handle(req: Request, res: Response) {
-    const { observation, items, sector, name, urgent, company_id } = req.body;
+    const {
+      observation,
+      items,
+      sector,
+      name,
+      urgent,
+      code,
+      collaborators,
+      company_id,
+    } = req.body;
 
     let userId = req.userId;
 
@@ -17,6 +26,8 @@ class CreateOrderController {
       sector,
       company_id,
       urgent,
+      collaborators,
+      code,
     });
 
     return res.json(order);
