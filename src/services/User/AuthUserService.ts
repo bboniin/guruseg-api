@@ -62,6 +62,7 @@ class AuthUserService {
           type: user.type,
           photo: user.photo,
           photo_url: photo_url,
+          costumer_id: user.costumer_id,
           phone_number: user.phone_number,
         },
         token,

@@ -24,6 +24,7 @@ class GetUserAdminService {
         sector5_id: true,
         services: true,
         phone_number: true,
+        costumer_id: true,
         category: true,
         city: true,
         state: true,

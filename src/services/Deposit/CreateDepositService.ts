@@ -2,6 +2,7 @@ import { addDays, format } from "date-fns";
 import { api } from "../../config/api";
 import prismaClient from "../../prisma";
 import { CreateCustomerService } from "../Payment/CreateCustomerService";
+import { validateCpf } from "../../config/functions";
 
 interface DepositRequest {
   package_id: string;
@@ -23,6 +24,10 @@ class CreateDepositService {
 
     if (!user.costumer_id) {
       if (cpf) {
+        if (!validateCpf(cpf)) {
+          throw new Error("CPF inválido");
+        }
+
         const createCustomerService = new CreateCustomerService();
 
         const costumer_id = await createCustomerService.execute({
