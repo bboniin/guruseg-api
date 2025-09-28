@@ -1,7 +1,4 @@
-import { addDays, format } from "date-fns";
-import { api } from "../../config/api";
 import prismaClient from "../../prisma";
-import { CreateCustomerService } from "../Payment/CreateCustomerService";
 
 interface DepositRequest {
   collaborator_id: string;
@@ -9,6 +6,7 @@ interface DepositRequest {
   value: number;
   bonus: number;
   description: string;
+  type: string;
 }
 
 class CreateDepositAdminService {
@@ -18,6 +16,7 @@ class CreateDepositAdminService {
     bonus,
     description,
     value,
+    type,
   }: DepositRequest) {
     const admin = await prismaClient.admin.findUnique({
       where: {
@@ -39,10 +38,15 @@ class CreateDepositAdminService {
       throw new Error("Usuário não encontrado");
     }
 
+    if (type == "saida") {
+      value *= -1;
+      bonus *= -1;
+    }
+
     const deposit = await prismaClient.deposit.create({
       data: {
         value: value,
-        name: "Envio de Saldo",
+        name: type == "saida" ? "Retirada de Saldo" : "Envio de Saldo",
         description: description,
         status: "confirmado",
         user_id: collaborator_id,

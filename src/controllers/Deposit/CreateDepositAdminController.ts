@@ -3,7 +3,7 @@ import { CreateDepositAdminService } from "../../services/Deposit/CreateDepositA
 
 class CreateDepositAdminController {
   async handle(req: Request, res: Response) {
-    const { value, bonus, collaborator_id, description } = req.body;
+    const { value, bonus, collaborator_id, description, type } = req.body;
 
     let userId = req.userId;
 
@@ -15,6 +15,7 @@ class CreateDepositAdminController {
       collaborator_id,
       bonus,
       description,
+      type,
     });
 
     return res.json(deposit);

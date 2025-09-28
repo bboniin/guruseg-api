@@ -151,7 +151,7 @@ import { EditOrderController } from "./controllers/Order/EditOrderController";
 import { CreateModuleController } from "./controllers/Admin/Courses/CreateModuleController";
 import { EditModuleController } from "./controllers/Admin/Courses/EditModuleController";
 import { ConfirmLessonController } from "./controllers/Admin/Lessons/ConfirmLessonController";
-import { GetResumeController } from "./controllers/Resume/GetResumeController";
+import { GetAdminResumeController } from "./controllers/Resume/GetAdminResumeController";
 import { DeleteModuleController } from "./controllers/Admin/Courses/DeleteModuleController";
 import { GetOccupationalController } from "./controllers/IA/GetFunctionController";
 import { GetRisksController } from "./controllers/IA/GetRisksController";
@@ -169,6 +169,8 @@ import { GetPaymentUserController } from "./controllers/Payment/GetPaymentUserCo
 import { ListDepositsController } from "./controllers/Deposit/ListDepositsController";
 import { CreateDepositAdminController } from "./controllers/Deposit/CreateDepositAdminController";
 import { ListDepositsAdminController } from "./controllers/Deposit/ListDepositsAdminController";
+import { GetUserResumeController } from "./controllers/Resume/GetUserResumeController";
+import { GetCollaboratorResumeController } from "./controllers/Resume/GetCollaboratorResumeController";
 
 const upload = multer(uploadConfig);
 
@@ -220,7 +222,9 @@ router.use(isAuthenticated);
 router.get("/services", new ListServicesAdminController().handle);
 router.get("/payments", new ListPaymentsController().handle);
 router.get("/services-client", new ListServicesClientController().handle);
-router.post("/resume", new GetResumeController().handle);
+router.post("/admin/resume", new GetAdminResumeController().handle);
+router.post("/cliente/resume", new GetUserResumeController().handle);
+router.post("/tecnico/resume", new GetCollaboratorResumeController().handle);
 
 // Credential
 

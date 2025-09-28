@@ -31,12 +31,9 @@ class DeleteCouponService {
       throw new Error("Cupom de desconto não encontrado");
     }
 
-    const couponDel = await prismaClient.coupon.update({
+    const couponDel = await prismaClient.coupon.delete({
       where: {
         id: id,
-      },
-      data: {
-        active: false,
       },
     });
 

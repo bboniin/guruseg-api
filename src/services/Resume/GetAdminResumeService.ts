@@ -7,7 +7,7 @@ interface ResumeRequest {
   userId: string;
 }
 
-class GetResumeService {
+class GetAdminResumeService {
   async execute({ start_date, end_date, userId }: ResumeRequest) {
     let responseData = [];
 
@@ -148,4 +148,4 @@ class GetResumeService {
   }
 }
 
-export { GetResumeService };
+export { GetAdminResumeService };
