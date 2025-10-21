@@ -171,6 +171,8 @@ import { CreateDepositAdminController } from "./controllers/Deposit/CreateDeposi
 import { ListDepositsAdminController } from "./controllers/Deposit/ListDepositsAdminController";
 import { GetUserResumeController } from "./controllers/Resume/GetUserResumeController";
 import { GetCollaboratorResumeController } from "./controllers/Resume/GetCollaboratorResumeController";
+import { GetRiskDetailsController } from "./controllers/IA/GetRiskDetailsController";
+import { GetAssistentController } from "./controllers/IA/GetAssistentController";
 
 const upload = multer(uploadConfig);
 
@@ -179,6 +181,8 @@ const router = Router();
 // Routes Publics
 router.get("/ia/risks", new GetRisksController().handle);
 router.get("/ia/occupation", new GetOccupationalController().handle);
+router.get("/ia/risk", new GetRiskDetailsController().handle);
+router.get("/ia/assistent", new GetAssistentController().handle);
 
 router.get("/payments/user", new GetPaymentUserController().handle);
 router.post("/lead/web", new CreateLeadWebController().handle);

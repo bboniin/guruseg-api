@@ -7,7 +7,7 @@ interface OccupationalRequest {
 class GetOccupationalService {
   async execute({ name }: OccupationalRequest) {
     if (!name) {
-      throw new Error("Preencher a função é obrigátorio");
+      throw new Error("Preencher a função para buscar mais detalhes");
     }
     const client = new OpenAI();
 

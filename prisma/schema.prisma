@@ -109,15 +109,31 @@ model Collaborator {
 }
 
 model Admin {
+  id              String    @id @default(uuid())
+  name            String    @default("Admin Guruseg")
+  password        String
+  type            String    @default("admin")
+  access_granted  String?   
+  email           String    @unique
+  create_at       DateTime? @default(now())
+  update_at       DateTime? @updatedAt
+
+  @@map("admins")
+}
+
+model Attendant {
   id        String    @id @default(uuid())
   password  String
-  type      String    @default("admin")
+  name      String   
+  visible   Boolean   @default(true)
+  type      String    @default("atendente")
   email     String    @unique
   create_at DateTime? @default(now())
   update_at DateTime? @updatedAt
 
-  @@map("admins")
+  @@map("attendants")
 }
+
 
 model Order {
   id                         Int       @id @default(autoincrement())
@@ -185,6 +201,7 @@ model Deposit {
   description String?
   value       Float    
   bonus       Float?
+  historic    String?
 
   payment     Payment?   @relation(fields: [payment_id], references: [id], onDelete: SetNull)
   payment_id  String? 
@@ -632,6 +649,7 @@ model Coupon {
   minValue       Float?     
   usageLimit     Int?     
   expirationDate DateTime? 
+  historic       String?
   create_at      DateTime @default(now())
   update_at      DateTime @updatedAt
 

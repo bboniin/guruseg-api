@@ -1,16 +1,16 @@
 import OpenAI from "openai";
 
-interface RiskslRequest {
+interface RisksRequest {
   sector: string;
   description: string;
   occupations: string;
 }
 
 class GetRisksService {
-  async execute({ sector, description, occupations }: RiskslRequest) {
+  async execute({ sector, description, occupations }: RisksRequest) {
     if (!sector || !occupations || !description) {
       throw new Error(
-        "Preencha o setor, descrição e e funções são obrigátorios"
+        "Preencha o setor, descrição e e funções para buscar mais detalhes"
       );
     }
     const client = new OpenAI();
