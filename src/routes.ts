@@ -173,6 +173,12 @@ import { GetUserResumeController } from "./controllers/Resume/GetUserResumeContr
 import { GetCollaboratorResumeController } from "./controllers/Resume/GetCollaboratorResumeController";
 import { GetRiskDetailsController } from "./controllers/IA/GetRiskDetailsController";
 import { GetAssistentController } from "./controllers/IA/GetAssistentController";
+import { GetRisksImagesController } from "./controllers/IA/GetRisksImagesController";
+import { ListAttendantsController } from "./controllers/Admin/Attendants/ListAttendantsController";
+import { CreateAttendantController } from "./controllers/Admin/Attendants/CreateAttendantController";
+import { EditAdminAttendantController } from "./controllers/Admin/Attendants/EditAdminAttendantController";
+import { DeleteAttendantController } from "./controllers/Admin/Attendants/DeleteAttendantController";
+import { RankingUsersController } from "./controllers/Admin/Users/RankingUsersController";
 
 const upload = multer(uploadConfig);
 
@@ -180,6 +186,7 @@ const router = Router();
 
 // Routes Publics
 router.get("/ia/risks", new GetRisksController().handle);
+router.get("/ia/risks/images", new GetRisksImagesController().handle);
 router.get("/ia/occupation", new GetOccupationalController().handle);
 router.get("/ia/risk", new GetRiskDetailsController().handle);
 router.get("/ia/assistent", new GetAssistentController().handle);
@@ -307,6 +314,7 @@ router.post("/credential", new AdminCreateCredentialController().handle);
 router.put("/credential", new AdminEditCredentialController().handle);
 
 router.get("/users/:type", new ListUsersController().handle);
+router.get("/admin/users/ranking", new RankingUsersController().handle);
 router.post("/user", upload.single("file"), new CreateUserController().handle);
 router.put(
   "/user/:id",
@@ -327,6 +335,19 @@ router.put(
   new EditAdminCollaboratorController().handle
 );
 router.delete("/collaborator/:id", new DeleteCollaboratorController().handle);
+
+router.get("/attendant", new ListAttendantsController().handle);
+router.post(
+  "/attendant",
+  upload.single("file"),
+  new CreateAttendantController().handle
+);
+router.put(
+  "/attendant/:id",
+  upload.single("file"),
+  new EditAdminAttendantController().handle
+);
+router.delete("/attendant/:id", new DeleteAttendantController().handle);
 
 router.get("/banners", new ListBannersController().handle);
 router.post(

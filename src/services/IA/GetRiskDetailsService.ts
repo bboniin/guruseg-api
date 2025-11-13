@@ -26,6 +26,7 @@ Sempre responda **exatamente** neste formato Objeto:
         "fonte_geradora": "Fonte Geradora",
             perigos: "Perigos (Atividade e Processo)",
             avaliacao_risco: "Avaliação do Risco (Probabilidade x Severidade)",
+            tempo_exposicao: "Tempo de exposição ao risco,
             epis: "EPI(s) Recomendado(s)",
             epcs: "EPC(s) Recomendado(s)",
             medidas_controle: "Medidas de Controle Adicional",

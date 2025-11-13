@@ -167,6 +167,7 @@ class EditCompanyService {
             fonte_geradora: data["fonte_geradora"],
             perigos: data["perigos"],
             avaliacao_risco: data["avaliacao_risco"],
+            tempo_exposicao: data["tempo_exposicao"],
             epis: data["epis"],
             epcs: data["epcs"],
             medidas_controle: data["medidas_controle"],

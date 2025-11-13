@@ -4,11 +4,12 @@ interface RisksRequest {
   sector: string;
   description: string;
   occupations: string;
+  images: string;
 }
 
-class GetRisksService {
-  async execute({ sector, description, occupations }: RisksRequest) {
-    if (!sector || !occupations || !description) {
+class GetRisksImagesService {
+  async execute({ sector, description, occupations, images }: RisksRequest) {
+    if (!sector || !occupations || !description || !images) {
       throw new Error(
         "Preencha o setor, descrição e e funções para buscar mais detalhes"
       );
@@ -43,4 +44,4 @@ Evite variações. Não inclua explicações, apenas o Array válido.
   }
 }
 
-export { GetRisksService };
+export { GetRisksImagesService };

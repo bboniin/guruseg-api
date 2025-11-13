@@ -125,6 +125,8 @@ model Attendant {
   id        String    @id @default(uuid())
   password  String
   name      String   
+  photo     String?   
+  enable    Boolean   @default(true)
   visible   Boolean   @default(true)
   type      String    @default("atendente")
   email     String    @unique
@@ -460,7 +462,7 @@ model Contract {
   create_at           DateTime? @default(now())
   update_at           DateTime? @updatedAt
 
-  services ContractServices[]
+  services            ContractServices[]
 
   @@map("contracts")
 }
@@ -579,6 +581,7 @@ model CompanyScratchs {
   perigos            String?
   avaliacao_risco    String?
   epis               String?
+  tempo_exposicao    String?
   epcs               String?
   medidas_controle   String?
   create_at          DateTime? @default(now())
