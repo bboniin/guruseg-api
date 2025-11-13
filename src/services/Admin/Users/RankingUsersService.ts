@@ -33,7 +33,7 @@ class RankingUsersService {
     const users = await prismaClient.user.findMany({
       where: {
         visible: true,
-        category: { contains: "cliente" },
+        category: "franqueado",
       },
       include: {
         orders: {
@@ -44,6 +44,7 @@ class RankingUsersService {
         },
       },
     });
+
     let totalPayments = 0;
     users.map((data) => {
       data["totalPayment"] = 0;
