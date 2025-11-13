@@ -21,20 +21,18 @@ class RankingUsersService {
 
     let filterSearch = {};
 
-    if (date_start || date_end) {
-      filterSearch["create_at"] = {};
-      if (date_start) {
-        filterSearch["create_at"].gte = startOfDay(new Date(date_start));
-      }
-      if (date_end) {
-        filterSearch["create_at"].lte = endOfDay(new Date(date_end));
-      }
+    if (!date_start || !date_end) {
+      throw new Error("Data de inicio e fim do periodo é obrigátorio");
     }
+
+    filterSearch["create_at"] = {
+      gte: startOfDay(new Date(date_start)),
+      lte: endOfDay(new Date(date_end)),
+    };
 
     const users = await prismaClient.user.findMany({
       where: {
         visible: true,
-        ...filterSearch,
       },
       include: {
         orders: {
