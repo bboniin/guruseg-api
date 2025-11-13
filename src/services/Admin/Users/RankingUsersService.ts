@@ -33,6 +33,7 @@ class RankingUsersService {
     const users = await prismaClient.user.findMany({
       where: {
         visible: true,
+        category: { contains: "cliente" },
       },
       include: {
         orders: {
@@ -43,7 +44,7 @@ class RankingUsersService {
         },
       },
     });
-
+    let totalPayments = 0;
     users.map((data) => {
       data["totalPayment"] = 0;
       data["totalServices"] = 0;
@@ -71,13 +72,14 @@ class RankingUsersService {
       data["servicesPeriod"] = data["servicesPeriod"].sort((a, b) => {
         return b["amount"] - a["amount"];
       });
+      totalPayments += data["totalPayment"];
     });
 
     const orderUsers = users.sort((a, b) => {
       return b["totalPayment"] - a["totalPayment"];
     });
 
-    return orderUsers;
+    return { users: orderUsers, totalPayments };
   }
 }
 
