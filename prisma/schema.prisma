@@ -36,6 +36,7 @@ model User {
   sector5_id           String?   @default("")
   costumer_id          String?   @default("")
   visible              Boolean   @default(true)
+  restricted           Boolean   @default(false)
   course               Boolean   @default(false)
   resale               Boolean   @default(false)
   create_at            DateTime? @default(now())
@@ -48,6 +49,7 @@ model User {
   redemptions         Redemption[]
   lessonConfirms      LessonConfirm[]
   payments            Payment[]
+  tickets             Ticket[]
 
   @@map("users")
 }
@@ -103,7 +105,8 @@ model Collaborator {
   create_at    DateTime? @default(now())
   update_at    DateTime? @updatedAt
 
-  orders Order[]
+  orders       Order[]
+  tickets      Ticket[]
 
   @@map("collaborators")
 }
@@ -112,6 +115,7 @@ model Admin {
   id              String    @id @default(uuid())
   name            String    @default("Admin Guruseg")
   password        String
+  photo           String?
   type            String    @default("admin")
   access_granted  String?   
   email           String    @unique
@@ -126,12 +130,14 @@ model Attendant {
   password  String
   name      String   
   photo     String?   
-  enable    Boolean   @default(true)
+  enabled   Boolean   @default(true)
   visible   Boolean   @default(true)
   type      String    @default("atendente")
   email     String    @unique
   create_at DateTime? @default(now())
   update_at DateTime? @updatedAt
+
+  tickets   Ticket[]
 
   @@map("attendants")
 }
@@ -385,7 +391,7 @@ model Course {
   module        Module?    @relation(fields: [module_id], references: [id], onDelete: SetNull)
   module_id     String?    
 
-  lessons Lesson[]
+  lessons       Lesson[]
 
   @@map("courses")
 }
@@ -677,7 +683,6 @@ model Redemption {
   @@map("redemptions")
 }
 
-
 model OSMessages {
   id          String    @id @default(uuid())
   message     String
@@ -688,6 +693,44 @@ model OSMessages {
   order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("os_messages")
+}
+
+model Ticket {
+  id                String         @id @default(uuid())
+  observation       String? 
+  order_id          String?   
+  ticket_id         String?         
+  protocol_id       String     
+  created_at        DateTime?      @default(now())
+  updated_at        DateTime?      @default(now()) 
+  status            String         @default("pendente")
+  rating            Int?          
+  rating_comment    String?          
+
+  user              User?          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id           String?
+  collaborator      Collaborator?  @relation(fields: [collaborator_id], references: [id], onDelete: Cascade)
+  collaborator_id   String?
+  attendant         Attendant?     @relation(fields: [attendant_id], references: [id], onDelete: Cascade)
+  attendant_id      String?
+
+  messages          Message[]
+
+  @@map("tickets")
+}
+
+model Message {
+  id            String    @id @default(uuid())
+  content       String
+  send_id       String
+  is_viewed     Boolean   @default(false)
+  created_at    DateTime? @default(now())    
+  viewed_at     DateTime  @default(now())    
+
+  ticket        Ticket  @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
+  ticket_id     String
+
+  @@map("messages")
 }
 
 enum CouponType {

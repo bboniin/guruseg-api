@@ -2,56 +2,62 @@ import prismaClient from "../../../prisma";
 import { hash } from "bcryptjs";
 import S3Storage from "../../../utils/S3Storage";
 
-interface CollaboratorRequest {
+interface AdminRequest {
   name: string;
   email: string;
-  phone_number: string;
   photo: string;
-  enabled: boolean;
   password: string;
-  sector: string;
-  user_id: string;
+  access_granted: string;
+  userId: string;
 }
 
-class CreateCollaboratorService {
+class CreateAdminService {
   async execute({
     name,
     email,
-    phone_number,
-    user_id,
+    userId,
     password,
     photo,
-    sector,
-    enabled,
-  }: CollaboratorRequest) {
-    if (!email || !name || !phone_number || !password || !sector) {
+    access_granted,
+  }: AdminRequest) {
+    if (!email || !name || !password) {
       throw new Error("Preencha todos os campos obrigatórios");
     }
 
-    const collaboratorAlreadyExistEmail =
-      await prismaClient.collaborator.findFirst({
+    const admin = await prismaClient.admin.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (admin?.id != "58e368a8-f71c-40da-a5f6-bcc31a7386ad") {
+      throw new Error("Rota restrita ao administrador master");
+    }
+
+    const alreadyExistEmail =
+      (await prismaClient.admin.findFirst({
         where: {
           email: email,
         },
-      });
+      })) ||
+      (await prismaClient.user.findFirst({
+        where: {
+          email: email,
+        },
+      })) ||
+      (await prismaClient.collaborator.findFirst({
+        where: {
+          email: email,
+        },
+      })) ||
+      (await prismaClient.attendant.findFirst({
+        where: {
+          email: email,
+        },
+      }));
 
-    if (collaboratorAlreadyExistEmail) {
+    if (alreadyExistEmail) {
       throw new Error("Email já cadastrado.");
-    }
-
-    if (user_id) {
-      const collaboratorAlreadyExistUser =
-        await prismaClient.collaborator.findFirst({
-          where: {
-            sector: sector,
-            user_id: user_id,
-            visible: true,
-          },
-        });
-
-      if (collaboratorAlreadyExistUser) {
-        throw new Error("Franqueado já vinculado a outro técnico desse setor.");
-      }
     }
 
     if (photo) {
@@ -63,27 +69,18 @@ class CreateCollaboratorService {
 
     const passwordHash = await hash(password, 8);
 
-    const collaborator = await prismaClient.collaborator.create({
+    const adminCreated = await prismaClient.admin.create({
       data: {
         name: name,
         email: email,
         password: passwordHash,
-        phone_number: phone_number,
+        access_granted: access_granted,
         photo: photo,
-        enabled: enabled,
-        sector: sector,
-        user_id: user_id,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        photo: true,
       },
     });
 
-    return collaborator;
+    return adminCreated;
   }
 }
 
-export { CreateCollaboratorService };
+export { CreateAdminService };

@@ -14,7 +14,7 @@ class ListServicesClientService {
 
     let servicesFilter = [];
 
-    if (user.services) {
+    if (user?.services) {
       user.services.split(";").map((item) => {
         if (item) {
           servicesFilter.push({
@@ -25,7 +25,7 @@ class ListServicesClientService {
     }
 
     const services = await prismaClient.service.findMany({
-      where: user.services
+      where: user?.services
         ? {
             visible: true,
             OR: servicesFilter,
@@ -38,7 +38,7 @@ class ListServicesClientService {
       },
     });
 
-    return { services, balance: user.balance };
+    return { services: services, balance: user?.balance || 0 };
   }
 }
 

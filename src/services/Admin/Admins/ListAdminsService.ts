@@ -1,38 +1,25 @@
-import { addDays } from "date-fns";
 import prismaClient from "../../../prisma";
 
-interface ServiceRequest {
+interface AdminRequest {
   userId: string;
   filter: string;
   page: number;
-  all: boolean;
 }
 
-class ListCollaboratorsService {
-  async execute({ userId, page, filter, all }: ServiceRequest) {
-    const admin = await prismaClient.admin.findUnique({
+class ListAdminsService {
+  async execute({ userId, page, filter }: AdminRequest) {
+    const admin = await prismaClient.admin.findFirst({
       where: {
         id: userId,
       },
     });
 
-    if (!admin && !all) {
-      throw new Error("Rota restrita ao administrador");
+    if (admin?.id != "58e368a8-f71c-40da-a5f6-bcc31a7386ad") {
+      throw new Error("Rota restrita ao administrador master");
     }
 
     let filterSearch = {};
 
-    if (all) {
-      const collaborators = await prismaClient.collaborator.findMany({
-        where: {
-          visible: true,
-        },
-        orderBy: {
-          create_at: "asc",
-        },
-      });
-      return { collaborators };
-    }
     if (filter) {
       filterSearch["name"] = {
         contains: filter,
@@ -40,16 +27,14 @@ class ListCollaboratorsService {
       };
     }
 
-    const collaboratorsTotal = await prismaClient.collaborator.count({
+    const adminsTotal = await prismaClient.admin.count({
       where: {
-        visible: true,
         ...filterSearch,
       },
     });
 
-    const collaborators = await prismaClient.collaborator.findMany({
+    const admins = await prismaClient.admin.findMany({
       where: {
-        visible: true,
         ...filterSearch,
       },
       orderBy: {
@@ -57,35 +42,10 @@ class ListCollaboratorsService {
       },
       skip: page * 30,
       take: 30,
-      include: {
-        orders: {
-          where: {
-            create_at: {
-              gte: addDays(new Date(), -7),
-            },
-          },
-          include: {
-            items: true,
-            messages: true,
-          },
-          orderBy: {
-            create_at: "asc",
-          },
-        },
-      },
     });
 
-    collaborators.map((data) => {
-      data["totalWeek"] = 0;
-      data.orders.map((item) => {
-        item.items.map((item) => {
-          data["totalWeek"] += item.amount * item.commission;
-        });
-      });
-    });
-
-    return { collaborators: collaborators, collaboratorsTotal };
+    return { admins: admins, adminsTotal };
   }
 }
 
-export { ListCollaboratorsService };
+export { ListAdminsService };

@@ -20,6 +20,7 @@ class EditAdminUserController {
       password,
       course,
       resale,
+      restricted,
       modules,
       courses,
     } = req.body;
@@ -35,6 +36,7 @@ class EditAdminUserController {
     let courseBoolean = course == "true" ? true : false;
     let resaleBoolean = resale == "true" ? true : false;
     let signatureBoolean = signature == "true" ? true : false;
+    let restrictedBoolean = restricted == "true" ? true : false;
 
     const editAdminUserService = new EditAdminUserService();
 
@@ -46,7 +48,7 @@ class EditAdminUserController {
       city,
       state,
       category,
-      signature: signatureBoolean,
+      signatureBoolean,
       sector1_id,
       sector2_id,
       sector3_id,
@@ -58,6 +60,7 @@ class EditAdminUserController {
       password,
       courseBoolean,
       resaleBoolean,
+      restrictedBoolean,
       modules,
     });
 

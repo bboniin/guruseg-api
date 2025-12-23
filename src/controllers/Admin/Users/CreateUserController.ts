@@ -22,6 +22,7 @@ class CreateUserController {
       course,
       modules,
       courses,
+      restricted,
     } = req.body;
 
     let photo = "";
@@ -33,6 +34,7 @@ class CreateUserController {
     let courseBoolean = course == "true" ? true : false;
     let resaleBoolean = resale == "true" ? true : false;
     let signatureBoolean = signature == "true" ? true : false;
+    let restrictedBoolean = restricted == "true" ? true : false;
 
     const createUserService = new CreateUserService();
 
@@ -45,7 +47,7 @@ class CreateUserController {
       services,
       courses,
       category,
-      signature: signatureBoolean,
+      signatureBoolean,
       sector1_id,
       sector2_id,
       sector3_id,
@@ -55,6 +57,7 @@ class CreateUserController {
       photo,
       courseBoolean,
       resaleBoolean,
+      restrictedBoolean,
       modules,
     });
 

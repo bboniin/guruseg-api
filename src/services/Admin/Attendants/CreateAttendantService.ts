@@ -1,39 +1,55 @@
 import prismaClient from "../../../prisma";
 import { hash } from "bcryptjs";
 import S3Storage from "../../../utils/S3Storage";
+import { String } from "aws-sdk/clients/cloudtrail";
 
 interface AttendantRequest {
   name: string;
   email: string;
-  phone_number: string;
   photo: string;
-  enabled: boolean;
   password: string;
-  sector: string;
-  user_id: string;
+  userId: String;
 }
 
 class CreateAttendantService {
-  async execute({
-    name,
-    email,
-    phone_number,
-    password,
-    photo,
-    sector,
-    enabled,
-  }: AttendantRequest) {
-    if (!email || !name || !phone_number || !password || !sector) {
+  async execute({ name, email, password, photo, userId }: AttendantRequest) {
+    if (!email || !name || !password) {
       throw new Error("Preencha todos os campos obrigatórios");
     }
 
-    const AttendantAlreadyExistEmail = await prismaClient.attendant.findFirst({
+    const admin = await prismaClient.admin.findFirst({
       where: {
-        email: email,
+        id: userId,
       },
     });
 
-    if (AttendantAlreadyExistEmail) {
+    if (!admin) {
+      throw new Error("Rota restrita ao administrador");
+    }
+
+    const alreadyExistEmail =
+      (await prismaClient.admin.findFirst({
+        where: {
+          email: email,
+        },
+      })) ||
+      (await prismaClient.user.findFirst({
+        where: {
+          email: email,
+        },
+      })) ||
+      (await prismaClient.collaborator.findFirst({
+        where: {
+          email: email,
+        },
+      })) ||
+      (await prismaClient.attendant.findFirst({
+        where: {
+          email: email,
+        },
+      }));
+
+    if (alreadyExistEmail) {
       throw new Error("Email já cadastrado.");
     }
 
@@ -52,12 +68,6 @@ class CreateAttendantService {
         email: email,
         password: passwordHash,
         photo: photo,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        photo: true,
       },
     });
 

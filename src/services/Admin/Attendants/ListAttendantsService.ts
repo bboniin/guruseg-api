@@ -16,7 +16,7 @@ class ListAttendantsService {
       },
     });
 
-    if (!admin && !all) {
+    if (!admin) {
       throw new Error("Rota restrita ao administrador");
     }
 

@@ -46,7 +46,11 @@ class GetOrderService {
         payment: true,
         user: true,
         collaborator: true,
-        messages: true,
+        messages: {
+          orderBy: {
+            create_at: "desc",
+          },
+        },
         redemptions: true,
       },
     });

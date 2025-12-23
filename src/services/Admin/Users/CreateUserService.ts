@@ -11,7 +11,8 @@ interface UserRequest {
   courseBoolean: boolean;
   modules: string;
   resaleBoolean: boolean;
-  signature: boolean;
+  restrictedBoolean: boolean;
+  signatureBoolean: boolean;
   category: string;
   sector1_id: string;
   sector2_id: string;
@@ -30,7 +31,7 @@ class CreateUserService {
     email,
     city,
     state,
-    signature,
+    signatureBoolean,
     category,
     sector1_id,
     sector2_id,
@@ -43,6 +44,7 @@ class CreateUserService {
     services,
     courseBoolean,
     resaleBoolean,
+    restrictedBoolean,
     modules,
     courses,
   }: UserRequest) {
@@ -79,7 +81,7 @@ class CreateUserService {
         photo: photo,
         city: city,
         state: state,
-        signature: signature,
+        signature: signatureBoolean,
         sector1_id: sector1_id,
         sector2_id: sector2_id,
         sector3_id: sector3_id,
@@ -87,6 +89,7 @@ class CreateUserService {
         sector5_id: sector5_id,
         course: courseBoolean,
         resale: resaleBoolean,
+        restricted: restrictedBoolean,
         services: services,
         modules: modules,
         courses: courses,

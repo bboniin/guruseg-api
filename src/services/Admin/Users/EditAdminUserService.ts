@@ -12,8 +12,9 @@ interface UserRequest {
   category: string;
   courseBoolean: boolean;
   resaleBoolean: boolean;
+  restrictedBoolean: boolean;
   modules: string;
-  signature: boolean;
+  signatureBoolean: boolean;
   sector1_id: string;
   sector2_id: string;
   sector3_id: string;
@@ -31,7 +32,7 @@ class EditAdminUserService {
     email,
     city,
     state,
-    signature,
+    signatureBoolean,
     category,
     sector1_id,
     sector2_id,
@@ -46,6 +47,7 @@ class EditAdminUserService {
     courseBoolean,
     courses,
     resaleBoolean,
+    restrictedBoolean,
     modules,
   }: UserRequest) {
     const user = await prismaClient.user.findUnique({
@@ -79,7 +81,7 @@ class EditAdminUserService {
       email: email,
       category: category,
       course: courseBoolean,
-      signature: signature,
+      signature: signatureBoolean,
       phone_number: phone_number,
       sector1_id: sector1_id,
       sector2_id: sector2_id,
@@ -87,6 +89,7 @@ class EditAdminUserService {
       sector4_id: sector4_id,
       sector5_id: sector5_id,
       resale: resaleBoolean,
+      restricted: restrictedBoolean,
       state: state,
       city: city,
       services: services,

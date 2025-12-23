@@ -3,25 +3,23 @@ import { CreateAttendantService } from "../../../services/Admin/Attendants/Creat
 
 class CreateAttendantController {
   async handle(req: Request, res: Response) {
-    const { name, email, password, phone_number, user_id, sector, enabled } =
-      req.body;
+    const { name, email, password } = req.body;
 
     let photo = "";
     if (req.file) {
       photo = req.file.filename;
     }
 
+    let userId = req.userId;
+
     const createAttendantService = new CreateAttendantService();
 
     const attendant = await createAttendantService.execute({
       name,
       email,
-      phone_number,
       password,
       photo,
-      user_id,
-      sector,
-      enabled: enabled == "true" ? true : false,
+      userId,
     });
 
     return res.json(attendant);

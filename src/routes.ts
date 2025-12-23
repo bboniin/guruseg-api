@@ -174,11 +174,23 @@ import { GetCollaboratorResumeController } from "./controllers/Resume/GetCollabo
 import { GetRiskDetailsController } from "./controllers/IA/GetRiskDetailsController";
 import { GetAssistentController } from "./controllers/IA/GetAssistentController";
 import { GetRisksImagesController } from "./controllers/IA/GetRisksImagesController";
+import { RankingUsersController } from "./controllers/Admin/Users/RankingUsersController";
 import { ListAttendantsController } from "./controllers/Admin/Attendants/ListAttendantsController";
 import { CreateAttendantController } from "./controllers/Admin/Attendants/CreateAttendantController";
-import { EditAdminAttendantController } from "./controllers/Admin/Attendants/EditAdminAttendantController";
+import { EditAttendantController } from "./controllers/Admin/Attendants/EditAttendantController";
 import { DeleteAttendantController } from "./controllers/Admin/Attendants/DeleteAttendantController";
-import { RankingUsersController } from "./controllers/Admin/Users/RankingUsersController";
+import { ListAdminsController } from "./controllers/Admin/Admins/ListAdminsController";
+import { CreateAdminController } from "./controllers/Admin/Admins/CreateAdminController";
+import { EditAdminController } from "./controllers/Admin/Admins/EditAdminController";
+import { DeleteAdminController } from "./controllers/Admin/Admins/DeleteAdminController";
+import { CreateTicketController } from "./controllers/Tickets/CreateTicketController";
+import { OpenTicketController } from "./controllers/Tickets/OpenTicketController";
+import { GetTicketController } from "./controllers/Tickets/GetTicketController";
+import { ListTicketsController } from "./controllers/Tickets/ListTicketsController";
+import { ListAttendantTicketsController } from "./controllers/Tickets/ListAttendantTicketsController";
+import { ListAdminTicketsController } from "./controllers/Tickets/ListAdminTicketsController";
+import { SendMessageTicketController } from "./controllers/Tickets/SendMessageTicketController";
+import { ListTicketsOpenController } from "./controllers/Tickets/ListTicketsOpenController";
 
 const upload = multer(uploadConfig);
 
@@ -236,6 +248,18 @@ router.get("/services-client", new ListServicesClientController().handle);
 router.post("/admin/resume", new GetAdminResumeController().handle);
 router.post("/cliente/resume", new GetUserResumeController().handle);
 router.post("/tecnico/resume", new GetCollaboratorResumeController().handle);
+
+// Attendant
+
+router.post("/ticket", new OpenTicketController().handle);
+router.post("/message/:ticket_id", new SendMessageTicketController().handle);
+router.post("/ticket/:ticket_id", new CreateTicketController().handle);
+router.put("/accept-ticket/:ticket_id", new EditAllRenewalsController().handle);
+router.get("/ticket/:ticket_id", new GetTicketController().handle);
+router.get("/admin/tickets", new ListAdminTicketsController().handle);
+router.get("/tickets", new ListTicketsController().handle);
+router.get("/tickets/open", new ListTicketsOpenController().handle);
+router.get("/attendant/tickets", new ListAttendantTicketsController().handle);
 
 // Credential
 
@@ -299,7 +323,7 @@ router.delete(
   new DeleteDocOrderController().handle
 );
 
-router.get("/user", new GetUserController().handle);
+router.get("/user/me", new GetUserController().handle);
 router.get("/collaborator", new GetCollaboratorController().handle);
 
 // Routes Admin
@@ -336,7 +360,7 @@ router.put(
 );
 router.delete("/collaborator/:id", new DeleteCollaboratorController().handle);
 
-router.get("/attendant", new ListAttendantsController().handle);
+router.get("/attendants", new ListAttendantsController().handle);
 router.post(
   "/attendant",
   upload.single("file"),
@@ -345,9 +369,22 @@ router.post(
 router.put(
   "/attendant/:id",
   upload.single("file"),
-  new EditAdminAttendantController().handle
+  new EditAttendantController().handle
 );
 router.delete("/attendant/:id", new DeleteAttendantController().handle);
+
+router.get("/admins", new ListAdminsController().handle);
+router.post(
+  "/admin",
+  upload.single("file"),
+  new CreateAdminController().handle
+);
+router.put(
+  "/admin/:id",
+  upload.single("file"),
+  new EditAdminController().handle
+);
+router.delete("/admin/:id", new DeleteAdminController().handle);
 
 router.get("/banners", new ListBannersController().handle);
 router.post(

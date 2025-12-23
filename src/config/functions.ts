@@ -78,3 +78,19 @@ export function validatePhone(phone) {
 export function getValue(value) {
   return value.toLocaleString("pt-br", { style: "currency", currency: "BRL" });
 }
+
+export function generateHighlyUniqueCode() {
+  // 1. Pega os últimos 6 dígitos do timestamp (milissegundos)
+  const timePart = Date.now().toString().slice(-7);
+
+  // 2. Gera um número aleatório de 2 dígitos (entre 00 e 99)
+  // O floor garante o inteiro; padStart(2, '0') garante dois dígitos.
+  const randomPart = Math.floor(Math.random() * 100)
+    .toString()
+    .padStart(3, "0");
+
+  // 3. Concatena (6 dígitos de tempo + 2 dígitos aleatórios)
+  const uniqueDigits = timePart + randomPart;
+
+  return `CH${uniqueDigits}`;
+}

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { EditAdminAttendantService } from "../../../services/Admin/Attendants/EditAdminAttendantService";
+import { EditAttendantService } from "../../../services/Admin/Attendants/EditAttendantService";
 
-class EditAdminAttendantController {
+class EditAttendantController {
   async handle(req: Request, res: Response) {
     const { name, email, password, enabled } = req.body;
 
@@ -13,15 +13,18 @@ class EditAdminAttendantController {
       photo = req.file.filename;
     }
 
-    const editAdminAttendantService = new EditAdminAttendantService();
+    let userId = req.userId;
 
-    const attendant = await editAdminAttendantService.execute({
+    const editAttendantService = new EditAttendantService();
+
+    const attendant = await editAttendantService.execute({
       name,
       email,
       photo,
       password,
       id,
       enabled: enabled == "true" ? true : false,
+      userId,
     });
 
     if (attendant["photo"]) {
@@ -33,4 +36,4 @@ class EditAdminAttendantController {
   }
 }
 
-export { EditAdminAttendantController };
+export { EditAttendantController };

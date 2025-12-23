@@ -28,7 +28,13 @@ class AuthUserService {
       },
     });
 
-    if (!user && !collaborator && !admin) {
+    const attendant = await prismaClient.attendant.findFirst({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!user && !collaborator && !admin && !attendant) {
       throw new Error("Email e Senha não correspondem ou não existe.");
     }
 
@@ -62,6 +68,9 @@ class AuthUserService {
           type: user.type,
           photo: user.photo,
           photo_url: photo_url,
+          course: user.course,
+          resale: user.resale,
+          signature: user.signature,
           costumer_id: user.costumer_id,
           phone_number: user.phone_number,
         },
@@ -120,12 +129,52 @@ class AuthUserService {
       if (!passwordMatch) {
         throw new Error("Email e Senha não correspondem ou não existe.");
       }
+      let photo_url =
+        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + admin.photo;
 
       return {
         user: {
           id: admin.id,
           email: admin.email,
+          name: admin.name,
+          photo: admin.photo,
+          photo_url: photo_url,
+          access_granted: admin.access_granted,
           type: admin.type,
+        },
+        token,
+      };
+    }
+    if (attendant) {
+      const passwordMatch = await compare(password, attendant.password);
+
+      const token = sign(
+        {
+          email: attendant.email,
+        },
+        authConfig.jwt.secret,
+        {
+          subject: attendant.id,
+          expiresIn: "365d",
+        }
+      );
+
+      if (!passwordMatch) {
+        throw new Error("Email e Senha não correspondem ou não existe.");
+      }
+
+      let photo_url =
+        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + attendant.photo;
+
+      return {
+        user: {
+          id: attendant.id,
+          email: attendant.email,
+          name: attendant.name,
+          photo: attendant.photo,
+          enabled: attendant.enabled,
+          photo_url: photo_url,
+          type: attendant.type,
         },
         token,
       };

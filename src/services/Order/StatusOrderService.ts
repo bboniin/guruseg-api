@@ -89,7 +89,7 @@ class StatusOrderService {
         data: {
           message: message,
           orderId: id,
-          type: userId == order.user_id ? "franqueado" : "tecnico",
+          type: userId == order.user_id ? "cliente" : "tecnico",
         },
       });
     }
