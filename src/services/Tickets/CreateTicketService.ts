@@ -112,8 +112,6 @@ class CreateTicketService {
       }
     }
 
-    console.log(data);
-
     const ticket = await prismaClient.ticket.create({
       data: {
         ...data,

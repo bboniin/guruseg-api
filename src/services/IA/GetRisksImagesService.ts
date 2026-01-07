@@ -51,7 +51,6 @@ Evite variações. Não inclua explicações, apenas o Array válido.
         },
       ],
     });
-    console.log(response);
     return JSON.parse(response.output_text);
   }
 }

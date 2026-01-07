@@ -71,7 +71,6 @@ const connectedUsers = {};
 io.use((socket, next) => {
   const userId = socket.handshake.auth.userId;
 
-  console.log(userId);
   socket.data.userId = userId;
 
   if (!connectedUsers[userId]) {
@@ -224,4 +223,4 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3333, () => console.log("rodando v77"));
+server.listen(3333, () => console.log("rodando v78"));

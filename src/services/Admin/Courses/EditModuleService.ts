@@ -1,16 +1,23 @@
 import prismaClient from "../../../prisma";
-import S3Storage from "../../../utils/S3Storage";
 
 interface moduleRequest {
   name: string;
   userId: string;
   description: string;
   id: string;
+  restricted: boolean;
   order: string;
 }
 
 class EditModuleService {
-  async execute({ name, description, userId, order, id }: moduleRequest) {
+  async execute({
+    name,
+    restricted,
+    description,
+    userId,
+    order,
+    id,
+  }: moduleRequest) {
     const admin = await prismaClient.admin.findUnique({
       where: {
         id: userId,
@@ -45,6 +52,7 @@ class EditModuleService {
       name: name,
       description: description,
       order: orderC,
+      restricted: restricted,
     };
 
     const moduleRes = await prismaClient.module.update({

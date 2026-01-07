@@ -10,7 +10,6 @@ interface CouponRequest {
 
 class GetCouponService {
   async execute({ userId, code, value }: CouponRequest) {
-    console.log(value);
     const coupon = await prismaClient.coupon.findFirst({
       where: {
         code: { equals: code, mode: "insensitive" },

@@ -3,7 +3,7 @@ import { EditModuleService } from "../../../services/Admin/Courses/EditModuleSer
 
 class EditModuleController {
   async handle(req: Request, res: Response) {
-    const { name, description, order } = req.body;
+    const { name, description, restricted, order } = req.body;
 
     const { id } = req.params;
 
@@ -16,6 +16,7 @@ class EditModuleController {
       description,
       order,
       id,
+      restricted,
       userId,
     });
 
