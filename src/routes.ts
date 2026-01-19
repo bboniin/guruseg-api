@@ -191,6 +191,7 @@ import { ListAttendantTicketsController } from "./controllers/Tickets/ListAttend
 import { ListAdminTicketsController } from "./controllers/Tickets/ListAdminTicketsController";
 import { SendMessageTicketController } from "./controllers/Tickets/SendMessageTicketController";
 import { ListTicketsOpenController } from "./controllers/Tickets/ListTicketsOpenController";
+import { EditCollaboratorOrderController } from "./controllers/Order/EditCollaboratorOrderController";
 
 const upload = multer(uploadConfig);
 
@@ -304,6 +305,10 @@ router.get("/orders-urgente", new ListAdminOrdersUrgentController().handle);
 router.get("/orders-open", new ListOpenOrdersController().handle);
 router.get("/orders/:type", new ListOrdersController().handle);
 router.get("/order/:id", new GetOrderController().handle);
+router.put(
+  "/order/edit-tecnico/:id",
+  new EditCollaboratorOrderController().handle
+);
 router.put("/order/:id", new EditOrderController().handle);
 router.put("/send-order/:id", new SendOrderUrgentController().handle);
 router.post("/customer", new CreateCustomerController().handle);
