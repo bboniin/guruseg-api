@@ -115,7 +115,7 @@ class CreateLeadsDiarieService {
             headers: {
               "Content-Type": "application/json",
               "api-key":
-                "xx54735aedbbbf71ae91a08664e0cc43a23a7df81672d1baff7750b2fd771a3de0719373ef76c874adb6695080a168379722f4e1e4f68b5e3fb50580f329f212b1",
+                "54735aedbbbf71ae91a08664e0cc43a23a7df81672d1baff7750b2fd771a3de0719373ef76c874adb6695080a168379722f4e1e4f68b5e3fb50580f329f212b1",
             },
           })
           .then(async (response) => {
