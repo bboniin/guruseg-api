@@ -109,7 +109,7 @@ class CreateLeadsDiarieService {
       })
       .catch(() => {
         console.log(
-          `Erro carregar leadsdia ${format(addDays(new Date(), -1), "dd/MM/yyyy")}`,
+          `Erro carregar leads dia ${format(addDays(new Date(), -1), "dd/MM/yyyy")}`,
         );
       });
     await Promise.all(
@@ -119,11 +119,10 @@ class CreateLeadsDiarieService {
             headers: {
               "Content-Type": "application/json",
               "api-key":
-                "xx54735aedbbbf71ae91a08664e0cc43a23a7df81672d1baff7750b2fd771a3de0719373ef76c874adb6695080a168379722f4e1e4f68b5e3fb50580f329f212b1",
+                "54735aedbbbf71ae91a08664e0cc43a23a7df81672d1baff7750b2fd771a3de0719373ef76c874adb6695080a168379722f4e1e4f68b5e3fb50580f329f212b1",
             },
           })
           .then(async (response) => {
-            console.log("Aq foi LEAD");
             const lead = response.data;
             await prismaClient.leadMaster.create({
               data: {
