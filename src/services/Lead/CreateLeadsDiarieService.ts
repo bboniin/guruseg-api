@@ -105,11 +105,13 @@ class CreateLeadsDiarieService {
       .then((response) => {
         leads = response.data?.cnpjs || [];
       })
-      .catch((response) => {
-        console.log(response);
+      .catch(() => {
+        console.log(
+          `Erro carregar leadsdia ${format(addDays(new Date(), -1), "dd/MM/yyyy")}`,
+        );
       });
     await Promise.all(
-      leads.map(async (item) => {
+      leads.map(async (item, index) => {
         await axios
           .get(`https://api.casadosdados.com.br/v4/cnpj/${item.cnpj}`, {
             headers: {
@@ -136,7 +138,11 @@ class CreateLeadsDiarieService {
               },
             });
           })
-          .catch(() => {});
+          .catch(() => {
+            console.log(
+              `Erro carregar lead ${index} dia ${format(addDays(new Date(), -1), "dd/MM/yyyy")}`,
+            );
+          });
       }),
     );
     return "";
