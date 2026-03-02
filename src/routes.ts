@@ -192,6 +192,9 @@ import { ListAdminTicketsController } from "./controllers/Tickets/ListAdminTicke
 import { SendMessageTicketController } from "./controllers/Tickets/SendMessageTicketController";
 import { ListTicketsOpenController } from "./controllers/Tickets/ListTicketsOpenController";
 import { EditCollaboratorOrderController } from "./controllers/Order/EditCollaboratorOrderController";
+import { DeleteManyLeadsMasterController } from "./controllers/Lead/DeleteManyLeadsMasterController";
+import { GetDepositsController } from "./controllers/Deposit/GetDepositsController";
+import { GetLeadMasterController } from "./controllers/Lead/GetLeadMasterController";
 
 const upload = multer(uploadConfig);
 
@@ -204,6 +207,7 @@ router.get("/ia/occupation", new GetOccupationalController().handle);
 router.get("/ia/risk", new GetRiskDetailsController().handle);
 router.get("/ia/assistent", new GetAssistentController().handle);
 
+router.delete("/all/leads", new DeleteManyLeadsMasterController().handle);
 router.get("/payments/user", new GetPaymentUserController().handle);
 router.post("/lead/web", new CreateLeadWebController().handle);
 router.put("/all-renewal", new EditAllRenewalsController().handle);
@@ -216,26 +220,26 @@ router.put("/refusal-contract/:id", new RefusalContractController().handle);
 router.post("/asaas/webhook", new ConfirmPaymentController().handle);
 router.put(
   "/negotiation-contract/:id",
-  new NegotiationContractController().handle
+  new NegotiationContractController().handle,
 );
 router.post("/password-forgot", new PasswordForgotController().handle);
 router.post("/password-reset/:code", new PasswordResetController().handle);
 router.get(
   "/password-verify-reset/:code",
-  new PasswordVerifyResetController().handle
+  new PasswordVerifyResetController().handle,
 );
 
 router.get("/list-credentials", new ListCredentialsController().handle);
 router.post(
   "/credential",
   upload.single("file"),
-  new CreateCredentialController().handle
+  new CreateCredentialController().handle,
 );
 router.get("/credential/:id", new GetCredentialController().handle);
 router.put(
   "/completed/:id",
   upload.single("file"),
-  new PublicEditCredentialController().handle
+  new PublicEditCredentialController().handle,
 );
 
 router.get("/company/:company_id", new GetCompanyController().handle);
@@ -267,18 +271,18 @@ router.get("/attendant/tickets", new ListAttendantTicketsController().handle);
 router.put(
   "/credential",
   upload.single("file"),
-  new EditCredentialController().handle
+  new EditCredentialController().handle,
 );
 router.delete("/credential/:id", new DeleteCredentialController().handle);
 router.post(
   "/admin/credential",
   upload.single("file"),
-  new AdminCreateCredentialController().handle
+  new AdminCreateCredentialController().handle,
 );
 router.put(
   "/admin/credential/:id",
   upload.single("file"),
-  new AdminEditCredentialController().handle
+  new AdminEditCredentialController().handle,
 );
 
 // Users and Colaborators
@@ -289,14 +293,14 @@ router.put("/user", upload.single("file"), new EditUserController().handle);
 router.put(
   "/collaborator",
   upload.single("file"),
-  new EditCollaboratorController().handle
+  new EditCollaboratorController().handle,
 );
 
 // Routes Clientes e Técnicos
 
 router.put(
   "/doc-recused-order/:order_id",
-  new RecusedDocOrderController().handle
+  new RecusedDocOrderController().handle,
 );
 
 router.post("/get/coupon", new GetCouponController().handle);
@@ -307,7 +311,7 @@ router.get("/orders/:type", new ListOrdersController().handle);
 router.get("/order/:id", new GetOrderController().handle);
 router.put(
   "/order/edit-tecnico/:id",
-  new EditCollaboratorOrderController().handle
+  new EditCollaboratorOrderController().handle,
 );
 router.put("/order/:id", new EditOrderController().handle);
 router.put("/send-order/:id", new SendOrderUrgentController().handle);
@@ -320,12 +324,12 @@ router.put("/order-cancel/:id", new CancelOrderController().handle);
 router.post(
   "/doc/:id",
   upload.single("file"),
-  new CreateDocOrderController().handle
+  new CreateDocOrderController().handle,
 );
 router.delete(
   "/doc/:id",
   upload.single("file"),
-  new DeleteDocOrderController().handle
+  new DeleteDocOrderController().handle,
 );
 
 router.get("/user/me", new GetUserController().handle);
@@ -336,7 +340,7 @@ router.get("/collaborator", new GetCollaboratorController().handle);
 router.post("/list-orders", new ListAdminOrdersPeriodoController().handle);
 router.get(
   "/admin/list-credentials",
-  new AdminListCredentialsController().handle
+  new AdminListCredentialsController().handle,
 );
 router.get("/admin/payments", new ListAdminPaymentsController().handle);
 router.post("/credential", new AdminCreateCredentialController().handle);
@@ -348,7 +352,7 @@ router.post("/user", upload.single("file"), new CreateUserController().handle);
 router.put(
   "/user/:id",
   upload.single("file"),
-  new EditAdminUserController().handle
+  new EditAdminUserController().handle,
 );
 router.delete("/user/:id", new DeleteUserController().handle);
 
@@ -356,12 +360,12 @@ router.get("/collaborators", new ListCollaboratorsController().handle);
 router.post(
   "/collaborator",
   upload.single("file"),
-  new CreateCollaboratorController().handle
+  new CreateCollaboratorController().handle,
 );
 router.put(
   "/collaborator/:id",
   upload.single("file"),
-  new EditAdminCollaboratorController().handle
+  new EditAdminCollaboratorController().handle,
 );
 router.delete("/collaborator/:id", new DeleteCollaboratorController().handle);
 
@@ -369,12 +373,12 @@ router.get("/attendants", new ListAttendantsController().handle);
 router.post(
   "/attendant",
   upload.single("file"),
-  new CreateAttendantController().handle
+  new CreateAttendantController().handle,
 );
 router.put(
   "/attendant/:id",
   upload.single("file"),
-  new EditAttendantController().handle
+  new EditAttendantController().handle,
 );
 router.delete("/attendant/:id", new DeleteAttendantController().handle);
 
@@ -382,12 +386,12 @@ router.get("/admins", new ListAdminsController().handle);
 router.post(
   "/admin",
   upload.single("file"),
-  new CreateAdminController().handle
+  new CreateAdminController().handle,
 );
 router.put(
   "/admin/:id",
   upload.single("file"),
-  new EditAdminController().handle
+  new EditAdminController().handle,
 );
 router.delete("/admin/:id", new DeleteAdminController().handle);
 
@@ -395,12 +399,12 @@ router.get("/banners", new ListBannersController().handle);
 router.post(
   "/banner",
   upload.single("file"),
-  new CreateBannerController().handle
+  new CreateBannerController().handle,
 );
 router.put(
   "/banner/:id",
   upload.single("file"),
-  new EditBannerController().handle
+  new EditBannerController().handle,
 );
 router.delete("/banner/:id", new DeleteBannerController().handle);
 
@@ -409,12 +413,12 @@ router.get("/courses", new ListCoursesController().handle);
 router.post(
   "/course",
   upload.single("file"),
-  new CreateCourseController().handle
+  new CreateCourseController().handle,
 );
 router.put(
   "/course/:id",
   upload.single("file"),
-  new EditCourseController().handle
+  new EditCourseController().handle,
 );
 router.delete("/course/:id", new DeleteCourseController().handle);
 router.post("/module", new CreateModuleController().handle);
@@ -426,20 +430,20 @@ router.get("/lessons/:course_id", new ListLessonsController().handle);
 router.post(
   "/lesson",
   upload.single("file"),
-  new CreateLessonController().handle
+  new CreateLessonController().handle,
 );
 router.post("/confirm-lesson/:id", new ConfirmLessonController().handle);
 router.put(
   "/lesson/:id",
   upload.single("file"),
-  new EditLessonController().handle
+  new EditLessonController().handle,
 );
 router.delete("/lesson/:id", new DeleteLessonController().handle);
 
 router.get("/user/:id", new GetUserAdminController().handle);
 router.get(
   "/users-collaborator/:collaborator_id",
-  new ListUsersCollaboratorController().handle
+  new ListUsersCollaboratorController().handle,
 );
 router.get("/collaborator/:id", new GetCollaboratorAdminController().handle);
 router.get("/orders/:id", new ListAdminOrdersController().handle);
@@ -458,13 +462,14 @@ router.post("/contract", new CreateContractController().handle);
 router.put("/contract/:id", new EditContractController().handle);
 router.put(
   "/end-negotiation-contract/:id",
-  new EndNegotiationContractController().handle
+  new EndNegotiationContractController().handle,
 );
 router.delete("/contract/:id", new DeleteContractController().handle);
 
 // CRM
 
 router.get("/lead/:id", new GetLeadController().handle);
+router.get("/leadmaster/:id", new GetLeadMasterController().handle);
 router.get("/leads/me", new ListLeadsClientController().handle);
 router.get("/leads-buy", new ListLeadsBuyController().handle);
 router.get("/leads/:userId", new ListAdminLeadsClientController().handle);
@@ -491,12 +496,12 @@ router.delete("/company/:company_id", new DeleteCompanyController().handle);
 router.post(
   "/company-image/:company_id",
   upload.single("file"),
-  new CreateImageCompanyController().handle
+  new CreateImageCompanyController().handle,
 );
 router.delete("/company-image/:id", new DeleteImageCompanyController().handle);
 router.put(
   "/company-handler/:company_id",
-  new HandlerCompanyController().handle
+  new HandlerCompanyController().handle,
 );
 router.put("/company-edit/:company_id", new EditCompanyController().handle);
 router.delete("/employe/:employe_id", new DeleteEmployeController().handle);
@@ -537,6 +542,7 @@ router.put("/coupon/:id", new EditCouponController().handle);
 router.delete("/coupon/:id", new DeleteCouponController().handle);
 
 router.post("/deposit", new CreateDepositController().handle);
+router.get("/deposit/:id", new GetDepositsController().handle);
 router.post("/package", new CreatePackageController().handle);
 router.get("/packages", new ListPackagesController().handle);
 router.get("/deposits", new ListDepositsController().handle);

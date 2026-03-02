@@ -65,6 +65,9 @@ class ListDepositsAdminService {
       },
       skip: page * 30,
       take: 30,
+      include: {
+        user: true,
+      },
     });
 
     return { deposits, depositsTotal };

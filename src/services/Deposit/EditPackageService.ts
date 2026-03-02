@@ -36,7 +36,7 @@ class EditPackageService {
     });
 
     if (!depositPackage) {
-      throw new Error("Cupom de desconto não encontrado");
+      throw new Error("Deposito não encontrado");
     }
 
     if (!value || !name) {

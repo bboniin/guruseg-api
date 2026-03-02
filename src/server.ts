@@ -14,6 +14,7 @@ import { OpenTicketService } from "./services/Tickets/OpenTicketService";
 import { AcceptTicketService } from "./services/Tickets/AcceptTicketService";
 import { ClosedTicketService } from "./services/Tickets/ClosedTicketService";
 import { CreateTicketService } from "./services/Tickets/CreateTicketService";
+import { CreateLeadsDiarieService } from "./services/Lead/CreateLeadsDiarieService";
 
 const app = express();
 
@@ -36,7 +37,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Origin, X-Requested-With, Content-Type, Accept",
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Expose-Headers", "agreementrequired");
@@ -65,6 +66,11 @@ cron.schedule("0 8,12,16,20 * * *", () => {
 cron.schedule("0 8 * * *", () => {
   const emailReminderService = new EmailReminderService();
   emailReminderService.execute();
+});
+
+cron.schedule("5 1 * * *", () => {
+  const createLeadsDiarieService = new CreateLeadsDiarieService();
+  createLeadsDiarieService.execute();
 });
 
 const connectedUsers = {};
@@ -224,4 +230,4 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3333, () => console.log("rodando v79"));
+server.listen(3333, () => console.log("rodando v80"));

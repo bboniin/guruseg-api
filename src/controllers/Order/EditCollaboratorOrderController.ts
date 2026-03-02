@@ -11,13 +11,21 @@ class EditCollaboratorOrderController {
 
     const editCollaboratorOrderService = new EditCollaboratorOrderService();
 
-    const services = await editCollaboratorOrderService.execute({
+    const order = await editCollaboratorOrderService.execute({
       collaborator_id,
       userId,
       id: parseInt(id),
     });
 
-    return res.json(services);
+    if (order["collaborator"]) {
+      if (order["collaborator"].photo) {
+        order["collaborator"]["photo_url"] =
+          "https://guruseg-data.s3.sa-east-1.amazonaws.com/" +
+          order["collaborator"].photo;
+      }
+    }
+
+    return res.json(order);
   }
 }
 

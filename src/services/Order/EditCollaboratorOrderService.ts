@@ -29,17 +29,8 @@ class EditCollaboratorOrderService {
         collaborator_id: collaborator_id,
       },
       include: {
-        items: true,
-        messages: true,
+        collaborator: true,
       },
-    });
-
-    orderD["totalServices"] = 0;
-    orderD["totalValue"] = 0;
-
-    orderD.items.map((item) => {
-      orderD["totalServices"] += item.amount;
-      orderD["totalValue"] += item.value * item.amount;
     });
 
     return orderD;
