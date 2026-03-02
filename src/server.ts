@@ -68,7 +68,7 @@ cron.schedule("0 8 * * *", () => {
   emailReminderService.execute();
 });
 
-cron.schedule("20 1 * * *", () => {
+cron.schedule("25 1 * * *", () => {
   const createLeadsDiarieService = new CreateLeadsDiarieService();
   createLeadsDiarieService.execute();
 });
