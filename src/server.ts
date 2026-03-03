@@ -230,4 +230,4 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3333, () => console.log("rodando v80"));
+server.listen(3333, () => console.log("rodando v81"));

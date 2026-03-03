@@ -77,8 +77,8 @@ class CreateLeadsDiarieService {
             "pr",
           ],
           data_abertura: {
-            inicio: format(addDays(new Date(), -1), "yyyy-MM-dd"),
-            fim: format(addDays(new Date(), -1), "yyyy-MM-dd"),
+            inicio: format(new Date(), "yyyy-MM-dd"),
+            fim: format(new Date(), "yyyy-MM-dd"),
           },
           capital_social: {
             minimo: 50000,
