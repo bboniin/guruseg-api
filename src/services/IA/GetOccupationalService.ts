@@ -20,7 +20,6 @@ Sempre responda **exatamente** neste formato JSON:
   "name": "Nome da função com iniciais maiúsculas",
   "description": "Resumo da atividade principal da função.",
   "epis": EPI 1, EPI 2, EPI 3...
-  "cbo": "0000-00" de acordo e atualizado no brasil, 
 }
 
 Evite variações. Não inclua explicações, apenas o JSON válido.

@@ -57,10 +57,9 @@ class EditCompanyService {
             !data.name ||
             !data.description ||
             !data.epis ||
-            !data.cbo ||
             !data.quantidade_colaboradores
           ) {
-            error = `Preencha o todos os campos da função ${i + 1} no setor ${index + 1}`;
+            error = `Preencha todos os campos da função ${i + 1} no setor ${index + 1}`;
           }
         });
         item["companyScratchs"].map((data) => {
@@ -146,7 +145,6 @@ class EditCompanyService {
             name: data["name"],
             description: data["description"],
             epis: data["epis"],
-            cbo: data["cbo"],
             quantidade_colaboradores:
               parseInt(data["quantidade_colaboradores"]) || 0,
             quantidade_colaboradores_m:

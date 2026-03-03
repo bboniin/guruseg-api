@@ -195,6 +195,7 @@ import { EditCollaboratorOrderController } from "./controllers/Order/EditCollabo
 import { DeleteManyLeadsMasterController } from "./controllers/Lead/DeleteManyLeadsMasterController";
 import { GetDepositsController } from "./controllers/Deposit/GetDepositsController";
 import { GetLeadMasterController } from "./controllers/Lead/GetLeadMasterController";
+import { CreateLeadsDiarieController } from "./controllers/Lead/CreateLeadsDiarieController";
 
 const upload = multer(uploadConfig);
 
@@ -303,6 +304,7 @@ router.put(
   new RecusedDocOrderController().handle,
 );
 
+router.get("/leads/diarie", new CreateLeadsDiarieController().handle);
 router.post("/get/coupon", new GetCouponController().handle);
 router.get("/orders-admin", new ListAdminOrdersController().handle);
 router.get("/orders-urgente", new ListAdminOrdersUrgentController().handle);

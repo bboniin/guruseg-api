@@ -93,6 +93,7 @@ class CreateLeadsDiarieService {
             excluir_empresas_visualizadas: true,
             excluir_email_contab: true,
           },
+          limite: 1000,
           pagina: 1,
         },
         {
@@ -104,7 +105,7 @@ class CreateLeadsDiarieService {
         },
       )
       .then((response) => {
-        console.log("Aq foi LEADS");
+        console.log("Aq foi LEADS", response.data?.total || 0);
         leads = response.data?.cnpjs || [];
       })
       .catch(() => {
