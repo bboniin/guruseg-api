@@ -207,6 +207,7 @@ router.get("/ia/risks/images", new GetRisksImagesController().handle);
 router.get("/ia/occupation", new GetOccupationalController().handle);
 router.get("/ia/risk", new GetRiskDetailsController().handle);
 router.get("/ia/assistent", new GetAssistentController().handle);
+router.get("/leads/diarie", new CreateLeadsDiarieController().handle);
 
 router.delete("/all/leads", new DeleteManyLeadsMasterController().handle);
 router.get("/payments/user", new GetPaymentUserController().handle);
@@ -304,7 +305,6 @@ router.put(
   new RecusedDocOrderController().handle,
 );
 
-router.get("/leads/diarie", new CreateLeadsDiarieController().handle);
 router.post("/get/coupon", new GetCouponController().handle);
 router.get("/orders-admin", new ListAdminOrdersController().handle);
 router.get("/orders-urgente", new ListAdminOrdersUrgentController().handle);
