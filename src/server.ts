@@ -68,7 +68,7 @@ cron.schedule("0 8 * * *", () => {
   emailReminderService.execute();
 });
 
-cron.schedule("0 8,14,20 * * *", () => {
+cron.schedule("50 23 * * 1-5", () => {
   const createLeadsDiarieService = new CreateLeadsDiarieService();
   createLeadsDiarieService.execute();
 });
@@ -230,4 +230,4 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3333, () => console.log("rodando v81"));
+server.listen(3333, () => console.log("rodando v82"));

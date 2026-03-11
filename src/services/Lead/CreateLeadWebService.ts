@@ -10,6 +10,7 @@ interface LeadRequest {
   necessity: string;
   location: string;
   tag: string;
+  price: number;
 }
 
 class CreateLeadWebService {
@@ -23,6 +24,7 @@ class CreateLeadWebService {
     necessity,
     phone_number,
     employees,
+    price,
   }: LeadRequest) {
     if (!name) {
       throw new Error("Nome é obrigatório");
@@ -50,7 +52,7 @@ class CreateLeadWebService {
         employees: employees,
         necessity: necessity,
         cnpj: cnpj,
-        price: 0,
+        price: price || 0,
         tag: tag,
         location: location,
       },
