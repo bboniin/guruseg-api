@@ -183,6 +183,13 @@ import { ListAdminsController } from "./controllers/Admin/Admins/ListAdminsContr
 import { CreateAdminController } from "./controllers/Admin/Admins/CreateAdminController";
 import { EditAdminController } from "./controllers/Admin/Admins/EditAdminController";
 import { DeleteAdminController } from "./controllers/Admin/Admins/DeleteAdminController";
+
+import { ListAssociatesController } from "./controllers/Admin/Associates/ListAssociatesController";
+import { CreateAssociateController } from "./controllers/Admin/Associates/CreateAssociateController";
+import { EditAdminAssociateController } from "./controllers/Admin/Associates/EditAdminAssociateController";
+import { GetAdminAssociateController } from "./controllers/Admin/Associates/GetAdminAssociateController";
+import { DeleteAssociateController } from "./controllers/Admin/Associates/DeleteAssociateController";
+
 import { CreateTicketController } from "./controllers/Tickets/CreateTicketController";
 import { OpenTicketController } from "./controllers/Tickets/OpenTicketController";
 import { GetTicketController } from "./controllers/Tickets/GetTicketController";
@@ -195,7 +202,11 @@ import { EditCollaboratorOrderController } from "./controllers/Order/EditCollabo
 import { DeleteManyLeadsMasterController } from "./controllers/Lead/DeleteManyLeadsMasterController";
 import { GetDepositsController } from "./controllers/Deposit/GetDepositsController";
 import { GetLeadMasterController } from "./controllers/Lead/GetLeadMasterController";
-import { CreateLeadsDiarieController } from "./controllers/Lead/CreateLeadsDiarieController";
+import { ListAssociateLeadsController } from "./controllers/Associate/ListAssociateLeadsController";
+import { EditAssociateController } from "./controllers/Associate/EditAssociateController";
+import { GetAssociateController } from "./controllers/Associate/GetAssociateController";
+import { ResumeAssociateController } from "./controllers/Associate/ResumeAssociateController";
+import { ListAssociatePaymentsController } from "./controllers/Associate/ListAssociatePaymentsController";
 
 const upload = multer(uploadConfig);
 
@@ -369,6 +380,49 @@ router.put(
   new EditAdminCollaboratorController().handle,
 );
 router.delete("/collaborator/:id", new DeleteCollaboratorController().handle);
+
+// Associate
+
+router.get("/leads/associate", new ListAssociateLeadsController().handle);
+
+router.get("/associates", new ListAssociatesController().handle);
+router.get(
+  "/associate/:associate_id",
+  new GetAdminAssociateController().handle,
+);
+router.post(
+  "/associate",
+  upload.single("file"),
+  new CreateAssociateController().handle,
+);
+router.put(
+  "/associate/:id",
+  upload.single("file"),
+  new EditAdminAssociateController().handle,
+);
+router.delete("/associate/:id", new DeleteAssociateController().handle);
+
+router.get("/associates", new ListAssociatesController().handle);
+router.get("/associate", new GetAssociateController().handle);
+router.get("/resume/associate", new ResumeAssociateController().handle);
+router.get("/payments/associate", new ListAssociatePaymentsController().handle);
+router.get("/associate/:id", new GetAdminAssociateController().handle);
+router.post(
+  "/associate",
+  upload.single("file"),
+  new CreateAssociateController().handle,
+);
+router.put(
+  "/associate/:id",
+  upload.single("file"),
+  new EditAdminAssociateController().handle,
+);
+router.put(
+  "/associate",
+  upload.single("file"),
+  new EditAssociateController().handle,
+);
+router.delete("/associate/:id", new DeleteAssociateController().handle);
 
 router.get("/attendants", new ListAttendantsController().handle);
 router.post(

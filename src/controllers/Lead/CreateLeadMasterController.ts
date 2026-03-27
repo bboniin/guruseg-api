@@ -14,6 +14,7 @@ class CreateLeadMasterController {
       employees,
       price,
       value,
+      associate_id,
     } = req.body;
 
     const createLeadMasterService = new CreateLeadMasterService();
@@ -29,6 +30,7 @@ class CreateLeadMasterController {
       employees,
       price,
       value,
+      associate_id,
     });
 
     return res.json(lead);

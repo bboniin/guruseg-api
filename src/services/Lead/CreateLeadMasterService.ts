@@ -11,6 +11,7 @@ interface LeadRequest {
   cnpj: string;
   necessity: string;
   location: string;
+  associate_id: string;
 }
 
 class CreateLeadMasterService {
@@ -25,6 +26,7 @@ class CreateLeadMasterService {
     price,
     employees,
     value,
+    associate_id,
   }: LeadRequest) {
     if (!name) {
       throw new Error("Nome é obrigatório");
@@ -42,6 +44,18 @@ class CreateLeadMasterService {
       }
     }
 
+    let user_id = "";
+
+    if (associate_id) {
+      const associate = await prismaClient.associate.findUnique({
+        where: {
+          id: associate_id,
+        },
+      });
+
+      user_id = associate.user_id;
+    }
+
     const lead = await prismaClient.leadMaster.create({
       data: {
         name: name,
@@ -54,8 +68,30 @@ class CreateLeadMasterService {
         value: value || 0,
         price: price || 0,
         location: location,
+        tag: associate_id ? "Associado" : "Cadastrado",
+        associate_id: associate_id,
       },
     });
+
+    if (user_id) {
+      await prismaClient.lead.create({
+        data: {
+          name: name,
+          email: email,
+          phone_number: phone_number,
+          observation: observation,
+          employees: employees,
+          necessity: necessity,
+          cnpj: cnpj,
+          value: value || 0,
+          price: price || 0,
+          location: location,
+          tag: associate_id ? "Associado" : "Cadastrado",
+          lead_id: lead.id,
+          user_id: user_id,
+        },
+      });
+    }
 
     return lead;
   }

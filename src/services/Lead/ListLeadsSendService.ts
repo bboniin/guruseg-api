@@ -6,10 +6,11 @@ interface LeadRequest {
   all: boolean;
   dateStart: string;
   dateEnd: string;
+  tag: string;
 }
 
 class ListLeadsSendService {
-  async execute({ page, all, dateStart, dateEnd }: LeadRequest) {
+  async execute({ page, all, tag, dateStart, dateEnd }: LeadRequest) {
     let filter = {
       leads: {
         none: {},
@@ -36,6 +37,10 @@ class ListLeadsSendService {
         gte: startOfDay(new Date(dateStart)),
         lte: endOfDay(new Date(dateEnd)),
       };
+    }
+
+    if (tag) {
+      filter["tag"] = tag;
     }
 
     const listLeadsTotal = await prismaClient.leadMaster.count({

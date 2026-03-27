@@ -15,6 +15,7 @@ class EditLeadMasterController {
       employees,
       value,
       price,
+      associate_id,
     } = req.body;
 
     const editLeadMasterService = new EditLeadMasterService();
@@ -31,6 +32,7 @@ class EditLeadMasterController {
       employees,
       value,
       price,
+      associate_id,
     });
 
     return res.json(lead);

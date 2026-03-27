@@ -17,7 +17,6 @@ class CreateLeadWebController {
         price,
       } = req.query;
 
-      console.log(req.query);
       const createLeadWebService = new CreateLeadWebService();
 
       const lead = await createLeadWebService.execute({
@@ -49,7 +48,7 @@ class CreateLeadWebController {
       } = req.body;
 
       const createLeadWebService = new CreateLeadWebService();
-      console.log(req.body);
+
       const lead = await createLeadWebService.execute({
         name,
         observation,

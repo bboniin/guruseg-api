@@ -34,7 +34,12 @@ class AuthUserService {
       },
     });
 
-    if (!user && !collaborator && !admin && !attendant) {
+    const associate = await prismaClient.associate.findFirst({
+      where: {
+        email: email,
+      },
+    });
+    if (!user && !collaborator && !admin && !attendant && !associate) {
       throw new Error("Email e Senha não correspondem ou não existe.");
     }
 
@@ -50,7 +55,7 @@ class AuthUserService {
         {
           subject: user.id,
           expiresIn: "365d",
-        }
+        },
       );
 
       if (!passwordMatch) {
@@ -89,7 +94,7 @@ class AuthUserService {
         {
           subject: collaborator.id,
           expiresIn: "365d",
-        }
+        },
       );
 
       if (!passwordMatch) {
@@ -123,7 +128,7 @@ class AuthUserService {
         {
           subject: admin.id,
           expiresIn: "365d",
-        }
+        },
       );
 
       if (!passwordMatch) {
@@ -156,7 +161,7 @@ class AuthUserService {
         {
           subject: attendant.id,
           expiresIn: "365d",
-        }
+        },
       );
 
       if (!passwordMatch) {
@@ -175,6 +180,47 @@ class AuthUserService {
           enabled: attendant.enabled,
           photo_url: photo_url,
           type: attendant.type,
+        },
+        token,
+      };
+    }
+    if (associate) {
+      const passwordMatch = await compare(password, associate.password);
+
+      const token = sign(
+        {
+          email: associate.email,
+        },
+        authConfig.jwt.secret,
+        {
+          subject: associate.id,
+          expiresIn: "365d",
+        },
+      );
+
+      if (!passwordMatch) {
+        throw new Error("Email e Senha não correspondem ou não existe.");
+      }
+
+      let photo_url =
+        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + associate.photo;
+
+      return {
+        user: {
+          id: associate.id,
+          email: associate.email,
+          name: associate.name,
+          photo: associate.photo,
+          phone_number: associate.phone_number,
+          comission: associate.comission,
+          state: associate.state,
+          city: associate.city,
+          photo_url: photo_url,
+          type: associate.type,
+          cpf: associate.cpf,
+          terms_accepted: associate.terms_accepted,
+          type_pix: associate.type_pix,
+          key_pix: associate.key_pix,
         },
         token,
       };

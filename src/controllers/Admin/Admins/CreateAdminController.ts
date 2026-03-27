@@ -3,7 +3,7 @@ import { CreateAdminService } from "../../../services/Admin/Admins/CreateAdminSe
 
 class CreateAdminController {
   async handle(req: Request, res: Response) {
-    const { name, email, password, access_granted, enabled } = req.body;
+    const { name, email, password, access_granted } = req.body;
 
     let photo = "";
     if (req.file) {

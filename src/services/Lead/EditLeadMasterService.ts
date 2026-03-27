@@ -11,6 +11,7 @@ interface LeadRequest {
   necessity: string;
   location: string;
   price: number;
+  associate_id: string;
   value: number;
 }
 
@@ -27,6 +28,7 @@ class EditLeadMasterService {
     necessity,
     phone_number,
     employees,
+    associate_id,
   }: LeadRequest) {
     if (!name) {
       throw new Error("Nome é obrigatório");
@@ -60,6 +62,7 @@ class EditLeadMasterService {
         cnpj: cnpj,
         location: location,
         price: price || 0,
+        associate_id: associate_id,
         value: value || 0,
         update_at: new Date(),
       },

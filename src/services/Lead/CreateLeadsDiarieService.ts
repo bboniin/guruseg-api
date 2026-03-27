@@ -73,6 +73,16 @@ class CreateLeadsDiarieService {
           `Erro carregar leads dia ${format(addDays(new Date(), -1), "dd/MM/yyyy")}`,
         );
       });
+
+    await prismaClient.leadMaster.deleteMany({
+      where: {
+        tag: "API",
+        leads: {
+          none: {},
+        },
+      },
+    });
+
     await Promise.all(
       leads.map(async (item, index) => {
         await axios

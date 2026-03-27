@@ -71,7 +71,7 @@ export function validateEmail(email) {
 }
 
 export function validatePhone(phone) {
-  const phoneRegex = /^(?:\+55\s?)?\(?[1-9]{2}\)?\s?[9]?[6-9]\d{3}-?\d{4}$/;
+  const phoneRegex = /^(?:\+55\s?)?\(?[1-9]{2}\)?\s?(?:9\d{8}|[2-8]\d{7})$/;
   return phoneRegex.test(phone);
 }
 
