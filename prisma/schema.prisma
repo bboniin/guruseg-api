@@ -25,7 +25,7 @@ model User {
   phone_number         String
   password             String
   balance              Float     @default(0)
-  bonus                Float     @default(0)
+  balance_leads        Float     @default(0)
   city                 String    @default("")
   state                String    @default("")
   signature            Boolean   @default(false)
@@ -51,6 +51,7 @@ model User {
   payments            Payment[]
   tickets             Ticket[]
   associates          Associate[]
+  reminders           Reminder[]
 
   @@map("users")
 }
@@ -216,6 +217,7 @@ model Order {
   docs                       Doc[]
   messages                   OSMessages[]
   redemptions                Redemption[]
+  reminders                  Reminder[]
      
   payment                    Payment?   @relation(fields: [payment_id], references: [id], onDelete: SetNull)
   payment_id                 String? 
@@ -252,6 +254,7 @@ model Deposit {
   id          String    @id @default(uuid())
   status      String  
   name        String 
+  type        String    @default("services")
   description String?
   value       Float    
   bonus       Float?
@@ -260,11 +263,11 @@ model Deposit {
   payment     Payment?   @relation(fields: [payment_id], references: [id], onDelete: SetNull)
   payment_id  String? 
 
-  user        User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user        User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id     String
 
-  create_at   DateTime? @default(now())
-  update_at   DateTime? @updatedAt
+  create_at   DateTime?  @default(now())
+  update_at   DateTime?  @updatedAt
 
   @@map("deposits")
 }
@@ -378,7 +381,7 @@ model Lead {
   leadMaster      LeadMaster?   @relation(fields: [lead_id], references: [id], onDelete: Cascade)
 
   historical      Historic[]
-  lead_reminders  LeadReminders[]
+  reminders       Reminder[]
   contracts       Contract[]
   
   @@map("leads")
@@ -661,17 +664,25 @@ model CompanyImages {
   @@map("company_images")
 }
 
-model LeadReminders {
+model Reminder {
   id                  String      @id @default(uuid())
   name                String
   description         String
+  type                String      @default("task")
   confirm             Boolean
   date                DateTime? 
+  expiration_date     DateTime? 
 
-  lead_id             String
-  lead                Lead        @relation(fields: [lead_id], references: [id], onDelete: Cascade)
+  lead_id             String?
+  lead                Lead?       @relation(fields: [lead_id], references: [id], onDelete: Cascade)
 
-  @@map("lead_reminders")
+  order_id            Int?
+  order               Order?      @relation(fields: [order_id], references: [id], onDelete: Cascade)
+
+  user_id             String
+  user                User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("reminders")
 }
 
 model Statement {

@@ -14,7 +14,6 @@ interface AssociateRequest {
   photo: string;
   password: string;
   id: string;
-  userId: string;
   cnpj: string;
   cpf: string;
   phone_number: string;
@@ -31,7 +30,6 @@ class EditAdminAssociateService {
     email,
     photo,
     id,
-    userId,
     cnpj,
     cpf,
     phone_number,
@@ -40,16 +38,6 @@ class EditAdminAssociateService {
     state,
     user_id,
   }: AssociateRequest) {
-    const admin = await prismaClient.admin.findFirst({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
     const associate = await prismaClient.associate.findUnique({
       where: {
         id: id,

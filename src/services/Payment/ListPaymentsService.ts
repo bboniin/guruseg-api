@@ -69,7 +69,7 @@ class ListPaymentsService {
 
     const totalValue = paymentsTotal.reduce(
       (sum, transaction) => sum + transaction.value,
-      0
+      0,
     );
 
     return {
@@ -77,7 +77,7 @@ class ListPaymentsService {
       paymentsTotal: paymentsTotal.length,
       totalValue,
       balance: userBalance.balance,
-      bonus: userBalance.bonus,
+      balance_leads: userBalance.balance_leads,
     };
   }
 }

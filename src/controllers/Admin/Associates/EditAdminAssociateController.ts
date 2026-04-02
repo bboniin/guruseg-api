@@ -24,8 +24,6 @@ class EditAdminAssociateController {
       photo = req.file.filename;
     }
 
-    let userId = req.userId;
-
     const editAdminAssociateService = new EditAdminAssociateService();
 
     const associate = await editAdminAssociateService.execute({
@@ -34,7 +32,6 @@ class EditAdminAssociateController {
       photo,
       password,
       id,
-      userId,
       cnpj,
       phone_number,
       comission: Number(comission),

@@ -207,6 +207,12 @@ import { EditAssociateController } from "./controllers/Associate/EditAssociateCo
 import { GetAssociateController } from "./controllers/Associate/GetAssociateController";
 import { ResumeAssociateController } from "./controllers/Associate/ResumeAssociateController";
 import { ListAssociatePaymentsController } from "./controllers/Associate/ListAssociatePaymentsController";
+import { isAdmin } from "./middlewares/isAdmin";
+import { ListAdminAssociateLeadsController } from "./controllers/Admin/Associates/ListAdminAssociateLeadsController";
+import { ListAdminAssociatePaymentsController } from "./controllers/Admin/Associates/ListAdminAssociatePaymentsController";
+import { ResumeAdminAssociateController } from "./controllers/Admin/Associates/ResumeAdminAssociateController";
+import { CreatePaymentAssociateController } from "./controllers/Admin/Associates/CreatePaymentAssociateController";
+import { LastStatementsUserController } from "./controllers/Statement/LastStatementsUserController";
 
 const upload = multer(uploadConfig);
 
@@ -383,8 +389,6 @@ router.delete("/collaborator/:id", new DeleteCollaboratorController().handle);
 
 // Associate
 
-router.get("/leads/associate", new ListAssociateLeadsController().handle);
-
 router.get("/associates", new ListAssociatesController().handle);
 router.get(
   "/associate/:associate_id",
@@ -405,6 +409,7 @@ router.delete("/associate/:id", new DeleteAssociateController().handle);
 router.get("/associates", new ListAssociatesController().handle);
 router.get("/associate", new GetAssociateController().handle);
 router.get("/resume/associate", new ResumeAssociateController().handle);
+router.get("/leads/associate", new ListAssociateLeadsController().handle);
 router.get("/payments/associate", new ListAssociatePaymentsController().handle);
 router.get("/associate/:id", new GetAdminAssociateController().handle);
 router.post(
@@ -570,7 +575,7 @@ router.delete("/company-renewal/:id", new DeleteRenewalController().handle);
 router.delete("/all-renewal", new DeleteAllRenewalController().handle);
 router.put("/renewal/:id", new CheckRenewalController().handle);
 
-router.post("/reminder/:lead_id", new CreateReminderController().handle);
+router.post("/reminder", new CreateReminderController().handle);
 router.get("/reminders", new ListRemindersController().handle);
 router.put("/reminder/:id", new EditReminderController().handle);
 router.delete("/reminder/:id", new DeleteReminderController().handle);
@@ -580,6 +585,7 @@ router.get("/statement/:id", new GetStatementController().handle);
 router.post("/statement", new CreateStatementController().handle);
 router.get("/statements", new ListStatementsController().handle);
 router.get("/statements-user", new ListStatementsUserController().handle);
+router.get("/statements-last", new LastStatementsUserController().handle);
 router.put("/statement/:id", new EditStatementController().handle);
 router.delete("/statement/:id", new DeleteStatementController().handle);
 router.put("/confirm-statement/:id", new ConfirmStatementController().handle);
@@ -606,5 +612,24 @@ router.get("/admin/deposits", new ListDepositsAdminController().handle);
 router.put("/package/:id", new EditPackageController().handle);
 router.get("/payment/:id", new GetPaymentController().handle);
 router.delete("/package/:id", new DeletePackageController().handle);
+
+router.use(isAdmin);
+
+router.get(
+  "/resume/associate/:associate_id",
+  new ResumeAdminAssociateController().handle,
+);
+router.get(
+  "/leads/associate/:associate_id",
+  new ListAdminAssociateLeadsController().handle,
+);
+router.get(
+  "/payments/associate/:associate_id",
+  new ListAdminAssociatePaymentsController().handle,
+);
+router.post(
+  "/payment/associate",
+  new CreatePaymentAssociateController().handle,
+);
 
 export { router };

@@ -14,14 +14,12 @@ interface AssociateRequest {
   email: string;
   photo: string;
   password: string;
-  userId: String;
   cnpj: string;
   phone_number: string;
   comission: number;
   city: string;
   cpf: string;
   state: string;
-
   user_id: string;
 }
 
@@ -31,7 +29,6 @@ class CreateAssociateService {
     email,
     password,
     photo,
-    userId,
     cnpj,
     phone_number,
     cpf,
@@ -42,16 +39,6 @@ class CreateAssociateService {
   }: AssociateRequest) {
     if (!email || !name || !password) {
       throw new Error("Preencha todos os campos obrigatórios");
-    }
-
-    const admin = await prismaClient.admin.findFirst({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
     }
 
     if (!validateEmail(email)) {

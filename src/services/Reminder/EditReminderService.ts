@@ -1,43 +1,52 @@
-import prismaClient from '../../prisma'
+import prismaClient from "../../prisma";
 
 interface ReminderRequest {
-    name: string;
-    description: string;
-    date: Date;
-    id: string;
+  name: string;
+  description: string;
+  date: Date;
+  expiration_date: Date;
+  id: string;
+  userId: string;
 }
 
 class EditReminderService {
-    async execute({ description, date, name, id }: ReminderRequest) {
+  async execute({
+    description,
+    date,
+    expiration_date,
+    userId,
+    name,
+    id,
+  }: ReminderRequest) {
+    const reminderGet = await prismaClient.reminder.findFirst({
+      where: {
+        id: id,
+        user_id: userId,
+      },
+    });
 
-        const reminderGet = await prismaClient.leadReminders.findUnique({
-            where: {
-                id: id,
-            }
-        })
-
-        if (!reminderGet) {
-            throw new Error("Lembrete não encontrado")
-        }
-
-        if (!name || !date) {
-            throw new Error("Preencha nome e data do lembrete para salvar")
-        }
-        
-        const reminder = await prismaClient.leadReminders.update({
-            where: {
-                id: id
-            },
-            data: {
-                name: name,
-                date: date,
-                description: description
-            }
-        })
-
-        return (reminder)
-
+    if (!reminderGet) {
+      throw new Error("Lembrete não encontrado");
     }
+
+    if (!name || !date || (reminderGet.type == "order" && !expiration_date)) {
+      throw new Error("Preencha nome e data do lembrete para salvar");
+    }
+
+    const reminder = await prismaClient.reminder.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: name,
+        date: date,
+        expiration_date: expiration_date,
+        description: description,
+      },
+    });
+
+    return reminder;
+  }
 }
 
-export { EditReminderService }
+export { EditReminderService };

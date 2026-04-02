@@ -17,10 +17,9 @@ class DeleteCouponService {
       throw new Error("Rota restrita ao administrador");
     }
 
-    const coupon = await prismaClient.coupon.findFirst({
+    const coupon = await prismaClient.coupon.findUnique({
       where: {
-        code: id,
-        active: true,
+        id: id,
       },
       include: {
         redemptions: true,

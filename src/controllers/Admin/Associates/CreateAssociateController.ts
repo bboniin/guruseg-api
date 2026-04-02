@@ -21,8 +21,6 @@ class CreateAssociateController {
       photo = req.file.filename;
     }
 
-    let userId = req.userId;
-
     const createAssociateService = new CreateAssociateService();
 
     const associate = await createAssociateService.execute({
@@ -30,7 +28,6 @@ class CreateAssociateController {
       email,
       password,
       photo,
-      userId,
       cnpj,
       cpf,
       phone_number,

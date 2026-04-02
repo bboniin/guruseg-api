@@ -57,7 +57,7 @@ class ListMyLeadsService {
         create_at: "desc",
       },
       include: {
-        lead_reminders: true,
+        reminders: true,
         contracts: {
           include: {
             services: true,

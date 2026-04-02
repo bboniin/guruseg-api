@@ -2,24 +2,13 @@ import { addDays } from "date-fns";
 import prismaClient from "../../../prisma";
 
 interface AssociateRequest {
-  userId: string;
   filter: string;
   page: number;
   all: boolean;
 }
 
 class ListAssociatesService {
-  async execute({ userId, page, filter, all }: AssociateRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
+  async execute({ page, filter, all }: AssociateRequest) {
     let filterSearch = {};
 
     if (all) {

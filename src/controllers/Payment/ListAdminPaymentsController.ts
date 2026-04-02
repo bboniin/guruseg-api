@@ -3,15 +3,20 @@ import { ListAdminPaymentsService } from "../../services/Payment/ListAdminPaymen
 
 class ListAdminPaymentsController {
   async handle(req: Request, res: Response) {
-    let { page, order_id, search } = req.query;
-    let userId = req.userId;
+    const { page, startDate, endDate, method, user_id, status, type } =
+      req.query;
+    const userId = req.userId;
 
     const listAdminPaymentsService = new ListAdminPaymentsService();
 
     const payments = await listAdminPaymentsService.execute({
       userId,
-      search: search ? String(search) : "",
-      order_id: Number(order_id) > 0 ? Number(order_id) : 0,
+      type: type ? String(type) : "",
+      status: status ? String(status) : "",
+      method: method ? String(method) : "",
+      user_id: user_id ? String(user_id) : "",
+      startDate: startDate ? String(startDate) : "",
+      endDate: endDate ? String(endDate) : "",
       page: Number(page) > 0 ? Number(page) : 0,
     });
 

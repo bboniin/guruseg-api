@@ -6,6 +6,7 @@ interface DepositRequest {
   value: number;
   bonus: number;
   description: string;
+  operation: string;
   type: string;
 }
 
@@ -16,6 +17,7 @@ class CreateDepositAdminService {
     bonus,
     description,
     value,
+    operation,
     type,
   }: DepositRequest) {
     const admin = await prismaClient.admin.findUnique({
@@ -38,7 +40,7 @@ class CreateDepositAdminService {
       throw new Error("Usuário não encontrado");
     }
 
-    if (type == "saida") {
+    if (operation == "saida") {
       value *= -1;
       bonus *= -1;
     }
@@ -46,23 +48,36 @@ class CreateDepositAdminService {
     const deposit = await prismaClient.deposit.create({
       data: {
         value: value,
-        name: type == "saida" ? "Retirada de Saldo" : "Envio de Saldo",
+        name: operation == "saida" ? "Retirada de Saldo" : "Envio de Saldo",
         description: description,
         status: "confirmado",
         user_id: collaborator_id,
         bonus: bonus,
+        type: type,
       },
     });
 
-    await prismaClient.user.update({
-      where: {
-        id: collaborator_id,
-      },
-      data: {
-        balance: parseFloat((user.balance + value).toFixed(2)),
-        bonus: parseFloat((user.bonus + bonus).toFixed(2)),
-      },
-    });
+    if (type == "services") {
+      await prismaClient.user.update({
+        where: {
+          id: collaborator_id,
+        },
+        data: {
+          balance: parseFloat((user.balance + value + bonus).toFixed(2)),
+        },
+      });
+    } else {
+      await prismaClient.user.update({
+        where: {
+          id: collaborator_id,
+        },
+        data: {
+          balance_leads: parseFloat(
+            (user.balance_leads + value + bonus).toFixed(2),
+          ),
+        },
+      });
+    }
 
     return deposit;
   }

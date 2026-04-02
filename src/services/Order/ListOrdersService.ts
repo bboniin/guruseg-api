@@ -10,6 +10,7 @@ interface OrderRequest {
   status: string;
   collaborator_id: string;
   user_id: string;
+  all: boolean;
   page: number;
 }
 
@@ -24,6 +25,7 @@ class ListOrdersService {
     page,
     collaborator_id,
     user_id,
+    all,
   }: OrderRequest) {
     let data = {};
 
@@ -39,6 +41,14 @@ class ListOrdersService {
       } else {
         throw new Error("Nenhum tipo de usuário foi enviado.");
       }
+    }
+
+    if (all) {
+      const orders = await prismaClient.order.findMany({
+        where: data,
+      });
+
+      return orders;
     }
 
     if (finance) {
@@ -140,7 +150,7 @@ class ListOrdersService {
       if (item.status == "finalizado") {
         item["averageTime"] = differenceInSeconds(
           item.update_at,
-          item.create_at
+          item.create_at,
         );
       }
     });

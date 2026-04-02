@@ -39,7 +39,7 @@ class ListLeadsAdminService {
       },
       include: {
         user: true,
-        lead_reminders: true,
+        reminders: true,
         contracts: {
           include: {
             services: true,

@@ -78,6 +78,7 @@ class CreateDepositService {
             description: depositPackage.description,
             status: "pendente",
             user_id: userId,
+            type: depositPackage.type,
             bonus: depositPackage.bonus,
           },
         });
@@ -101,7 +102,7 @@ class CreateDepositService {
           })
           .catch((e) => {
             throw new Error(
-              "Ocorreu um gerar QR Code Pix, recarregue a página"
+              "Ocorreu um gerar QR Code Pix, recarregue a página",
             );
           });
       })

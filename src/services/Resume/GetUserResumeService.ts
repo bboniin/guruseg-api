@@ -98,7 +98,7 @@ class GetUserResumeService {
 
       const paymentsValue = payments.reduce(
         (sum, payment) => sum + payment.value,
-        0
+        0,
       );
 
       responseData.push({
@@ -113,7 +113,7 @@ class GetUserResumeService {
 
       const paymentsConfirmValue = paymentsConfirm.reduce(
         (sum, payment) => sum + payment.value,
-        0
+        0,
       );
 
       responseData.push({
@@ -124,13 +124,13 @@ class GetUserResumeService {
       responseData.push({
         value: user.balance,
         type: "currency",
-        name: "Saldo disponivel",
+        name: "Saldo disponivel para serviços",
       });
 
       responseData.push({
-        value: user.bonus,
+        value: user.balance_leads,
         type: "currency",
-        name: "Bônus disponivel",
+        name: "Saldo disponivel para leads",
       });
 
       const leadsCount = await prismaClient.lead.count({

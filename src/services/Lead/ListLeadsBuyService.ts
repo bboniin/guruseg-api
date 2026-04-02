@@ -93,8 +93,7 @@ class ListLeadsBuyService {
     return {
       leads: listLeads,
       leadsTotal: listLeadsTotal,
-      balance: userBalance.balance,
-      bonus: userBalance.bonus,
+      balance_leads: userBalance.balance_leads,
     };
   }
 }

@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { addMonths, format } from "date-fns";
 import prismaClient from "../../prisma";
 import { GetCouponService } from "../Coupon/GetCouponService";
 import { RescueCouponService } from "../Coupon/RescueCouponService";
@@ -11,6 +11,7 @@ interface OrderRequest {
   urgent: boolean;
   sector: string;
   code: string;
+  reminder: boolean;
   collaborators: number;
   items: Array<[]>;
 }
@@ -26,6 +27,7 @@ class CreateOrderService {
     company_id,
     collaborators,
     code,
+    reminder,
   }: OrderRequest) {
     if (items.length == 0 || !userId || !sector || !collaborators) {
       throw new Error("Preencha todos os campos.");
@@ -49,7 +51,7 @@ class CreateOrderService {
       await items.map(async (data) => {
         totalValue += data["value"] * data["amount"];
         totalServices += data["amount"];
-      })
+      }),
     );
 
     if (!code && totalValue > user.balance) {
@@ -165,7 +167,7 @@ class CreateOrderService {
           },
         });
         order["items"].push(itemOrder);
-      })
+      }),
     );
 
     if (urgent) {
@@ -180,6 +182,22 @@ class CreateOrderService {
         },
       });
       order["items"].push(itemOrder);
+    }
+
+    if (reminder) {
+      await prismaClient.reminder.create({
+        data: {
+          name: name,
+          date: addMonths(new Date(), 9),
+          description:
+            "Lembrete para 3 meses antes para iniciar renovação da documentação dessa OS",
+          type: "order",
+          user_id: userId,
+          order_id: order.id,
+          expiration_date: addMonths(new Date(), 12),
+          confirm: false,
+        },
+      });
     }
 
     order["totalValue"] = totalValue;

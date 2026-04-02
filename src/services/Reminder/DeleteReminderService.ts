@@ -1,30 +1,31 @@
-import prismaClient from '../../prisma'
+import prismaClient from "../../prisma";
 
 interface ReminderRequest {
-    id: string;
+  id: string;
+  userId: string;
 }
 
 class DeleteReminderService {
-    async execute({ id }: ReminderRequest) {
+  async execute({ id, userId }: ReminderRequest) {
+    const reminder = await prismaClient.reminder.findFirst({
+      where: {
+        id: id,
+        user_id: userId,
+      },
+    });
 
-        const reminder = await prismaClient.leadReminders.findFirst({
-            where: {
-                id: id,
-            }
-        })
-
-        if (!reminder) {
-            throw new Error("Lembrete não encontrado")
-        }
-
-        await prismaClient.leadReminders.delete({
-            where: {
-                id: id,
-            },
-        })
-
-        return "Deletado com sucesso"
+    if (!reminder) {
+      throw new Error("Lembrete não encontrado");
     }
+
+    await prismaClient.reminder.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    return "Deletado com sucesso";
+  }
 }
 
-export { DeleteReminderService }
+export { DeleteReminderService };

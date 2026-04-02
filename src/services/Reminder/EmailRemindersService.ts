@@ -23,14 +23,10 @@ class EmailReminderService {
     fifteenDaysFromNow.setHours(0, 0, 0, 0);
 
     franqueados.map(async (item) => {
-      const listReminders = await prismaClient.leadReminders.findMany({
+      const listReminders = await prismaClient.reminder.findMany({
         where: {
           confirm: false,
-          lead: {
-            is: {
-              user_id: item.id,
-            },
-          },
+          user_id: item.id,
         },
       });
 

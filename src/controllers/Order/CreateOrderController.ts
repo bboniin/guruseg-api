@@ -12,6 +12,7 @@ class CreateOrderController {
       code,
       collaborators,
       company_id,
+      reminder,
     } = req.body;
 
     let userId = req.userId;
@@ -28,6 +29,7 @@ class CreateOrderController {
       urgent,
       collaborators,
       code,
+      reminder,
     });
 
     return res.json(order);

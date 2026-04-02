@@ -14,6 +14,7 @@ class ListOrdersController {
       collaborator_id,
       id,
       user_id,
+      all,
     } = req.query;
 
     let userId = req.userId;
@@ -25,6 +26,7 @@ class ListOrdersController {
       userId: id ? String(id) : userId,
       finance: finance == "true",
       endDate: endDate ? String(endDate) : "",
+      all: all == "true",
       status: status ? String(status) : "",
       startDate: startDate ? String(startDate) : "",
       collaborator_id: collaborator_id ? String(collaborator_id) : "",

@@ -99,15 +99,33 @@ class ConfirmPaymentService {
           });
 
           if (depositGet.status != "confirmado") {
-            await prismaClient.user.update({
-              where: {
-                id: user.id,
-              },
-              data: {
-                balance: parseFloat((user.balance + deposit.value).toFixed(2)),
-                bonus: parseFloat((user.bonus + deposit.bonus).toFixed(2)),
-              },
-            });
+            if (depositGet.type == "services") {
+              await prismaClient.user.update({
+                where: {
+                  id: user.id,
+                },
+                data: {
+                  balance: parseFloat(
+                    (user.balance + deposit.value + deposit.bonus).toFixed(2),
+                  ),
+                },
+              });
+            } else {
+              await prismaClient.user.update({
+                where: {
+                  id: user.id,
+                },
+                data: {
+                  balance_leads: parseFloat(
+                    (
+                      user.balance_leads +
+                      deposit.value +
+                      deposit.bonus
+                    ).toFixed(2),
+                  ),
+                },
+              });
+            }
           }
         }
 
@@ -116,7 +134,7 @@ class ConfirmPaymentService {
           "..",
           "..",
           "views",
-          "confirmedPayment.hbs"
+          "confirmedPayment.hbs",
         );
 
         const templateFileContent = fs.readFileSync(path).toString("utf-8");
@@ -174,7 +192,7 @@ class ConfirmPaymentService {
             "..",
             "..",
             "views",
-            "expiredPayment.hbs"
+            "expiredPayment.hbs",
           );
 
           const templateFileContent = fs.readFileSync(path).toString("utf-8");
@@ -232,7 +250,7 @@ class ConfirmPaymentService {
             "..",
             "..",
             "views",
-            "canceledPayment.hbs"
+            "canceledPayment.hbs",
           );
 
           const templateFileContent = fs.readFileSync(path).toString("utf-8");
