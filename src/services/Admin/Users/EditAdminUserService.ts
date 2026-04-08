@@ -10,20 +10,27 @@ interface UserRequest {
   password: string;
   id: string;
   category: string;
-  courseBoolean: boolean;
-  resaleBoolean: boolean;
-  restrictedBoolean: boolean;
   modules: string;
-  signatureBoolean: boolean;
   sector1_id: string;
   sector2_id: string;
   sector3_id: string;
   sector4_id: string;
-  services: string;
   sector5_id: string;
+  services: string;
   city: string;
   state: string;
   courses: string;
+  leads_enabled: boolean;
+  courses_enabled: boolean;
+  marketing_enabled: boolean;
+  credentials_enabled: boolean;
+  value_pcmso: number;
+  value_ltcat_atr: number;
+  value_ltcat_medico: number;
+  value_pgr_atr: number;
+  value_lip: number;
+  value_li: number;
+  value_lp: number;
 }
 
 class EditAdminUserService {
@@ -32,7 +39,6 @@ class EditAdminUserService {
     email,
     city,
     state,
-    signatureBoolean,
     category,
     sector1_id,
     sector2_id,
@@ -44,10 +50,18 @@ class EditAdminUserService {
     photo,
     id,
     password,
-    courseBoolean,
     courses,
-    resaleBoolean,
-    restrictedBoolean,
+    leads_enabled,
+    courses_enabled,
+    marketing_enabled,
+    credentials_enabled,
+    value_pcmso,
+    value_ltcat_atr,
+    value_ltcat_medico,
+    value_pgr_atr,
+    value_lip,
+    value_li,
+    value_lp,
     modules,
   }: UserRequest) {
     const user = await prismaClient.user.findUnique({
@@ -80,18 +94,25 @@ class EditAdminUserService {
       name: name,
       email: email,
       category: category,
-      course: courseBoolean,
-      signature: signatureBoolean,
       phone_number: phone_number,
       sector1_id: sector1_id,
       sector2_id: sector2_id,
       sector3_id: sector3_id,
       sector4_id: sector4_id,
       sector5_id: sector5_id,
-      resale: resaleBoolean,
-      restricted: restrictedBoolean,
       state: state,
       city: city,
+      leads_enabled: leads_enabled,
+      courses_enabled: courses_enabled,
+      marketing_enabled: marketing_enabled,
+      credentials_enabled: credentials_enabled,
+      value_pcmso: value_pcmso,
+      value_ltcat_atr: value_ltcat_atr,
+      value_ltcat_medico: value_ltcat_medico,
+      value_pgr_atr: value_pgr_atr,
+      value_lip: value_lip,
+      value_li: value_li,
+      value_lp: value_lp,
       services: services,
       modules: modules,
       courses: courses,

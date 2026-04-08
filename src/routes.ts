@@ -364,7 +364,7 @@ router.get("/admin/payments", new ListAdminPaymentsController().handle);
 router.post("/credential", new AdminCreateCredentialController().handle);
 router.put("/credential", new AdminEditCredentialController().handle);
 
-router.get("/users/:type", new ListUsersController().handle);
+router.get("/users", new ListUsersController().handle);
 router.get("/admin/users/ranking", new RankingUsersController().handle);
 router.post("/user", upload.single("file"), new CreateUserController().handle);
 router.put(

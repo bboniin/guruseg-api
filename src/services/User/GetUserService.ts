@@ -45,10 +45,12 @@ class GetUserService {
         type: user.type,
         photo: user.photo,
         photo_url: photo_url,
-        course: user.course,
-        resale: user.resale,
-        signature: user.signature,
+        courses_enabled: user.courses_enabled,
+        leads_enabled: user.leads_enabled,
+        marketing_enabled: user.marketing_enabled,
+        credentials_enabled: user.credentials_enabled,
         costumer_id: user.costumer_id,
+        category: user.category,
         phone_number: user.phone_number,
       };
     }

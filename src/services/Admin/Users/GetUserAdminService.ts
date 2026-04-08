@@ -13,9 +13,6 @@ class GetUserAdminService {
       select: {
         name: true,
         email: true,
-        course: true,
-        resale: true,
-        signature: true,
         modules: true,
         sector1_id: true,
         sector2_id: true,
@@ -30,6 +27,17 @@ class GetUserAdminService {
         state: true,
         photo: true,
         courses: true,
+        leads_enabled: true,
+        courses_enabled: true,
+        marketing_enabled: true,
+        credentials_enabled: true,
+        value_pcmso: true,
+        value_ltcat_atr: true,
+        value_ltcat_medico: true,
+        value_pgr_atr: true,
+        value_lip: true,
+        value_li: true,
+        value_lp: true,
       },
     });
 

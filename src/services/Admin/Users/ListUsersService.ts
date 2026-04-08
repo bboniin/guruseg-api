@@ -22,23 +22,35 @@ class ListUsersService {
 
     let filterSearch = {};
 
-    if (type == "all") {
-      type = "";
+    if (filter) {
+      filterSearch["name"] = {
+        contains: filter,
+        mode: "insensitive",
+      };
+    }
+    if (type) {
+      filterSearch["category"] = type;
     }
 
-    if (!all) {
-      if (filter) {
-        filterSearch["name"] = {
-          contains: filter,
-          mode: "insensitive",
-        };
-      }
+    if (all) {
+      const users = await prismaClient.user.findMany({
+        where: {
+          visible: true,
+          category: { contains: type },
+          ...filterSearch,
+        },
+        orderBy: {
+          create_at: "asc",
+        },
+        ...(all ? {} : { skip: page * 30, take: 30 }),
+      });
+
+      return { users };
     }
 
     const usersTotal = await prismaClient.user.count({
       where: {
         visible: true,
-        category: { contains: type },
         ...filterSearch,
       },
     });
@@ -46,7 +58,6 @@ class ListUsersService {
     const users = await prismaClient.user.findMany({
       where: {
         visible: true,
-        category: { contains: type },
         ...filterSearch,
       },
       orderBy: {

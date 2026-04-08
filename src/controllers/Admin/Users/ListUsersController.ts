@@ -3,19 +3,17 @@ import { ListUsersService } from "../../../services/Admin/Users/ListUsersService
 
 class ListUsersController {
   async handle(req: Request, res: Response) {
-    const { type } = req.params;
-
     let userId = req.userId;
 
-    const { filter, page, all } = req.query;
+    const { filter, page, all, type } = req.query;
 
     const listUsersService = new ListUsersService();
 
     const users = await listUsersService.execute({
       userId,
-      type,
       page: page ? Number(page) || 0 : 0,
       filter: filter ? String(filter) : "",
+      type: type ? String(type) : "",
       all: all == "true",
     });
 
