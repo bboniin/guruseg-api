@@ -16,7 +16,7 @@ class ListUsersService {
       },
     });
 
-    if (!admin && type != "all") {
+    if (!admin && !all) {
       throw new Error("Rota restrita ao administrador");
     }
 
@@ -42,7 +42,6 @@ class ListUsersService {
         orderBy: {
           create_at: "asc",
         },
-        ...(all ? {} : { skip: page * 30, take: 30 }),
       });
 
       return { users };
@@ -63,7 +62,8 @@ class ListUsersService {
       orderBy: {
         create_at: "asc",
       },
-      ...(all ? {} : { skip: page * 30, take: 30 }),
+      skip: page * 30,
+      take: 30,
     });
 
     return { users, usersTotal };
