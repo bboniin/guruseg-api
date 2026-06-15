@@ -113,7 +113,6 @@ class IntegrationRisksService {
         },
       )
       .then((response) => {
-        console.log(response.data);
         const returnJSON = JSON.parse(
           response.data.replace(/"({.*?})"/g, (match, p1) => {
             return JSON.stringify(p1);

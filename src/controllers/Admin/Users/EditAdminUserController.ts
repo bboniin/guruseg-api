@@ -40,7 +40,6 @@ class EditAdminUserController {
       photo = req.file.filename;
     }
 
-    console.log(req.body);
     const editAdminUserService = new EditAdminUserService();
 
     const user = await editAdminUserService.execute({

@@ -54,16 +54,6 @@ class IntegrationJobService {
       throw new Error("Função já vinculada ao SGG");
     }
 
-    console.log({
-      id_empresa: company.sgg_id,
-      id_setor: employee.company_sector.sgg_id,
-      setor: employee.company_sector.name,
-      cargo: employee.name,
-      funcao: employee.name,
-      cbo: employee.cbo,
-      descricao_atividades: employee.description,
-    });
-
     let error = "";
     let sggId = "";
 
