@@ -6,7 +6,7 @@ interface AssociateRequest {
   value: number;
 }
 
-class CreatePaymentAssociateService {
+class CreatePaymentComissionAssociateService {
   async execute({ description, associate_id, value }: AssociateRequest) {
     if (!value) {
       throw new Error("Valor é obrigatório");
@@ -34,4 +34,4 @@ class CreatePaymentAssociateService {
   }
 }
 
-export { CreatePaymentAssociateService };
+export { CreatePaymentComissionAssociateService };

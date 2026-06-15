@@ -206,13 +206,18 @@ import { ListAssociateLeadsController } from "./controllers/Associate/ListAssoci
 import { EditAssociateController } from "./controllers/Associate/EditAssociateController";
 import { GetAssociateController } from "./controllers/Associate/GetAssociateController";
 import { ResumeAssociateController } from "./controllers/Associate/ResumeAssociateController";
-import { ListAssociatePaymentsController } from "./controllers/Associate/ListAssociatePaymentsController";
 import { isAdmin } from "./middlewares/isAdmin";
 import { ListAdminAssociateLeadsController } from "./controllers/Admin/Associates/ListAdminAssociateLeadsController";
-import { ListAdminAssociatePaymentsController } from "./controllers/Admin/Associates/ListAdminAssociatePaymentsController";
 import { ResumeAdminAssociateController } from "./controllers/Admin/Associates/ResumeAdminAssociateController";
-import { CreatePaymentAssociateController } from "./controllers/Admin/Associates/CreatePaymentAssociateController";
 import { LastStatementsUserController } from "./controllers/Statement/LastStatementsUserController";
+import { ListAdminAssociatePaymentsComissionController } from "./controllers/Admin/Associates/ListAdminAssociatePaymentsComissionController";
+import { CreatePaymentComissionAssociateController } from "./controllers/Admin/Associates/CreatePaymentComissionAssociateController";
+import { ListAssociateComissionsController } from "./controllers/Associate/ListAssociateComissionsController";
+import { IntegrationCompanyController } from "./controllers/SGG/IntegrationCompanyController";
+import { IntegrationSectorController } from "./controllers/SGG/IntegrationSectorController";
+import { IntegrationJobController } from "./controllers/SGG/IntegrationJobController";
+import { IntegrationRisksController } from "./controllers/SGG/IntegrationRisksController";
+import { SggCompanyController } from "./controllers/Company/SggCompanyController";
 
 const upload = multer(uploadConfig);
 
@@ -262,6 +267,7 @@ router.put(
 
 router.get("/company/:company_id", new GetCompanyController().handle);
 router.put("/company/:company_id", new ConfirmCompanyController().handle);
+router.put("/sgg/company/:company_id", new SggCompanyController().handle);
 
 router.use(isAuthenticated);
 
@@ -410,8 +416,11 @@ router.get("/associates", new ListAssociatesController().handle);
 router.get("/associate", new GetAssociateController().handle);
 router.get("/resume/associate", new ResumeAssociateController().handle);
 router.get("/leads/associate", new ListAssociateLeadsController().handle);
-router.get("/payments/associate", new ListAssociatePaymentsController().handle);
 router.get("/associate/:id", new GetAdminAssociateController().handle);
+router.get(
+  "/payments/associate",
+  new ListAssociateComissionsController().handle,
+);
 router.post(
   "/associate",
   upload.single("file"),
@@ -575,6 +584,14 @@ router.delete("/company-renewal/:id", new DeleteRenewalController().handle);
 router.delete("/all-renewal", new DeleteAllRenewalController().handle);
 router.put("/renewal/:id", new CheckRenewalController().handle);
 
+router.post("/sgg-company/:id", new IntegrationCompanyController().handle);
+router.post("/sgg-sector/:id", new IntegrationSectorController().handle);
+router.post("/sgg-employee/:id", new IntegrationJobController().handle);
+router.post("/sgg-risks/:id", new IntegrationRisksController().handle);
+router.post("/company-renewal", new CreateRenewalController().handle);
+router.post("/company-renewal", new CreateRenewalController().handle);
+router.post("/company-renewal", new CreateRenewalController().handle);
+
 router.post("/reminder", new CreateReminderController().handle);
 router.get("/reminders", new ListRemindersController().handle);
 router.put("/reminder/:id", new EditReminderController().handle);
@@ -625,11 +642,11 @@ router.get(
 );
 router.get(
   "/payments/associate/:associate_id",
-  new ListAdminAssociatePaymentsController().handle,
+  new ListAdminAssociatePaymentsComissionController().handle,
 );
 router.post(
   "/payment/associate",
-  new CreatePaymentAssociateController().handle,
+  new CreatePaymentComissionAssociateController().handle,
 );
 
 export { router };

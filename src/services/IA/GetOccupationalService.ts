@@ -18,6 +18,7 @@ class GetOccupationalService {
 Sempre responda **exatamente** neste formato JSON:
 {
   "name": "Nome da função com iniciais maiúsculas",
+  "cbo": "cbo": "O código CBO oficial com 6 dígitos (Ex: 2122-05 para Engenheiro de Software)",
   "description": "Resumo da atividade principal da função.",
   "epis": EPI 1, EPI 2, EPI 3...
 }

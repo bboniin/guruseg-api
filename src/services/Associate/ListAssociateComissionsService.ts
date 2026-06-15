@@ -1,12 +1,12 @@
 import prismaClient from "../../prisma";
 
-interface PaymentRequest {
+interface ComissionRequest {
   userId: string;
   page: number;
 }
 
-class ListAssociatePaymentsService {
-  async execute({ userId, page }: PaymentRequest) {
+class ListAssociateComissionsService {
+  async execute({ userId, page }: ComissionRequest) {
     const paymentsTotalArray = await prismaClient.associatePayment.findMany({
       where: {
         associate_id: userId,
@@ -34,4 +34,4 @@ class ListAssociatePaymentsService {
   }
 }
 
-export { ListAssociatePaymentsService };
+export { ListAssociateComissionsService };

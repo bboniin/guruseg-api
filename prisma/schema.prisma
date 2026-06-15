@@ -177,7 +177,7 @@ model Associate {
   user_id           String?
 
   leads             LeadMaster[]
-  payments          AssociatePayment[]
+  payments        AssociatePayment[]
 
   @@map("associates")
 }
@@ -198,24 +198,24 @@ model AssociatePayment {
 
 
 model Order {
-  id                         Int       @id @default(autoincrement())
+  id                         Int           @id @default(autoincrement())
   observation                String?
-  observationCollaborator    String?   @default("")
-  order_linked_id            Int?      @default(0)
-  name                       String?   @default("")
-  urgent                     Boolean   @default(false)
-  order_doc_recused          Boolean   @default(false)
-  status                     String    @default("pendente")
-  status_payment             String    @default("pendente")
-  month                      String    @default("")
-  company_id                 String?   @default("")
-  collaborators              Int       @default(0)
-  sector                     String    @default("Serviços de segurança do Trabalho")
-  create_at                  DateTime? @default(now())
-  update_at                  DateTime? @updatedAt
+  observationCollaborator    String?       @default("")
+  order_linked_id            Int?          @default(0)
+  name                       String?       @default("")
+  urgent                     Boolean       @default(false)
+  order_doc_recused          Boolean       @default(false)
+  status                     String        @default("pendente")
+  status_payment             String        @default("pendente")
+  month                      String        @default("")
+  company_id                 String?       @default("")
+  collaborators              Int           @default(0)
+  sector                     String        @default("Serviços de segurança do Trabalho")
+  create_at                  DateTime?     @default(now())
+  update_at                  DateTime?     @updatedAt
     
-  user                       User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id                    String?
+  user                       User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id                    String
     
   collaborator               Collaborator? @relation(fields: [collaborator_id], references: [id], onDelete: Cascade)
   collaborator_id            String?
@@ -583,6 +583,8 @@ model Company {
   id                  String    @id @default(uuid())
   razao_social        String?
   nome_fantasia       String?
+  sgg_id              String?
+  sgg_risks_id        String?
   cnpj                String?
   ramo_atividade      String?
   cep                 String?
@@ -609,6 +611,7 @@ model CompanySector {
   id               String    @id @default(uuid())
   name             String
   description      String
+  sgg_id           String?
   create_at        DateTime? @default(now())
   update_at        DateTime? @updatedAt
   company          Company?    @relation(fields: [company_id], references: [id], onDelete: Cascade)
@@ -624,6 +627,7 @@ model CompanyEmployees {
   id                         String    @id @default(uuid())
   name                       String
   cbo                        String?
+  sgg_id                     String?
   quantidade_colaboradores   Int?
   quantidade_colaboradores_m Int?
   quantidade_colaboradores_f Int?
@@ -643,11 +647,14 @@ model CompanyScratchs {
   name               String
   description        String
   type               String   
+  sgg_id             String?
   fonte_geradora     String?
   perigos            String?
-  avaliacao_risco    String?
+  probabilidade      String?
+  efeito             String?
   epis               String?
   tempo_exposicao    String?
+  tipo_exposicao     String?
   epcs               String?
   medidas_controle   String?
   create_at          DateTime? @default(now())

@@ -57,6 +57,7 @@ class EditCompanyService {
             !data.name ||
             !data.description ||
             !data.epis ||
+            !data.cbo ||
             !data.quantidade_colaboradores
           ) {
             error = `Preencha todos os campos da função ${i + 1} no setor ${index + 1}`;
@@ -145,6 +146,7 @@ class EditCompanyService {
             name: data["name"],
             description: data["description"],
             epis: data["epis"],
+            cbo: data["cbo"],
             quantidade_colaboradores:
               parseInt(data["quantidade_colaboradores"]) || 0,
             quantidade_colaboradores_m:
@@ -164,7 +166,9 @@ class EditCompanyService {
             description: data["description"],
             fonte_geradora: data["fonte_geradora"],
             perigos: data["perigos"],
-            avaliacao_risco: data["avaliacao_risco"],
+            probabilidade: data["probabilidade"],
+            efeito: data["efeito"],
+            tipo_exposicao: data["tipo_exposicao"],
             tempo_exposicao: data["tempo_exposicao"],
             epis: data["epis"],
             epcs: data["epcs"],

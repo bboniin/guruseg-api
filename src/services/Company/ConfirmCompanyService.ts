@@ -148,6 +148,7 @@ class ConfirmCompanyService {
             name: data["name"],
             description: data["description"],
             epis: data["epis"],
+            cbo: data["cbo"],
             quantidade_colaboradores:
               parseInt(data["quantidade_colaboradores"]) || 0,
             quantidade_colaboradores_m:
@@ -167,8 +168,10 @@ class ConfirmCompanyService {
             description: data["description"],
             fonte_geradora: data["fonte_geradora"],
             perigos: data["perigos"],
-            avaliacao_risco: data["avaliacao_risco"],
+            probabilidade: data["probabilidade"],
+            efeito: data["efeito"],
             tempo_exposicao: data["tempo_exposicao"],
+            tipo_exposicao: data["tipo_exposicao"],
             epis: data["epis"],
             epcs: data["epcs"],
             medidas_controle: data["medidas_controle"],
