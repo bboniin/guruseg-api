@@ -11,6 +11,7 @@ interface OrderRequest {
   collaborator_id: string;
   user_id: string;
   all: boolean;
+  allType: boolean;
   page: number;
 }
 
@@ -26,6 +27,7 @@ class ListOrdersService {
     collaborator_id,
     user_id,
     all,
+    allType,
   }: OrderRequest) {
     let data = {};
 
@@ -104,14 +106,17 @@ class ListOrdersService {
       },
     });
 
+    const skip = allType ? undefined : page * 30;
+    const take = allType ? undefined : 30;
+
     const orders = await prismaClient.order.findMany({
       where: data,
       orderBy: {
         update_at: "desc",
       },
 
-      skip: page * 30,
-      take: 30,
+      skip,
+      take,
       include: {
         items: {
           orderBy: {

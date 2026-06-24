@@ -11,6 +11,7 @@ class CreateServiceController {
       min_collaborators,
       max_collaborators,
       sector,
+      required_company,
     } = req.body;
 
     const createServiceService = new CreateServiceService();
@@ -23,6 +24,7 @@ class CreateServiceController {
       max_collaborators,
       commission,
       sector,
+      required_company,
     });
 
     return res.json(service);

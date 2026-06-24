@@ -54,7 +54,7 @@ class IntegrationRisksService {
       );
     }
 
-    if (sector.companyScratchs[0].sgg_id) {
+    if (company.sgg_risks_id) {
       throw new Error("Riscos já vinculados ao SGG");
     }
 

@@ -266,8 +266,6 @@ router.put(
 );
 
 router.get("/company/:company_id", new GetCompanyController().handle);
-router.put("/company/:company_id", new ConfirmCompanyController().handle);
-router.put("/sgg/company/:company_id", new SggCompanyController().handle);
 
 router.use(isAuthenticated);
 
@@ -558,6 +556,11 @@ router.delete("/lead/master/:id", new DeleteLeadMasterController().handle);
 
 // Companies
 
+router.put("/sgg/company/:company_id", new SggCompanyController().handle);
+router.put(
+  "/confirm-company/:company_id",
+  new ConfirmCompanyController().handle,
+);
 router.get("/companies", new ListCompaniesController().handle);
 router.get("/companies-confirm", new ListCompaniesConfirmController().handle);
 router.post("/company", new CreateCompanyController().handle);
@@ -572,7 +575,7 @@ router.put(
   "/company-handler/:company_id",
   new HandlerCompanyController().handle,
 );
-router.put("/company-edit/:company_id", new EditCompanyController().handle);
+router.put("/company/:company_id", new EditCompanyController().handle);
 router.delete("/employe/:employe_id", new DeleteEmployeController().handle);
 
 router.post("/service-os/:id", new ServiceOSUserController().handle);

@@ -42,12 +42,15 @@ class IntegrationCompanyService {
           fantasia: company.nome_fantasia,
           nome: company.razao_social,
           CNPJ: company.cnpj,
-          responsaveis: [
-            {
-              CPF: company.cpf_responsavel,
-              nome: company.nome_responsavel,
-            },
-          ],
+          ...(company.nome_responsavel &&
+            company.cpf_responsavel && {
+              responsaveis: [
+                {
+                  CPF: company.cpf_responsavel,
+                  nome: company.nome_responsavel,
+                },
+              ],
+            }),
         },
         {
           auth: {

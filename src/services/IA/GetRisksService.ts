@@ -362,7 +362,7 @@ class GetRisksService {
   { "agente": "Risco de desgaste emocional", "tipo": "Ergonômico" },
   { "agente": "Peróxido de metil etil cetona", "tipo": "Químico" },
   { "agente": "Estireno", "tipo": "Químico" },
-  { "agente": "Radiação não ionizante", "tipo": "Físico" },
+  { "agente": "Radiação não ionizante", "tipo": "Físico" }, 
   { "agente": "Cortes e Perfurações", "tipo": "Acidentes" },
   { "agente": "Equipamentos e Ferramentas", "tipo": "Acidentes" },
   { "agente": "Nevoas e vapores de gasolina e óleo diesel", "tipo": "Químico" },
@@ -380,8 +380,8 @@ Possiveis Tipo de Exposição: Eventual/Ocasional,Habitual,Habitual/Intermitente
 Sempre responda **exatamente** neste formato Array :
 
   [{
-      "type": "Tipo do risco",
-      "name": "Agente do risco",
+      "type": "Tipo do risco (Siga o agente exato do array passado acima)",
+      "name": "Agente do risco (Siga o tipo exato do agente do array passado acima)",
       "description": "Atividades e Processos",
       "fonte_geradora": "Fontes Geradora, retorne os elementos separados por vírgula, garantindo que CADA palavra comece com a primeira letra maiúscula (Exemplo: "Computador, Teclado"),
       "perigos": "Perigos",

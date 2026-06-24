@@ -10,6 +10,8 @@ interface ServiceRequest {
   sector: string;
   min_collaborators: number;
   max_collaborators: number;
+
+  required_company: boolean;
 }
 
 class EditServiceService {
@@ -22,6 +24,7 @@ class EditServiceService {
     max_collaborators,
     commission,
     sector,
+    required_company,
   }: ServiceRequest) {
     if (!name || !value || !commission || !sector) {
       throw new Error("Nome, valor, setor e comissão é obrigatório");
@@ -35,6 +38,7 @@ class EditServiceService {
       commission: commission,
       min_collaborators: min_collaborators,
       max_collaborators: max_collaborators,
+      required_company: required_company,
     };
 
     const service = await prismaClient.service.update({

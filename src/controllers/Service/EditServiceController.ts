@@ -12,6 +12,7 @@ class EditServiceController {
       max_collaborators,
       commission,
       sector,
+      required_company,
     } = req.body;
 
     const editServiceService = new EditServiceService();
@@ -25,6 +26,7 @@ class EditServiceController {
       value,
       commission,
       sector,
+      required_company,
     });
 
     return res.json(service);

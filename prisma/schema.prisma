@@ -206,6 +206,7 @@ model Order {
   urgent                     Boolean       @default(false)
   order_doc_recused          Boolean       @default(false)
   status                     String        @default("pendente")
+  type                       String        @default("elaboracao")
   status_payment             String        @default("pendente")
   month                      String        @default("")
   company_id                 String?       @default("")
@@ -330,6 +331,7 @@ model Service {
   min_collaborators   Int       @default(0)
   max_collaborators   Int       @default(0)
   visible             Boolean   @default(true)
+  required_company    Boolean   @default(false)
   description         String?
   sector              String    @default("Serviços de segurança do Trabalho")
   create_at           DateTime? @default(now())
@@ -593,11 +595,10 @@ model Company {
   cpf_responsavel     String?
   contato_responsavel String?
   observation         String?
+  type                String    @default("CNPJ")
   order_id            Int?      @default(0)
   status              String    @default("aguardando")
   collaborador_id     String  
-  signature           String?
-  signature_date      DateTime? @default(now())  
   create_at           DateTime? @default(now())
   update_at           DateTime? @updatedAt
 
@@ -647,7 +648,6 @@ model CompanyScratchs {
   name               String
   description        String
   type               String   
-  sgg_id             String?
   fonte_geradora     String?
   perigos            String?
   probabilidade      String?

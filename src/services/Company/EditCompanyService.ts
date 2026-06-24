@@ -13,6 +13,9 @@ interface CompanyRequest {
   cpf_responsavel: string;
   contato_responsavel: string;
   companySector: Array<[]>;
+  deleteSector: Array<string>;
+  deleteEmploye: Array<string>;
+  type: string;
 }
 
 class EditCompanyService {
@@ -29,20 +32,23 @@ class EditCompanyService {
     cpf_responsavel,
     contato_responsavel,
     companySector,
+    deleteSector,
+    deleteEmploye,
+    type,
   }: CompanyRequest) {
     let error = "";
 
     if (
       !razao_social ||
       companySector.length == 0 ||
-      !contato_responsavel ||
-      !cpf_responsavel ||
-      !nome_responsavel ||
       !endereco ||
       !ramo_atividade ||
       !cep ||
       !nome_fantasia ||
-      !cnpj
+      !cnpj ||
+      !type ||
+      (type == "CAEPF" &&
+        (!contato_responsavel || !cpf_responsavel || !nome_responsavel))
     ) {
       error = "Preencha todos os campos do Formulário.";
     }
@@ -63,9 +69,21 @@ class EditCompanyService {
             error = `Preencha todos os campos da função ${i + 1} no setor ${index + 1}`;
           }
         });
-        item["companyScratchs"].map((data) => {
-          if (!data.description) {
-            error = `Preencha o observação do risco ${data.name} no setor ${index + 1}`;
+        item["companyScratchs"].map((risk) => {
+          if (
+            !risk.name ||
+            !risk.type ||
+            !risk.description ||
+            !risk.fonte_geradora ||
+            !risk.perigos ||
+            !risk.probabilidade ||
+            !risk.efeito ||
+            !risk.epis ||
+            !risk.epcs ||
+            !risk.tipo_exposicao ||
+            !risk.tempo_exposicao
+          ) {
+            error = `Preencha o todas informações do risco ${risk.name} no setor ${index + 1}`;
           }
         });
       }
@@ -111,6 +129,17 @@ class EditCompanyService {
     await prismaClient.companySector.deleteMany({
       where: {
         company_id: company_id,
+        id: {
+          in: deleteSector,
+        },
+      },
+    });
+
+    await prismaClient.companyEmployees.deleteMany({
+      where: {
+        id: {
+          in: deleteEmploye,
+        },
       },
     });
 
@@ -128,39 +157,82 @@ class EditCompanyService {
         nome_responsavel: nome_responsavel,
         cpf_responsavel: cpf_responsavel,
         contato_responsavel: contato_responsavel,
+        type: type == "CAEPF" ? "CAEPF" : "CNPJ",
       },
     });
 
     companySector.map(async (item) => {
-      const sector = await prismaClient.companySector.create({
-        data: {
-          company_id: companyGet.id,
-          name: item["name"],
-          description: item["description"],
-        },
-      });
-      item["companyEmployees"].map(async (data) => {
-        await prismaClient.companyEmployees.create({
+      let sector = {};
+      if (item["id"]) {
+        sector = await prismaClient.companySector.update({
+          where: {
+            id: item["id"],
+          },
           data: {
-            company_sector_id: sector.id,
-            name: data["name"],
-            description: data["description"],
-            epis: data["epis"],
-            cbo: data["cbo"],
-            quantidade_colaboradores:
-              parseInt(data["quantidade_colaboradores"]) || 0,
-            quantidade_colaboradores_m:
-              parseInt(data["quantidade_colaboradores_m"]) || 0,
-            quantidade_colaboradores_f:
-              parseInt(data["quantidade_colaboradores_f"]) || 0,
+            company_id: companyGet.id,
+            name: item["name"],
+            description: item["description"],
           },
         });
+      } else {
+        sector = await prismaClient.companySector.create({
+          data: {
+            company_id: companyGet.id,
+            name: item["name"],
+            description: item["description"],
+          },
+        });
+      }
+
+      item["companyEmployees"].map(async (data) => {
+        if (data["id"]) {
+          await prismaClient.companyEmployees.update({
+            where: {
+              id: data["id"],
+            },
+            data: {
+              company_sector_id: sector["id"],
+              name: data["name"],
+              description: data["description"],
+              epis: data["epis"],
+              cbo: data["cbo"],
+              quantidade_colaboradores:
+                parseInt(data["quantidade_colaboradores"]) || 0,
+              quantidade_colaboradores_m:
+                parseInt(data["quantidade_colaboradores_m"]) || 0,
+              quantidade_colaboradores_f:
+                parseInt(data["quantidade_colaboradores_f"]) || 0,
+            },
+          });
+        } else {
+          await prismaClient.companyEmployees.create({
+            data: {
+              company_sector_id: sector["id"],
+              name: data["name"],
+              description: data["description"],
+              epis: data["epis"],
+              cbo: data["cbo"],
+              quantidade_colaboradores:
+                parseInt(data["quantidade_colaboradores"]) || 0,
+              quantidade_colaboradores_m:
+                parseInt(data["quantidade_colaboradores_m"]) || 0,
+              quantidade_colaboradores_f:
+                parseInt(data["quantidade_colaboradores_f"]) || 0,
+            },
+          });
+        }
+      });
+
+      await prismaClient.companyScratchs.deleteMany({
+        where: {
+          company_sector_id: sector["id"],
+        },
       });
 
       item["companyScratchs"].map(async (data) => {
         await prismaClient.companyScratchs.create({
           data: {
-            company_sector_id: sector.id,
+            company_sector_id: sector["id"],
             name: data["name"],
             type: data["type"],
             description: data["description"],

@@ -390,8 +390,8 @@ Possiveis Tipo de Exposição: Eventual/Ocasional,Habitual,Habitual/Intermitente
 Sempre responda **exatamente** neste formato Array :
 
   [{
-      "type": "Tipo do risco",
-      "name": "Agente do risco",
+      "type": "Tipo do risco (Siga o agente exato do array passado acima)",
+      "name": "Agente do risco (Siga o tipo exato do agente do array passado acima)",
       "description": "Atividades e Processos",
       "fonte_geradora": "Fontes Geradora, retorne os elementos separados por vírgula, garantindo que CADA palavra comece com a primeira letra maiúscula (Exemplo: "Computador, Teclado"),
       "perigos": "Perigos",

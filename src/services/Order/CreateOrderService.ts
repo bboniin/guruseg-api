@@ -14,6 +14,7 @@ interface OrderRequest {
   reminder: boolean;
   collaborators: number;
   items: Array<[]>;
+  type: string;
 }
 
 class CreateOrderService {
@@ -28,6 +29,7 @@ class CreateOrderService {
     collaborators,
     code,
     reminder,
+    type,
   }: OrderRequest) {
     if (items.length == 0 || !userId || !sector || !collaborators) {
       throw new Error("Preencha todos os campos.");
@@ -94,6 +96,7 @@ class CreateOrderService {
         urgent: urgent,
         collaborators: collaborators,
         status: "pendente",
+        type: type == "renovacao" ? "renovacao" : "elaboracao",
         status_payment: "confirmado",
       },
       include: {
