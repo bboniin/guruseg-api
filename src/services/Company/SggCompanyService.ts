@@ -3,11 +3,10 @@ import prismaClient from "../../prisma";
 interface CompanyRequest {
   company_id: string;
   sgg_id: string;
-  userId: string;
 }
 
 class SggCompanyService {
-  async execute({ company_id, sgg_id, userId }: CompanyRequest) {
+  async execute({ company_id, sgg_id }: CompanyRequest) {
     if (!sgg_id) {
       throw new Error("Código SGG é obrigatorio");
     }
@@ -15,7 +14,6 @@ class SggCompanyService {
     const companyGet = await prismaClient.company.findFirst({
       where: {
         id: company_id,
-        collaborador_id: userId,
       },
       include: {
         companySector: {

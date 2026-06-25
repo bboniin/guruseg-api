@@ -14,7 +14,6 @@ class SggCompanyController {
     const company = await sggCompanyService.execute({
       company_id: company_id,
       sgg_id,
-      userId,
     });
 
     return res.json(company);

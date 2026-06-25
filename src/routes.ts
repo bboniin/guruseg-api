@@ -218,6 +218,7 @@ import { IntegrationSectorController } from "./controllers/SGG/IntegrationSector
 import { IntegrationJobController } from "./controllers/SGG/IntegrationJobController";
 import { IntegrationRisksController } from "./controllers/SGG/IntegrationRisksController";
 import { SggCompanyController } from "./controllers/Company/SggCompanyController";
+import { SggSectorController } from "./controllers/Company/SggSectorController";
 
 const upload = multer(uploadConfig);
 
@@ -557,6 +558,7 @@ router.delete("/lead/master/:id", new DeleteLeadMasterController().handle);
 // Companies
 
 router.put("/sgg/company/:company_id", new SggCompanyController().handle);
+router.put("/sgg/sector/:sector_id", new SggSectorController().handle);
 router.put(
   "/confirm-company/:company_id",
   new ConfirmCompanyController().handle,
