@@ -375,6 +375,27 @@ class GetRisksService {
   { "agente": "Biodiesel", "tipo": "Químico" },
   { "agente": "Repetitividade de movimentos", "tipo": "Ergonômico" }
 ]
+
+Possiveis Probabilidades: Não há exposição,Exposição a níveis baixos,Exposição moderada,Exposição elevada,Exposição elevadíssima 
+Possiveis Efeitos: Pouca importância,Preocupantes,Severos,Irreversíveis,Ameaça
+Possiveis Tipo de Exposição: Eventual/Ocasional,Habitual,Habitual/Intermitente,Habitual/Permanente,Intermitente,N.A.,Não Habitual/Não Permanente,Ocasional,Ocasional/Intermitente,Ocasional/Permanente,Permanente
+
+Sempre responda **exatamente** neste formato Array :
+
+  [{
+      "type": "Tipo do risco (Siga o agente exato do array passado acima)",
+      "name": "Agente do risco (Siga o tipo exato do agente do array passado acima)",
+      "description": "Atividades e Processos",
+      "fonte_geradora": "Fontes Geradora, retorne os elementos separados por vírgula, garantindo que CADA palavra comece com a primeira letra maiúscula (Exemplo: "Computador, Teclado"),
+      "perigos": "Perigos",
+      "probabilidade": probabilidade,
+      "efeito": efeito,
+      "tipo_exposicao": tipo de exposição,
+      "tempo_exposicao": "Tempo de exposição ao risco,
+      "epis": "EPI(s) Recomendado(s)",
+      "epcs": "EPC(s) Recomendado(s)",
+      "medidas_controle": "Medidas de Controle Adicional",
+  }]
 }
 
 Evite variações. Não inclua explicações, apenas o Array válido.
