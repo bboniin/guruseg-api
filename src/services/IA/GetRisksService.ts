@@ -373,7 +373,8 @@ class GetRisksService {
   { "agente": "Arranjo Inadequado", "tipo": "Ergonômico" },
   { "agente": "Risco de fadiga extrema e queda de desempenho", "tipo": "Ergonômico" },
   { "agente": "Biodiesel", "tipo": "Químico" },
-  { "agente": "Repetitividade de movimentos", "tipo": "Ergonômico" }
+  { "agente": "Repetitividade de movimentos", "tipo": "Ergonômico" },
+  { "agente": "Fatores de Riscos Psicossociais", "tipo": "Ergonômico" }
 ]
 
 Possiveis Probabilidades: Não há exposição,Exposição a níveis baixos,Exposição moderada,Exposição elevada,Exposição elevadíssima 

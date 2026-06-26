@@ -54,7 +54,7 @@ class IntegrationRisksService {
       );
     }
 
-    if (company.sgg_risks_id) {
+    if (sector.sgg_risks_id) {
       throw new Error("Riscos já vinculados ao SGG");
     }
 
@@ -134,9 +134,9 @@ class IntegrationRisksService {
       throw new Error(error);
     }
 
-    await prismaClient.company.update({
+    await prismaClient.companySector.update({
       where: {
-        id: company_id,
+        id: id,
       },
       data: {
         sgg_risks_id: sggId,

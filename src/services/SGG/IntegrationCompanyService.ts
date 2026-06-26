@@ -41,16 +41,26 @@ class IntegrationCompanyService {
         {
           fantasia: company.nome_fantasia,
           nome: company.razao_social,
-          CNPJ: company.cnpj,
-          ...(company.nome_responsavel &&
-            company.cpf_responsavel && {
-              responsaveis: [
-                {
-                  CPF: company.cpf_responsavel,
-                  nome: company.nome_responsavel,
-                },
-              ],
-            }),
+          ...(company.type === "CNPJ"
+            ? {
+                CNPJ: company.cnpj,
+              }
+            : {
+                CPF: company.cpf_responsavel,
+                tipo_especifico: "CAEPF",
+                valor_tipo_especifico: company.cnpj,
+              }),
+          ...(((company.type === "CNPJ" &&
+            company.nome_responsavel &&
+            company.cpf_responsavel) ||
+            company.type === "CAEPF") && {
+            responsaveis: [
+              {
+                CPF: company.cpf_responsavel,
+                nome: company.nome_responsavel,
+              },
+            ],
+          }),
         },
         {
           auth: {

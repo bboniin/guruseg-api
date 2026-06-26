@@ -586,7 +586,6 @@ model Company {
   razao_social        String?
   nome_fantasia       String?
   sgg_id              String?
-  sgg_risks_id        String?
   cnpj                String?
   ramo_atividade      String?
   cep                 String?
@@ -613,6 +612,7 @@ model CompanySector {
   name             String
   description      String
   sgg_id           String?
+  sgg_risks_id     String?
   create_at        DateTime? @default(now())
   update_at        DateTime? @updatedAt
   company          Company?    @relation(fields: [company_id], references: [id], onDelete: Cascade)

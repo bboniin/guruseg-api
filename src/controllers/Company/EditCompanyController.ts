@@ -21,8 +21,6 @@ class EditCompanyController {
 
     const { company_id } = req.params;
 
-    let userId = req.userId;
-
     const editCompanyService = new EditCompanyService();
 
     const company = await editCompanyService.execute({
@@ -32,7 +30,6 @@ class EditCompanyController {
       cnpj,
       ramo_atividade,
       cep,
-      userId,
       endereco,
       nome_responsavel,
       cpf_responsavel,

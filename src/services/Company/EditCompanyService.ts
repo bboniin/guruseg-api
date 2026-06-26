@@ -7,7 +7,6 @@ interface CompanyRequest {
   cnpj: string;
   ramo_atividade: string;
   cep: string;
-  userId: string;
   endereco: string;
   nome_responsavel: string;
   cpf_responsavel: string;
@@ -27,7 +26,6 @@ class EditCompanyService {
     ramo_atividade,
     cep,
     endereco,
-    userId,
     nome_responsavel,
     cpf_responsavel,
     contato_responsavel,
@@ -95,7 +93,6 @@ class EditCompanyService {
     const companyGet = await prismaClient.company.findFirst({
       where: {
         id: company_id,
-        collaborador_id: userId,
       },
       include: {
         companySector: {
