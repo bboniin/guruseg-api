@@ -127,7 +127,6 @@ class IntegrationRisksService {
         sggId = returnData.id;
       })
       .catch((error) => {
-        console.log(error);
         error = error.message;
       });
 

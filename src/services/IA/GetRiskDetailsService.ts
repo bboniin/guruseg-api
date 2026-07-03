@@ -13,40 +13,121 @@ class GetRiskDetailsService {
         "Preencha o tipo, setor e nome para buscar mais detalhes",
       );
     }
+
     const client = new OpenAI();
 
-    const response = await client.responses.create({
-      model: "gpt-4.1",
-      input: `Você é um assistente que retorna informações mais detalhadas sobre risco do setor ${sector}, agente ${name} do tipo ${type}. de acordo com as funções no Brasil.
- Use esses agentes como modelo: 
+    const PROBABILIDADES = [
+      "Não há exposição",
+      "Exposição a níveis baixos",
+      "Exposição moderada",
+      "Exposição elevada",
+      "Exposição elevadíssima",
+    ];
+    const EFEITOS = [
+      "Pouca importância",
+      "Preocupantes",
+      "Severos",
+      "Irreversíveis",
+      "Ameaça",
+    ];
+    const TIPOS_EXPOSICAO = [
+      "Eventual/Ocasional",
+      "Habitual",
+      "Habitual/Intermitente",
+      "Habitual/Permanente",
+      "Intermitente",
+      "N.A.",
+      "Não Habitual/Não Permanente",
+      "Ocasional",
+      "Ocasional/Intermitente",
+      "Ocasional/Permanente",
+      "Permanente",
+    ];
 
-Possiveis Probabilidades: Não há exposição,Exposição a níveis baixos,Exposição moderada,Exposição elevada,Exposição elevadíssima 
-Possiveis Efeitos: Pouca importância,Preocupantes,Severos,Irreversíveis,Ameaça
-Possiveis Tipo de Exposição: Eventual/Ocasional,Habitual,Habitual/Intermitente,Habitual/Permanente,Intermitente,N.A.,Não Habitual/Não Permanente,Ocasional,Ocasional/Intermitente,Ocasional/Permanente,Permanente
+    const response = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
+            "Você é um perito engenheiro de segurança do trabalho no Brasil especialista em PGR e eSocial. Seu objetivo é detalhar os riscos ocupacionais solicitados.",
+        },
+        {
+          role: "user",
+          content: `Retorne informações detalhadas sobre o risco no setor "${sector}". Agente nocivo: "${name}". Tipo de risco: "${type}".`,
+        },
+      ],
 
-Sempre responda **exatamente** neste formato Objeto:
-
-  {
-      "type": ${type},
-      "name": ${name},
-      "description": "Atividades e Processos do risco",
-      "fonte_geradora": "Fontes Geradora do risco, retorne os elementos separados por vírgula, garantindo que CADA palavra comece com a primeira letra maiúscula (Exemplo: "Computador, Teclado"),
-      "perigos": "Perigos do risco",
-      "probabilidade": probabilidade,
-      "efeito": efeito,
-      "tipo_exposicao": tipo de exposição,
-      "tempo_exposicao": "Tempo de exposição ao risco,
-      "epis": "EPI(s) Recomendado(s)",
-      "epcs": "EPC(s) Recomendado(s)",
-      "medidas_controle": "Medidas de Controle Adicional",
-  }
-}
-
-Evite variações. Não inclua explicações, apenas o Objeto válido.
-`,
+      response_format: {
+        type: "json_schema",
+        json_schema: {
+          name: "detalhes_do_risco",
+          strict: true,
+          schema: {
+            type: "object",
+            properties: {
+              tipo: {
+                type: "string",
+                enum: [type],
+                description: "O tipo do risco passado na requisição.",
+              },
+              name: {
+                type: "string",
+                enum: [name],
+                description: "O nome do agente passado na requisição.",
+              },
+              description: {
+                type: "string",
+                description: "Atividades e Processos detalhados do risco.",
+              },
+              fonte_geradora: {
+                type: "string",
+                description:
+                  "Fontes Geradoras separadas por vírgula. Cada palavra deve começar com letra maiúscula. Exemplo: 'Computador, Teclado'.",
+              },
+              perigos: {
+                type: "string",
+                description: "Perigos associados ao risco.",
+              },
+              probabilidade: { type: "string", enum: PROBABILIDADES },
+              efeito: { type: "string", enum: EFEITOS },
+              tipo_exposicao: { type: "string", enum: TIPOS_EXPOSICAO },
+              tempo_exposicao: {
+                type: "string",
+                description: "Tempo estimado de exposição ao risco.",
+              },
+              epis: { type: "string", description: "EPI(s) Recomendado(s)" },
+              epcs: { type: "string", description: "EPC(s) Recomendado(s)" },
+              medidas_controle: {
+                type: "string",
+                description: "Medidas de Controle Adicional",
+              },
+            },
+            required: [
+              "tipo",
+              "name",
+              "description",
+              "fonte_geradora",
+              "perigos",
+              "probabilidade",
+              "efeito",
+              "tipo_exposicao",
+              "tempo_exposicao",
+              "epis",
+              "epcs",
+              "medidas_controle",
+            ],
+            additionalProperties: false,
+          },
+        },
+      },
+      temperature: 0.1,
     });
 
-    return JSON.parse(response.output_text);
+    const risco = JSON.parse(response.choices[0].message.content || "{}");
+    risco.type = risco.tipo;
+    console.log(risco);
+    return risco;
   }
 }
 

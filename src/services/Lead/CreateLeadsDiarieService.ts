@@ -5,7 +5,6 @@ import axios from "axios";
 class CreateLeadsDiarieService {
   async execute() {
     let leads = [];
-    console.log("Aq foi");
     await axios
       .post(
         "https://api.casadosdados.com.br/v5/cnpj/pesquisa",
@@ -108,7 +107,6 @@ class CreateLeadsDiarieService {
                 price: 2.97,
                 tag: "API",
                 location: `${lead.endereco.municipio} - ${lead.endereco.uf}`,
-                // timeout:
               },
             });
           })
