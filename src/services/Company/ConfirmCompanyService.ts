@@ -29,6 +29,25 @@ class ConfirmCompanyService {
       },
     });
 
+    if (company.order_id) {
+      const order = await prismaClient.order.findUnique({
+        where: {
+          id: company.order_id,
+        },
+      });
+      if (order) {
+        await prismaClient.order.update({
+          where: {
+            id: company.order_id,
+          },
+          data: {
+            status: order.is_finished ? "alteracao" : "andamento",
+            company_edited: false,
+          },
+        });
+      }
+    }
+
     return company;
   }
 }

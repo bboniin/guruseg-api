@@ -14,6 +14,8 @@ class CreateOrderController {
       company_id,
       reminder,
       type,
+      delivery_date,
+      acquisition_channel,
     } = req.body;
 
     let userId = req.userId;
@@ -32,6 +34,8 @@ class CreateOrderController {
       code,
       reminder,
       type,
+      delivery_date,
+      acquisition_channel,
     });
 
     return res.json(order);

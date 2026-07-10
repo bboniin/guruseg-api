@@ -12,7 +12,7 @@ class GetAssistentService {
     const client = new OpenAI();
 
     const response = await client.responses.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4.1",
       input: `Você é um assistente especializado exclusivamente em Segurança do Trabalho. Seu conhecimento cobre normas regulamentadoras (NRs), prevenção de acidentes, EPIs, ergonomia, análises de risco, segurança em máquinas e equipamentos, inspeções, treinamentos, entre outros assuntos relacionados à saúde e segurança ocupacional.
 
 Quando alguém fizer uma pergunta dentro desse tema, você deve responder de forma clara, técnica e precisa, podendo usar exemplos, siglas e explicações normativas quando necessário.

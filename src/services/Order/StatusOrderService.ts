@@ -110,6 +110,7 @@ class StatusOrderService {
         },
         data: {
           status: status,
+          ...(status === "finalizado" && { is_finished: true }),
           update_at: new Date(),
         },
         include: {

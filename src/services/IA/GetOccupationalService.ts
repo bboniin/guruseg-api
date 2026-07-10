@@ -12,7 +12,7 @@ class GetOccupationalService {
     const client = new OpenAI();
 
     const response = await client.responses.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4.1",
       input: `Você é um assistente que retorna informações sobre ocupações de trabalho no Brasil.
 
 Sempre responda **exatamente** neste formato JSON:

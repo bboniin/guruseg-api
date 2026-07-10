@@ -219,6 +219,7 @@ import { IntegrationJobController } from "./controllers/SGG/IntegrationJobContro
 import { IntegrationRisksController } from "./controllers/SGG/IntegrationRisksController";
 import { SggCompanyController } from "./controllers/Company/SggCompanyController";
 import { SggSectorController } from "./controllers/Company/SggSectorController";
+import { EditRiskCompanyController } from "./controllers/Company/EditRiskCompanyController";
 
 const upload = multer(uploadConfig);
 
@@ -578,6 +579,7 @@ router.put(
   new HandlerCompanyController().handle,
 );
 router.put("/company/:company_id", new EditCompanyController().handle);
+router.put("/risk-company/:risk_id", new EditRiskCompanyController().handle);
 router.delete("/employe/:employe_id", new DeleteEmployeController().handle);
 
 router.post("/service-os/:id", new ServiceOSUserController().handle);

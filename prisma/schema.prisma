@@ -212,6 +212,10 @@ model Order {
   company_id                 String?       @default("")
   collaborators              Int           @default(0)
   sector                     String        @default("Serviços de segurança do Trabalho")
+  delivery_date              DateTime      @default(now())
+  acquisition_channel        String?       @default("")
+  company_edited             Boolean       @default(false)
+  is_finished                Boolean       @default(false)
   create_at                  DateTime?     @default(now())
   update_at                  DateTime?     @updatedAt
     

@@ -404,7 +404,13 @@ class GetRisksImagesService {
       { "agente": "Risco de fadiga extrema e queda de desempenho", "tipo": "Ergonômico" },
       { "agente": "Biodiesel", "tipo": "Químico" },
       { "agente": "Repetitividade de movimentos", "tipo": "Ergonômico" },
-      { "agente": "Fatores de Riscos Psicossociais", "tipo": "Ergonômico" }
+      { "agente": "Fatores de Riscos Psicossociais", "tipo": "Ergonômico" },
+      { "agente": "Trabalho em condições de difícil comunicação", "tipo": "Ergonômico" },
+      { "agente": "Poeiras Vapores Orgânicos - Percloroetileno", "tipo": "Químico" },
+      { "agente": "Princípio de Incêndio", "tipo": "Acidentes" },
+      { "agente": "Frequente ação de puxar/empurrar cargas ou volumes", "tipo": "Ergonômico" },
+      { "agente": "Exigência de flexões de coluna vertebral frequentes", "tipo": "Ergonômico" },
+      { "agente": "Água sanitária", "tipo": "Químico" }
     ]`;
 
     contentPayload.push({
