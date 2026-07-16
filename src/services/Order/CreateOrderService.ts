@@ -16,6 +16,7 @@ interface OrderRequest {
   items: Array<[]>;
   type: string;
   delivery_date: Date;
+  value_urgent: number;
   acquisition_channel: string;
 }
 
@@ -34,6 +35,7 @@ class CreateOrderService {
     type,
     delivery_date,
     acquisition_channel,
+    value_urgent,
   }: OrderRequest) {
     if (items.length == 0 || !userId || !sector || !collaborators) {
       throw new Error("Preencha todos os campos.");
@@ -50,7 +52,7 @@ class CreateOrderService {
       throw new Error("Franqueado não encontrado");
     }
 
-    let totalValue = urgent ? 147 : 0;
+    let totalValue = urgent ? value_urgent : 0;
     let totalServices = urgent ? 1 : 0;
 
     await Promise.all(
@@ -184,10 +186,10 @@ class CreateOrderService {
         data: {
           amount: 1,
           order_id: order.id,
-          name: "Taxa de Urgencia",
-          value: 147,
-          commission: 14.7,
-          description: "OS finalizada em menos de 24hrs",
+          name: "Taxa de Urgência",
+          value: value_urgent,
+          commission: value_urgent * 0.1,
+          description: "OS finalizada de acordo com prazo selecionado",
         },
       });
       order["items"].push(itemOrder);

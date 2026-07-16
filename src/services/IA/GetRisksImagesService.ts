@@ -410,7 +410,10 @@ class GetRisksImagesService {
       { "agente": "Princípio de Incêndio", "tipo": "Acidentes" },
       { "agente": "Frequente ação de puxar/empurrar cargas ou volumes", "tipo": "Ergonômico" },
       { "agente": "Exigência de flexões de coluna vertebral frequentes", "tipo": "Ergonômico" },
-      { "agente": "Água sanitária", "tipo": "Químico" }
+      { "agente": "Água sanitária", "tipo": "Químico" },
+      { "agente": "Selante para Reparos SV-01", "tipo": "Químico" },
+      { "agente": "Pó de borracha", "tipo": "Químico" },
+      { "agente": "Cola aderente à base de cimento vulcanizante", "tipo": "Químico" }
     ]`;
 
     contentPayload.push({

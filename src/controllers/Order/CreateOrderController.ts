@@ -16,6 +16,7 @@ class CreateOrderController {
       type,
       delivery_date,
       acquisition_channel,
+      value_urgent,
     } = req.body;
 
     let userId = req.userId;
@@ -36,6 +37,7 @@ class CreateOrderController {
       type,
       delivery_date,
       acquisition_channel,
+      value_urgent,
     });
 
     return res.json(order);
