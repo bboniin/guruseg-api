@@ -9,6 +9,7 @@ class GetUserService {
     const user = await prismaClient.user.findFirst({
       where: {
         id: userId,
+        visible: true,
       },
     });
 
@@ -21,12 +22,14 @@ class GetUserService {
     const collaborator = await prismaClient.collaborator.findFirst({
       where: {
         id: userId,
+        visible: true,
       },
     });
 
     const attendant = await prismaClient.attendant.findFirst({
       where: {
         id: userId,
+        visible: true,
       },
     });
 

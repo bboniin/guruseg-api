@@ -13,6 +13,7 @@ class AuthUserService {
     const user = await prismaClient.user.findFirst({
       where: {
         email: email,
+        visible: true,
       },
     });
 
@@ -25,18 +26,21 @@ class AuthUserService {
     const collaborator = await prismaClient.collaborator.findFirst({
       where: {
         email: email,
+        visible: true,
       },
     });
 
     const attendant = await prismaClient.attendant.findFirst({
       where: {
         email: email,
+        visible: true,
       },
     });
 
     const associate = await prismaClient.associate.findFirst({
       where: {
         email: email,
+        visible: true,
       },
     });
     if (!user && !collaborator && !admin && !attendant && !associate) {
