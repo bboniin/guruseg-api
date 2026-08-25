@@ -110,10 +110,16 @@ class GetUserService {
         email: associate.email,
         name: associate.name,
         photo: associate.photo,
+        phone_number: associate.phone_number,
         comission: associate.comission,
-        user_id: associate.user_id,
+        state: associate.state,
+        city: associate.city,
         photo_url: photo_url,
         type: associate.type,
+        cpf: associate.cpf,
+        terms_accepted: associate.terms_accepted,
+        type_pix: associate.type_pix,
+        key_pix: associate.key_pix,
       };
     }
   }

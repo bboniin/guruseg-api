@@ -126,7 +126,6 @@ class GetRiskDetailsService {
 
     const risco = JSON.parse(response.choices[0].message.content || "{}");
     risco.type = risco.tipo;
-    console.log(risco);
     return risco;
   }
 }

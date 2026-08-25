@@ -67,6 +67,7 @@ class CreateAssociateWebService {
         phone_number: phone_number,
         comission: 20,
         city: city,
+        user_id: "a988da0a-eaa3-4817-b3b1-c7cd292bb805",
         state: state,
       },
     });
