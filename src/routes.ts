@@ -220,6 +220,7 @@ import { IntegrationRisksController } from "./controllers/SGG/IntegrationRisksCo
 import { SggCompanyController } from "./controllers/Company/SggCompanyController";
 import { SggSectorController } from "./controllers/Company/SggSectorController";
 import { EditRiskCompanyController } from "./controllers/Company/EditRiskCompanyController";
+import { CreateAssociateWebController } from "./controllers/Admin/Associates/CreateAssociateWebController";
 
 const upload = multer(uploadConfig);
 
@@ -235,6 +236,7 @@ router.get("/ia/assistent", new GetAssistentController().handle);
 router.delete("/all/leads", new DeleteManyLeadsMasterController().handle);
 router.get("/payments/user", new GetPaymentUserController().handle);
 router.post("/lead/web", new CreateLeadWebController().handle);
+router.post("/associate/web", new CreateAssociateWebController().handle);
 router.put("/all-renewal", new EditAllRenewalsController().handle);
 router.post("/session", new AuthUserController().handle);
 router.post("/credential-session", new AuthCredentialController().handle);

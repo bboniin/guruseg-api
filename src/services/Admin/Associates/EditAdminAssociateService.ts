@@ -19,6 +19,7 @@ interface AssociateRequest {
   phone_number: string;
   comission: number;
   city: string;
+  accounting_name: string;
   state: string;
   user_id: string;
 }
@@ -31,6 +32,7 @@ class EditAdminAssociateService {
     photo,
     id,
     cnpj,
+    accounting_name,
     cpf,
     phone_number,
     comission,
@@ -95,6 +97,7 @@ class EditAdminAssociateService {
       name: name || associate.name,
       email: email || associate.email,
       cnpj: cnpj || associate.cnpj,
+      accounting_name: accounting_name || associate.accounting_name,
       phone_number: phone_number || associate.phone_number,
       comission: comission || associate.comission,
       city: city || associate.city,

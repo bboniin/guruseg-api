@@ -156,7 +156,8 @@ model Associate {
   id                String    @id @default(uuid())
   email             String    @unique
   password          String
-  name              String   
+  name              String  
+  accounting_name   String?  
   photo             String?  
   phone_number      String?
   city              String?
@@ -177,7 +178,7 @@ model Associate {
   user_id           String?
 
   leads             LeadMaster[]
-  payments        AssociatePayment[]
+  payments          AssociatePayment[]
 
   @@map("associates")
 }

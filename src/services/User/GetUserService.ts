@@ -30,7 +30,14 @@ class GetUserService {
       },
     });
 
-    if (!user && !collaborator && !admin && !attendant) {
+    const associate = await prismaClient.associate.findFirst({
+      where: {
+        id: userId,
+        visible: true,
+      },
+    });
+
+    if (!user && !collaborator && !admin && !attendant && !associate) {
       throw new Error("Usuário não encontrado");
     }
 
@@ -93,6 +100,20 @@ class GetUserService {
         enabled: attendant.enabled,
         photo_url: photo_url,
         type: attendant.type,
+      };
+    }
+    if (associate) {
+      let photo_url =
+        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + associate.photo;
+      return {
+        id: associate.id,
+        email: associate.email,
+        name: associate.name,
+        photo: associate.photo,
+        comission: associate.comission,
+        user_id: associate.user_id,
+        photo_url: photo_url,
+        type: associate.type,
       };
     }
   }

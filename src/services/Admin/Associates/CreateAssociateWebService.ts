@@ -1,44 +1,26 @@
 import prismaClient from "../../../prisma";
 import { hash } from "bcryptjs";
-import S3Storage from "../../../utils/S3Storage";
-import {
-  validateCnpj,
-  validateCpf,
-  validateEmail,
-  validatePhone,
-} from "../../../config/functions";
+import { validateEmail } from "../../../config/functions";
 
 interface AssociateRequest {
   name: string;
   email: string;
-  photo: string;
-  password: string;
   accounting_name: string;
-  cnpj: string;
   phone_number: string;
-  comission: number;
   city: string;
-  cpf: string;
   state: string;
-  user_id: string;
 }
 
-class CreateAssociateService {
+class CreateAssociateWebService {
   async execute({
     name,
     email,
-    password,
-    photo,
-    cnpj,
     phone_number,
-    cpf,
-    comission,
     city,
     accounting_name,
     state,
-    user_id,
   }: AssociateRequest) {
-    if (!email || !name || !password) {
+    if (!email || !name || !phone_number) {
       throw new Error("Preencha todos os campos obrigatórios");
     }
 
@@ -72,22 +54,7 @@ class CreateAssociateService {
       throw new Error("Email já cadastrado.");
     }
 
-    if (photo) {
-      const s3Storage = new S3Storage();
-      await s3Storage.saveFile(photo);
-    } else {
-      photo = "";
-    }
-
-    if (cpf && !validateCpf(cpf)) {
-      throw new Error("CPF é inválido");
-    }
-    if (cnpj && !validateCnpj(cnpj)) {
-      throw new Error("CNPJ é inválido");
-    }
-    if (phone_number && !validatePhone(phone_number)) {
-      throw new Error("Telefone é inválido");
-    }
+    const password = phone_number.slice(-4);
 
     const passwordHash = await hash(password, 8);
 
@@ -96,20 +63,18 @@ class CreateAssociateService {
         name: name,
         email: email,
         password: passwordHash,
-        photo: photo,
         accounting_name: accounting_name,
-        cnpj: cnpj,
         phone_number: phone_number,
-        comission: comission,
+        comission: 20,
         city: city,
-        cpf: cpf,
         state: state,
-        user_id: user_id,
       },
     });
+
+    console.log(associate);
 
     return associate;
   }
 }
 
-export { CreateAssociateService };
+export { CreateAssociateWebService };
