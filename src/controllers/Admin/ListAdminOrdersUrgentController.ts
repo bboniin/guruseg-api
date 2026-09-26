@@ -3,13 +3,9 @@ import { ListAdminOrdersUrgentService } from "../../services/Admin/ListAdminOrde
 
 class ListAdminOrdersUrgentController {
   async handle(req: Request, res: Response) {
-    let userId = req.userId;
-
     const listAdminOrdersUrgentService = new ListAdminOrdersUrgentService();
 
-    const orders = await listAdminOrdersUrgentService.execute({
-      userId,
-    });
+    const orders = await listAdminOrdersUrgentService.execute();
 
     return res.json(orders);
   }

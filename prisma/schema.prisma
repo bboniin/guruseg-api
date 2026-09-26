@@ -59,8 +59,38 @@ model User {
   tickets             Ticket[]
   associates          Associate[]
   reminders           Reminder[]
+  enterprises         Enterprise[]
+  leadsMatriz         LeadMatriz[]
 
   @@map("users")
+}
+
+
+model Enterprise {
+  id                  String    @id @default(uuid())
+  razao_social        String
+  nome_fantasia       String
+  document            String
+  type                String    @default("CNPJ")
+  ramo_atividade      String?
+  cep                 String?
+  endereco            String?
+  nome_responsavel    String?
+  cpf_responsavel     String?
+  contato_responsavel String?
+  observation         String?
+  sgg_id              String?
+  employee_count      Int?      @default(0)
+  esocial_renewal     Boolean?  @default(false)
+  visible             Boolean   @default(true)
+  user_id             String  
+  user                User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  create_at           DateTime? @default(now())
+  update_at           DateTime? @updatedAt
+
+  orders              Order[]
+
+  @@map("enterprises")
 }
 
 model CompanyRenewal {
@@ -213,6 +243,7 @@ model Order {
   company_id                 String?       @default("")
   collaborators              Int           @default(0)
   sector                     String        @default("Serviços de segurança do Trabalho")
+  delivery_time              Int           @default(5)
   delivery_date              DateTime      @default(now())
   acquisition_channel        String?       @default("")
   company_edited             Boolean       @default(false)
@@ -225,6 +256,9 @@ model Order {
     
   collaborator               Collaborator? @relation(fields: [collaborator_id], references: [id], onDelete: Cascade)
   collaborator_id            String?
+
+  enterprise                 Enterprise? @relation(fields: [enterprise_id], references: [id], onDelete: Cascade)
+  enterprise_id              String?
 
   items                      Item[]
   docs                       Doc[]
@@ -367,6 +401,7 @@ model LeadMaster {
   associate       Associate?   @relation(fields: [associate_id], references: [id], onDelete: SetNull)
 
   leads           Lead[]
+  leadsMatriz     LeadMatriz[]
   
   @@map("leads_master")
 }
@@ -399,6 +434,32 @@ model Lead {
   contracts       Contract[]
   
   @@map("leads")
+}
+
+model LeadMatriz {
+  id              String        @id @default(uuid())
+  name            String
+  email           String?
+  phone_number    String?
+  status          String        @default("Oportunidade")
+  tag             String?       @default("Cadastrado")
+  necessity       String?
+  cnpj            String?
+  employees       String?
+  location        String?
+  user_id         String?
+  contract_id     String?
+  value           Float? 
+  price           Float         @default(0)        
+  lead_id         String?
+  observation     String?
+  create_at       DateTime?     @default(now())
+  update_at       DateTime?     @updatedAt
+
+  user            User?         @relation(fields: [user_id], references: [id], onDelete: SetNull)
+  leadMaster      LeadMaster?   @relation(fields: [lead_id], references: [id], onDelete: SetNull)
+
+  @@map("leads_matriz")
 }
 
 model Announcement {

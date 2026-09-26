@@ -2,22 +2,11 @@ import prismaClient from "../../prisma";
 
 interface ServiceRequest {
   search: string;
-  userId: string;
   page: number;
   all: boolean;
 }
 class ListServicesAdminService {
-  async execute({ userId, page, search, all }: ServiceRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
+  async execute({ page, search, all }: ServiceRequest) {
     if (all) {
       const services = await prismaClient.service.findMany({
         orderBy: {

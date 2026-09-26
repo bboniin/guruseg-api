@@ -1,22 +1,11 @@
 import prismaClient from "../../prisma";
 
 interface CouponRequest {
-  userId: string;
   id: string;
 }
 
 class DeleteCouponService {
-  async execute({ userId, id }: CouponRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
+  async execute({ id }: CouponRequest) {
     const coupon = await prismaClient.coupon.findUnique({
       where: {
         id: id,

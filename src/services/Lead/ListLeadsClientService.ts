@@ -1,30 +1,34 @@
-import prismaClient from '../../prisma'
+import prismaClient from "../../prisma";
 
 interface LeadRequest {
-    userId: string;
+  userId: string;
 }
 
 class ListLeadsClientService {
-    async execute({ userId }: LeadRequest) {
+  async execute({ userId }: LeadRequest) {
+    const leads = await prismaClient.lead.findMany({
+      where: {
+        user_id: userId,
+      },
+      orderBy: {
+        update_at: "desc",
+      },
+      include: {
+        historical: {
+          orderBy: {
+            create_at: "asc",
+          },
+        },
+        leadMaster: {
+          include: {
+            associate: true,
+          },
+        },
+      },
+    });
 
-        const leads = await prismaClient.lead.findMany({
-            where: {
-                user_id: userId
-            },
-            orderBy: {
-                update_at: "desc"
-            },
-            include: {
-                historical: {
-                    orderBy: {
-                        create_at: "asc"
-                    }
-                }
-            }
-        })
-
-        return (leads)
-    }
+    return leads;
+  }
 }
 
-export { ListLeadsClientService }
+export { ListLeadsClientService };

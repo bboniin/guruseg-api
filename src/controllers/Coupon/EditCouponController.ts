@@ -17,8 +17,6 @@ class EditCouponController {
       active,
     } = req.body;
 
-    let userId = req.userId;
-
     const editCouponService = new EditCouponService();
 
     const coupon = await editCouponService.execute({
@@ -30,7 +28,6 @@ class EditCouponController {
       isSingleUse,
       code,
       usageLimit,
-      userId,
       active,
       id,
     });

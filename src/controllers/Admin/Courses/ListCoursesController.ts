@@ -5,12 +5,9 @@ class ListCoursesController {
   async handle(req: Request, res: Response) {
     const { search } = req.query;
 
-    let userId = req.userId;
-
     const listCoursesService = new ListCoursesService();
 
     const modules = await listCoursesService.execute({
-      userId,
       search: search ? String(search) : "",
     });
 

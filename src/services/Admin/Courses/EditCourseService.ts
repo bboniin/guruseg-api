@@ -3,7 +3,6 @@ import S3Storage from "../../../utils/S3Storage";
 
 interface CourseRequest {
   name: string;
-  userId: string;
   photo: string;
   description: string;
   id: string;
@@ -16,21 +15,10 @@ class EditCourseService {
     name,
     description,
     module_id,
-    userId,
     order,
     photo,
     id,
   }: CourseRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
     const course = await prismaClient.course.findUnique({
       where: {
         id: id,

@@ -7,8 +7,6 @@ class CreateCourseController {
 
     let photo = "";
 
-    let userId = req.userId;
-
     if (req.file) {
       photo = req.file.filename;
     }
@@ -16,7 +14,6 @@ class CreateCourseController {
     const createCourseService = new CreateCourseService();
 
     const course = await createCourseService.execute({
-      userId,
       name,
       order,
       description,

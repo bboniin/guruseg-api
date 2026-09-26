@@ -2,7 +2,7 @@ import prismaClient from "../../prisma";
 import { resolve } from "path";
 import fs from "fs";
 import handlebars from "handlebars";
-import { addDays } from "date-fns";
+import { addBusinessDays, addDays } from "date-fns";
 import { Resend } from "resend";
 
 interface OrderRequest {
@@ -25,6 +25,7 @@ class ConfirmOrderService {
         items: true,
         messages: true,
         docs: true,
+        enterprise: true,
       },
     });
 
@@ -34,7 +35,7 @@ class ConfirmOrderService {
 
     if (!orderGet.docs.length) {
       throw new Error(
-        "Envie pelo menos um documento para confirmar o envio da documentação"
+        "Envie pelo menos um documento para confirmar o envio da documentação",
       );
     }
 
@@ -204,6 +205,7 @@ class ConfirmOrderService {
             ? "andamento"
             : "aberto",
         collaborator_id: orderGet.urgent ? null : collaborator.id,
+        delivery_date: addBusinessDays(new Date(), orderGet.delivery_time),
       },
       include: {
         items: true,

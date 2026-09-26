@@ -10,8 +10,6 @@ class CreateAttendantController {
       photo = req.file.filename;
     }
 
-    let userId = req.userId;
-
     const createAttendantService = new CreateAttendantService();
 
     const attendant = await createAttendantService.execute({
@@ -19,7 +17,6 @@ class CreateAttendantController {
       email,
       password,
       photo,
-      userId,
     });
 
     return res.json(attendant);

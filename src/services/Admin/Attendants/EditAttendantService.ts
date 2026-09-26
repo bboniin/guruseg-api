@@ -9,7 +9,6 @@ interface AttendantRequest {
   password: string;
   enabled: boolean;
   id: string;
-  userId: string;
 }
 
 class EditAttendantService {
@@ -20,18 +19,7 @@ class EditAttendantService {
     photo,
     id,
     enabled,
-    userId,
   }: AttendantRequest) {
-    const admin = await prismaClient.admin.findFirst({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
     if (!email || !name) {
       throw new Error("Preencha todos os campos obrigatórios");
     }

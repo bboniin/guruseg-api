@@ -2,7 +2,6 @@ import { differenceInSeconds, endOfDay, startOfDay } from "date-fns";
 import prismaClient from "../../prisma";
 
 interface OrderRequest {
-  userId: string;
   id: Number;
   user_id: string;
   collaborator_id: string;
@@ -15,7 +14,6 @@ interface OrderRequest {
 
 class ListAdminOrdersService {
   async execute({
-    userId,
     id,
     collaborator_id,
     user_id,
@@ -91,6 +89,7 @@ class ListAdminOrdersService {
         },
         user: true,
         collaborator: true,
+        enterprise: true,
       },
     });
 
@@ -120,7 +119,7 @@ class ListAdminOrdersService {
       if (item.status == "finalizado") {
         item["averageTime"] = differenceInSeconds(
           item.update_at,
-          item.create_at
+          item.create_at,
         );
       }
     });
@@ -139,7 +138,7 @@ class ListAdminOrdersService {
       if (item.status == "finalizado") {
         item["averageTime"] = differenceInSeconds(
           item.update_at,
-          item.create_at
+          item.create_at,
         );
         averageTime += item["averageTime"];
         OSfinish++;

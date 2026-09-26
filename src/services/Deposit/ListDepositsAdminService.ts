@@ -2,7 +2,6 @@ import { endOfDay, startOfDay } from "date-fns";
 import prismaClient from "../../prisma";
 
 interface DepositRequest {
-  userId: string;
   collaborator_id: string;
   page: number;
   startDate: string;
@@ -12,23 +11,12 @@ interface DepositRequest {
 
 class ListDepositsAdminService {
   async execute({
-    userId,
     page,
     collaborator_id,
     status,
     endDate,
     startDate,
   }: DepositRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
     let filter = {};
 
     if (collaborator_id) {

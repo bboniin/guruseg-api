@@ -4,6 +4,7 @@ import fs from "fs";
 import handlebars from "handlebars";
 import { Resend } from "resend";
 import { ConfirmOrderService } from "./ConfirmOrderService";
+import { addBusinessDays, isPast } from "date-fns";
 
 interface OrderRequest {
   id: number;
@@ -104,6 +105,11 @@ class StatusOrderService {
 
       return orderD;
     } else {
+      let final_delivery_date = order.delivery_date;
+      if (isPast(new Date(addBusinessDays(order.delivery_date, -1)))) {
+        final_delivery_date = addBusinessDays(new Date(), order.urgent ? 1 : 2);
+      }
+
       const orderD = await prismaClient.order.update({
         where: {
           id: id,
@@ -112,6 +118,7 @@ class StatusOrderService {
           status: status,
           ...(status === "finalizado" && { is_finished: true }),
           update_at: new Date(),
+          delivery_date: final_delivery_date,
         },
         include: {
           items: true,

@@ -2,20 +2,9 @@ import prismaClient from "../../prisma";
 
 interface PackageRequest {
   id: string;
-  userId: string;
 }
 class GetDepositService {
-  async execute({ id, userId }: PackageRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
+  async execute({ id }: PackageRequest) {
     const deposit = await prismaClient.deposit.findUnique({
       where: {
         id: id,

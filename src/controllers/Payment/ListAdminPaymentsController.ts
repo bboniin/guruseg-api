@@ -5,12 +5,10 @@ class ListAdminPaymentsController {
   async handle(req: Request, res: Response) {
     const { page, startDate, endDate, method, user_id, status, type } =
       req.query;
-    const userId = req.userId;
 
     const listAdminPaymentsService = new ListAdminPaymentsService();
 
     const payments = await listAdminPaymentsService.execute({
-      userId,
       type: type ? String(type) : "",
       status: status ? String(status) : "",
       method: method ? String(method) : "",

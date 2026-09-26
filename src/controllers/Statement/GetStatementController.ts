@@ -1,21 +1,18 @@
-import { Request, Response } from 'express';
-import { GetStatementService } from '../../services/Statement/GetStatementService';
+import { Request, Response } from "express";
+import { GetStatementService } from "../../services/Statement/GetStatementService";
 
 class GetStatementController {
-    async handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response) {
+    const { id } = req.params;
 
-        const { id } = req.params
+    const getStatementService = new GetStatementService();
 
-        const userId = req.userId
+    const statement = await getStatementService.execute({
+      id,
+    });
 
-        const getStatementService = new GetStatementService
-
-        const statement = await getStatementService.execute({
-            userId, id
-        })
-
-        return res.json(statement)
-    }
+    return res.json(statement);
+  }
 }
 
-export { GetStatementController }
+export { GetStatementController };

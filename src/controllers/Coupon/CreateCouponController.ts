@@ -14,8 +14,6 @@ class CreateCouponController {
       usageLimit,
     } = req.body;
 
-    let userId = req.userId;
-
     const createCouponService = new CreateCouponService();
 
     const coupon = await createCouponService.execute({
@@ -27,7 +25,6 @@ class CreateCouponController {
       isSingleUse,
       code,
       usageLimit,
-      userId,
     });
 
     return res.json(coupon);

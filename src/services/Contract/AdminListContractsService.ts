@@ -2,23 +2,12 @@ import prismaClient from "../../prisma";
 
 interface ContractRequest {
   user_id: string;
-  userId: string;
   search: string;
   page: number;
 }
 
 class AdminListContractsService {
-  async execute({ user_id, userId, search, page }: ContractRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
+  async execute({ user_id, search, page }: ContractRequest) {
     let filter = {
       user_id: user_id,
     };

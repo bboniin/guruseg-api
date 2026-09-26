@@ -38,7 +38,7 @@ class AdminCreateCredentialService {
   }: CredentialRequest) {
     if (!email || !name) {
       throw new Error(
-        "Preencha pelo menos o nome e email para cadastrar o credenciado."
+        "Preencha pelo menos o nome e email para cadastrar o credenciado.",
       );
     }
 
@@ -123,7 +123,7 @@ class AdminCreateCredentialService {
         "..",
         "..",
         "views",
-        "completedCredential.hbs"
+        "completedCredential.hbs",
       );
 
       const templateFileContent = fs.readFileSync(path).toString("utf-8");

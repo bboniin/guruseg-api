@@ -7,8 +7,6 @@ class EditCourseController {
 
     const { id } = req.params;
 
-    let userId = req.userId;
-
     let photo = "";
 
     if (req.file) {
@@ -24,7 +22,6 @@ class EditCourseController {
       photo,
       id,
       module_id,
-      userId,
     });
 
     if (course["photo"]) {

@@ -24,6 +24,7 @@ class RecusedDocOrderService {
         messages: true,
         user: true,
         collaborator: true,
+        enterprise: true,
       },
     });
 
@@ -37,7 +38,7 @@ class RecusedDocOrderService {
 
     if (orderGet.order_linked_id) {
       throw new Error(
-        "Já foi solicitado a alteração do documento após recusa Ordem de serviço"
+        "Já foi solicitado a alteração do documento após recusa Ordem de serviço",
       );
     }
 

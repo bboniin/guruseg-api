@@ -130,6 +130,7 @@ class ListOrdersService {
         },
         user: true,
         collaborator: true,
+        enterprise: true,
       },
     });
 

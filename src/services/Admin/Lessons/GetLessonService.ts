@@ -1,31 +1,19 @@
-import prismaClient from '../../../prisma'
+import prismaClient from "../../../prisma";
 
 interface LessonRequest {
-    userId: string;
-    id: string;
+  id: string;
 }
 
 class GetLessonService {
-    async execute({ userId, id }: LessonRequest) {
+  async execute({ id }: LessonRequest) {
+    const lesson = await prismaClient.lesson.findUnique({
+      where: {
+        id: id,
+      },
+    });
 
-        const admin = await prismaClient.admin.findUnique({
-            where: {
-                id: userId
-            }
-        })
-
-        if (!admin) {
-            throw new Error("Rota restrita ao administrador")
-        }
-
-        const lesson = await prismaClient.lesson.findUnique({
-            where: {
-                id: id,
-            }
-        })
-
-        return (lesson)
-    }
+    return lesson;
+  }
 }
 
-export { GetLessonService }
+export { GetLessonService };

@@ -4,31 +4,12 @@ interface PackageRequest {
   id: string;
   description: string;
   name: string;
-  userId: string;
   value: number;
   type: string;
   bonus: number;
 }
 class EditPackageService {
-  async execute({
-    id,
-    userId,
-    name,
-    value,
-    description,
-    type,
-    bonus,
-  }: PackageRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
+  async execute({ id, name, value, description, type, bonus }: PackageRequest) {
     const depositPackage = await prismaClient.depositPackage.findUnique({
       where: {
         id: id,

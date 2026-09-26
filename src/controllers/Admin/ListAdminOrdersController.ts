@@ -14,12 +14,9 @@ class ListAdminOrdersController {
       collaborator_id,
     } = req.query;
 
-    let userId = req.userId;
-
     const listAdminOrdersService = new ListAdminOrdersService();
 
     const orders = await listAdminOrdersService.execute({
-      userId,
       id: id ? Number(id) : 0,
       status: status ? String(status) : "",
       collaborator_id: collaborator_id ? String(collaborator_id) : "",

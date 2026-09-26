@@ -1,22 +1,11 @@
 import prismaClient from "../../../prisma";
 
 interface CourseRequest {
-  userId: string;
   search: string;
 }
 
 class ListCoursesService {
-  async execute({ userId, search }: CourseRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
+  async execute({ search }: CourseRequest) {
     const modules = await prismaClient.module.findMany({
       orderBy: {
         order: "asc",

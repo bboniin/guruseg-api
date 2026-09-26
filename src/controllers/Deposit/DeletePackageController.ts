@@ -5,13 +5,10 @@ class DeletePackageController {
   async handle(req: Request, res: Response) {
     const { id } = req.params;
 
-    let userId = req.userId;
-
     const deletePackageService = new DeletePackageService();
 
     const packageRes = await deletePackageService.execute({
       id,
-      userId,
     });
 
     return res.json(packageRes);

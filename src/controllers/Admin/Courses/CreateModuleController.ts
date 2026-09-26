@@ -5,12 +5,9 @@ class CreateModuleController {
   async handle(req: Request, res: Response) {
     const { name, description, restricted, order } = req.body;
 
-    let userId = req.userId;
-
     const createModuleService = new CreateModuleService();
 
     const module = await createModuleService.execute({
-      userId,
       name,
       order,
       description,

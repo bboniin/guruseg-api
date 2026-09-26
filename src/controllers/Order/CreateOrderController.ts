@@ -8,15 +8,14 @@ class CreateOrderController {
       items,
       sector,
       name,
-      urgent,
       code,
       collaborators,
       company_id,
+      enterprise_id,
       reminder,
       type,
-      delivery_date,
+      delivery_time,
       acquisition_channel,
-      value_urgent,
     } = req.body;
 
     let userId = req.userId;
@@ -30,14 +29,13 @@ class CreateOrderController {
       name,
       sector,
       company_id,
-      urgent,
+      enterprise_id,
       collaborators,
       code,
       reminder,
       type,
-      delivery_date,
+      delivery_time: delivery_time ? Number(delivery_time) : 5,
       acquisition_channel,
-      value_urgent,
     });
 
     return res.json(order);

@@ -5,7 +5,6 @@ interface CouponRequest {
   id: string;
   code: string;
   name: string;
-  userId: string;
   value: number;
   type: string;
   minValue: number;
@@ -18,7 +17,6 @@ class EditCouponService {
   async execute({
     id,
     code,
-    userId,
     type,
     name,
     value,
@@ -28,16 +26,6 @@ class EditCouponService {
     active,
     minValue,
   }: CouponRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
     const coupon = await prismaClient.coupon.findUnique({
       where: {
         id: id,

@@ -3,7 +3,6 @@ import S3Storage from "../../../utils/S3Storage";
 
 interface CourseRequest {
   name: string;
-  userId: string;
   photo: string;
   order: string;
   module_id: string;
@@ -11,24 +10,7 @@ interface CourseRequest {
 }
 
 class CreateCourseService {
-  async execute({
-    userId,
-    name,
-    photo,
-    order,
-    module_id,
-    description,
-  }: CourseRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
+  async execute({ name, photo, order, module_id, description }: CourseRequest) {
     if (!name) {
       throw new Error("Nome do curso é obrigatório");
     }

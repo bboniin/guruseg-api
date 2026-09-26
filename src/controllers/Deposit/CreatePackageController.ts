@@ -5,8 +5,6 @@ class CreatePackageController {
   async handle(req: Request, res: Response) {
     const { name, value, description, bonus, type } = req.body;
 
-    let userId = req.userId;
-
     const createPackageService = new CreatePackageService();
 
     const packageRes = await createPackageService.execute({
@@ -14,7 +12,6 @@ class CreatePackageController {
       value,
       bonus,
       description,
-      userId,
       type,
     });
 

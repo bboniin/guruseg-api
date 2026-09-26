@@ -8,15 +8,14 @@ interface OrderRequest {
   userId: string;
   name: string;
   company_id: string;
-  urgent: boolean;
+  enterprise_id: string;
   sector: string;
   code: string;
   reminder: boolean;
   collaborators: number;
   items: Array<[]>;
   type: string;
-  delivery_date: Date;
-  value_urgent: number;
+  delivery_time?: number;
   acquisition_channel: string;
 }
 
@@ -27,17 +26,23 @@ class CreateOrderService {
     name,
     items,
     sector,
-    urgent,
     company_id,
     collaborators,
     code,
     reminder,
     type,
-    delivery_date,
+    delivery_time,
     acquisition_channel,
-    value_urgent,
+    enterprise_id,
   }: OrderRequest) {
-    if (items.length == 0 || !userId || !sector || !collaborators) {
+    if (
+      items.length == 0 ||
+      !userId ||
+      !sector ||
+      !collaborators ||
+      !enterprise_id ||
+      !acquisition_channel
+    ) {
       throw new Error("Preencha todos os campos.");
     }
 
@@ -52,8 +57,36 @@ class CreateOrderService {
       throw new Error("Franqueado não encontrado");
     }
 
-    let totalValue = urgent ? value_urgent : 0;
-    let totalServices = urgent ? 1 : 0;
+    const final_delivery_time =
+      delivery_time !== undefined ? Number(delivery_time) : 5;
+
+    const urgencyPrices = {
+      1: 147,
+      2: 137,
+      3: 127,
+      4: 107,
+      5: 0,
+    };
+
+    let final_value_urgent = 0;
+    if (sector === "Serviços de segurança do Trabalho") {
+      final_value_urgent = urgencyPrices[final_delivery_time] ?? 0;
+    }
+    const final_urgent = final_value_urgent > 0;
+
+    let calcDate = new Date();
+    let addedDays = 0;
+    while (addedDays < final_delivery_time) {
+      calcDate.setDate(calcDate.getDate() + 1);
+      const dayOfWeek = calcDate.getDay();
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+        addedDays++;
+      }
+    }
+    const final_delivery_date = calcDate;
+
+    let totalValue = final_urgent ? final_value_urgent : 0;
+    let totalServices = final_urgent ? 1 : 0;
 
     await Promise.all(
       await items.map(async (data) => {
@@ -63,7 +96,7 @@ class CreateOrderService {
     );
 
     if (!code && totalValue > user.balance) {
-      throw new Error("Saldo insuficiente para solicatar esses serviços");
+      throw new Error("Saldo insuficiente para solicitar esses serviços");
     }
 
     let coupon = null;
@@ -87,7 +120,7 @@ class CreateOrderService {
       totalValue -= valueDiscount;
 
       if (totalValue > user.balance) {
-        throw new Error("Saldo insuficiente para solicatar esses serviços");
+        throw new Error("Saldo insuficiente para solicitar esses serviços");
       }
     }
 
@@ -98,9 +131,11 @@ class CreateOrderService {
         month: format(new Date(), "yyyy-MM"),
         name: name,
         company_id: company_id,
+        enterprise_id: enterprise_id,
         sector: sector,
-        urgent: urgent,
-        delivery_date: delivery_date,
+        urgent: final_urgent,
+        delivery_time: final_delivery_time,
+        delivery_date: final_delivery_date,
         acquisition_channel: acquisition_channel,
         collaborators: collaborators,
         status: "pendente",
@@ -181,14 +216,14 @@ class CreateOrderService {
       }),
     );
 
-    if (urgent) {
+    if (final_urgent) {
       const itemOrder = await prismaClient.item.create({
         data: {
           amount: 1,
           order_id: order.id,
           name: "Taxa de Urgência",
-          value: value_urgent,
-          commission: value_urgent * 0.1,
+          value: final_value_urgent,
+          commission: final_value_urgent * 0.1,
           description: "OS finalizada de acordo com prazo selecionado",
         },
       });

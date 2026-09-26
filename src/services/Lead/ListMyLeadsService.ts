@@ -63,6 +63,11 @@ class ListMyLeadsService {
             services: true,
           },
         },
+        leadMaster: {
+          include: {
+            associate: true,
+          },
+        },
       },
     });
 

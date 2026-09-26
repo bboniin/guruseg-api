@@ -49,6 +49,7 @@ class EditOrderService {
         collaborator: true,
         messages: true,
         redemptions: true,
+        enterprise: true,
       },
     });
 

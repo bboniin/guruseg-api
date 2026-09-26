@@ -36,6 +36,7 @@ class ListUsersService {
       const users = await prismaClient.user.findMany({
         where: {
           visible: true,
+          type: "cliente",
           category: { contains: type },
           ...filterSearch,
         },
@@ -50,6 +51,7 @@ class ListUsersService {
     const usersTotal = await prismaClient.user.count({
       where: {
         visible: true,
+        type: "cliente",
         ...filterSearch,
       },
     });
@@ -57,6 +59,7 @@ class ListUsersService {
     const users = await prismaClient.user.findMany({
       where: {
         visible: true,
+        type: "cliente",
         ...filterSearch,
       },
       orderBy: {

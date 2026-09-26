@@ -13,6 +13,7 @@ class CreateLeadController {
       phone_number,
       employees,
       value,
+      associate_id,
     } = req.body;
 
     let userId = req.userId;
@@ -29,6 +30,7 @@ class CreateLeadController {
       necessity,
       phone_number,
       employees,
+      associate_id,
       value,
     });
 

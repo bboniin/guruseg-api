@@ -7,8 +7,6 @@ class EditPackageController {
 
     const { name, value, description, bonus, type } = req.body;
 
-    let userId = req.userId;
-
     const editPackageService = new EditPackageService();
 
     const packageRes = await editPackageService.execute({
@@ -16,7 +14,6 @@ class EditPackageController {
       value,
       description,
       bonus,
-      userId,
       id,
       type,
     });

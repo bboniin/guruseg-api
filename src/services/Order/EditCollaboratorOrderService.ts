@@ -30,6 +30,7 @@ class EditCollaboratorOrderService {
       },
       include: {
         collaborator: true,
+        enterprise: true,
       },
     });
 

@@ -1,21 +1,7 @@
 import prismaClient from "../../prisma";
 
-interface OrderRequest {
-  userId: string;
-}
-
 class ListAdminOrdersUrgentService {
-  async execute({ userId }: OrderRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
+  async execute() {
     const ordersTotal = await prismaClient.order.findMany({
       where: {
         urgent: true,
@@ -41,6 +27,7 @@ class ListAdminOrdersUrgentService {
         },
         user: true,
         collaborator: true,
+        enterprise: true,
       },
     });
 

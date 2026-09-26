@@ -2,7 +2,6 @@ import { endOfDay, startOfDay } from "date-fns";
 import prismaClient from "../../prisma";
 
 interface PaymentRequest {
-  userId: string;
   startDate: string;
   endDate: string;
   method: string;
@@ -14,7 +13,6 @@ interface PaymentRequest {
 
 class ListAdminPaymentsService {
   async execute({
-    userId,
     page,
     startDate,
     endDate,
@@ -23,16 +21,6 @@ class ListAdminPaymentsService {
     status,
     type,
   }: PaymentRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
     let filter = {};
 
     if (status) {

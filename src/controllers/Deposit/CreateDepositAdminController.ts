@@ -6,13 +6,10 @@ class CreateDepositAdminController {
     const { value, bonus, collaborator_id, operation, description, type } =
       req.body;
 
-    let userId = req.userId;
-
     const createDepositAdminService = new CreateDepositAdminService();
 
     const deposit = await createDepositAdminService.execute({
       value,
-      userId,
       collaborator_id,
       bonus,
       description,

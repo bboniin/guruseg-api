@@ -11,6 +11,7 @@ interface LeadRequest {
   value: number;
   necessity: string;
   location: string;
+  associate_id: string;
 }
 
 class CreateLeadService {
@@ -25,6 +26,7 @@ class CreateLeadService {
     phone_number,
     employees,
     value,
+    associate_id,
   }: LeadRequest) {
     if (!name) {
       throw new Error("Nome é obrigatório");
@@ -63,6 +65,7 @@ class CreateLeadService {
         necessity: necessity,
         cnpj: cnpj,
         is_user: !!userId,
+        associate_id: associate_id,
         price: 0,
         tag: !!userId ? "Franqueado" : "Cadastrado",
         location: location,

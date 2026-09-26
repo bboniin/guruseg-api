@@ -13,8 +13,6 @@ class EditAttendantController {
       photo = req.file.filename;
     }
 
-    let userId = req.userId;
-
     const editAttendantService = new EditAttendantService();
 
     const attendant = await editAttendantService.execute({
@@ -24,7 +22,6 @@ class EditAttendantController {
       password,
       id,
       enabled: enabled == "true" ? true : false,
-      userId,
     });
 
     if (attendant["photo"]) {

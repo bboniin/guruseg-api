@@ -1,26 +1,11 @@
-import prismaClient from '../../../prisma'
-
-interface BannerRequest {
-    userId: string;
-}
+import prismaClient from "../../../prisma";
 
 class ListBannersService {
-    async execute({ userId }: BannerRequest) {
+  async execute() {
+    const banners = await prismaClient.banner.findMany();
 
-        const admin = await prismaClient.admin.findUnique({
-            where: {
-                id: userId
-            }
-        })
-
-        if (!admin) {
-            throw new Error("Rota restrita ao administrador")
-        }
-
-        const banners = await prismaClient.banner.findMany()
-
-        return (banners)
-    }
+    return banners;
+  }
 }
 
-export { ListBannersService }
+export { ListBannersService };

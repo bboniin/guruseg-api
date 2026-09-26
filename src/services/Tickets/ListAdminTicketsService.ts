@@ -1,22 +1,11 @@
 import prismaClient from "../../prisma";
 
 interface TicketRequest {
-  userId: string;
   page: number;
 }
 
 class ListAdminTicketsService {
-  async execute({ userId, page }: TicketRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
+  async execute({ page }: TicketRequest) {
     const ticketsTotal = await prismaClient.ticket.count({});
 
     const tickets = await prismaClient.ticket.findMany({

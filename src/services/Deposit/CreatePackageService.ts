@@ -3,31 +3,13 @@ import prismaClient from "../../prisma";
 interface PackageRequest {
   description: string;
   name: string;
-  userId: string;
   value: number;
   bonus: number;
   type: string;
 }
 
 class CreatePackageService {
-  async execute({
-    description,
-    type,
-    userId,
-    name,
-    value,
-    bonus,
-  }: PackageRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
+  async execute({ description, type, name, value, bonus }: PackageRequest) {
     if (!name || !value) {
       throw new Error("Preencha o nome e valor do pacote de deposito");
     }

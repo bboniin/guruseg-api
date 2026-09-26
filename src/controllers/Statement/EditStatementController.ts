@@ -1,23 +1,22 @@
-import { Request, Response } from 'express';
-import { EditStatementService } from '../../services/Statement/EditStatementService';
+import { Request, Response } from "express";
+import { EditStatementService } from "../../services/Statement/EditStatementService";
 
 class EditStatementController {
-    async handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response) {
+    const { id } = req.params;
 
-        const { id } = req.params
+    const { title, description } = req.body;
 
-        const { title, description } = req.body
+    const editStatementService = new EditStatementService();
 
-        const userId = req.userId
+    const statement = await editStatementService.execute({
+      title,
+      description,
+      id,
+    });
 
-        const editStatementService = new EditStatementService
-
-        const statement = await editStatementService.execute({
-            title, description, userId, id
-        })
-
-        return res.json(statement)
-    }
+    return res.json(statement);
+  }
 }
 
-export { EditStatementController }
+export { EditStatementController };

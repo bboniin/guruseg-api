@@ -52,6 +52,7 @@ class GetOrderService {
           },
         },
         redemptions: true,
+        enterprise: true,
       },
     });
 
@@ -82,7 +83,7 @@ class GetOrderService {
         if (order.collaborator) {
           if (userId != order.collaborator.id) {
             throw new Error(
-              "Essa ordem de serviço não está vinculada a sua conta"
+              "Essa ordem de serviço não está vinculada a sua conta",
             );
           }
         }

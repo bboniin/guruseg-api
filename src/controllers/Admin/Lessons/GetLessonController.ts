@@ -1,25 +1,23 @@
-import { Request, Response } from 'express';
-import { GetLessonService } from '../../../services/Admin/Lessons/GetLessonService';
+import { Request, Response } from "express";
+import { GetLessonService } from "../../../services/Admin/Lessons/GetLessonService";
 
 class GetLessonController {
-    async handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response) {
+    const { id } = req.params;
 
-        const { id } = req.params
+    const getLessonService = new GetLessonService();
 
-        let userId = req.userId
+    const lesson = await getLessonService.execute({
+      id,
+    });
 
-        const getLessonService = new GetLessonService
-
-        const lesson = await getLessonService.execute({
-            userId, id
-        })
-
-        if (lesson["file"]) {
-            lesson["file_url"] = "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + lesson["file"];
-        }
-
-        return res.json(lesson)
+    if (lesson["file"]) {
+      lesson["file_url"] =
+        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + lesson["file"];
     }
+
+    return res.json(lesson);
+  }
 }
 
-export { GetLessonController }
+export { GetLessonController };

@@ -8,23 +8,12 @@ interface AttendantRequest {
   email: string;
   photo: string;
   password: string;
-  userId: String;
 }
 
 class CreateAttendantService {
-  async execute({ name, email, password, photo, userId }: AttendantRequest) {
+  async execute({ name, email, password, photo }: AttendantRequest) {
     if (!email || !name || !password) {
       throw new Error("Preencha todos os campos obrigatórios");
-    }
-
-    const admin = await prismaClient.admin.findFirst({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
     }
 
     const alreadyExistEmail =

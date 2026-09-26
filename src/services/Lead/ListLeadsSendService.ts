@@ -55,6 +55,7 @@ class ListLeadsSendService {
         create_at: "desc",
       },
       include: {
+        associate: true,
         leads: {
           include: {
             user: true,

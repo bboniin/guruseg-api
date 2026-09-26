@@ -1,47 +1,35 @@
-import prismaClient from '../../prisma'
+import prismaClient from "../../prisma";
 
 interface StatementRequest {
-    page: number;
-    userId: string;
+  page: number;
 }
 
 class ListStatementsService {
-    async execute({ page, userId }: StatementRequest) {
+  async execute({ page }: StatementRequest) {
+    let filter = {};
 
-        const admin = await prismaClient.admin.findUnique({
-            where: {
-                id: userId
-            }
-        })
+    const listStatementsTotal = await prismaClient.statement.count({
+      where: filter,
+    });
 
-        if (!admin) {
-            throw new Error("Rota restrita ao administrador")
-        }
+    const listStatements = await prismaClient.statement.findMany({
+      where: filter,
+      skip: page * 30,
+      take: 30,
+      orderBy: {
+        create_at: "desc",
+      },
+      include: {
+        statement_confirms: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
 
-        let filter = {}
-
-        const listStatementsTotal = await prismaClient.statement.count({
-            where: filter,
-        })
-
-        const listStatements = await prismaClient.statement.findMany({
-            where: filter,
-            skip: page*30,
-            take: 30,
-            orderBy: {
-               create_at: 'desc',
-            },
-            include: {
-                statement_confirms: {
-                    include: {
-                        user: true
-                    }
-                }
-            }
-        })
-
-        return ({statements: listStatements, statementsTotal: listStatementsTotal})
-    }
+    return { statements: listStatements, statementsTotal: listStatementsTotal };
+  }
 }
 
-export { ListStatementsService }
+export { ListStatementsService };

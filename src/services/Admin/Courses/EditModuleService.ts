@@ -2,7 +2,6 @@ import prismaClient from "../../../prisma";
 
 interface moduleRequest {
   name: string;
-  userId: string;
   description: string;
   id: string;
   restricted: boolean;
@@ -10,24 +9,7 @@ interface moduleRequest {
 }
 
 class EditModuleService {
-  async execute({
-    name,
-    restricted,
-    description,
-    userId,
-    order,
-    id,
-  }: moduleRequest) {
-    const admin = await prismaClient.admin.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!admin) {
-      throw new Error("Rota restrita ao administrador");
-    }
-
+  async execute({ name, restricted, description, order, id }: moduleRequest) {
     const module = await prismaClient.module.findUnique({
       where: {
         id: id,

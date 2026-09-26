@@ -7,8 +7,6 @@ class EditModuleController {
 
     const { id } = req.params;
 
-    let userId = req.userId;
-
     const editModuleService = new EditModuleService();
 
     const module = await editModuleService.execute({
@@ -17,7 +15,6 @@ class EditModuleController {
       order,
       id,
       restricted,
-      userId,
     });
 
     return res.json(module);

@@ -34,6 +34,7 @@ class ListAdminOrdersPeriodoService {
         },
         user: true,
         collaborator: true,
+        enterprise: true,
       },
     });
 
