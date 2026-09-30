@@ -75,6 +75,7 @@ class IntegrationRisksService {
         risco: item.name,
         envia_esocial: "Não",
         matriz_risco: "AIHA",
+        atividades: item.description,
         perigos: item.perigos,
         tipo_avaliacao: "Qualitativa",
         fontes_geradoras: item.fonte_geradora.split(","),

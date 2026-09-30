@@ -687,7 +687,7 @@ router.put(
 router.delete("/attendant/:id", new DeleteAttendantController().handle);
 
 // Gestão Admin de Associados & Comissões
-router.get("/associates", new ListAssociatesController().handle);
+router.get("/admin/associates", new ListAssociatesController().handle);
 router.get(
   "/associate/:associate_id",
   new GetAdminAssociateController().handle,

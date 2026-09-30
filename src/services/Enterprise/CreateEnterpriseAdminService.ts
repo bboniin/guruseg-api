@@ -50,17 +50,6 @@ class CreateEnterpriseAdminService {
       throw new Error("Usuário não encontrado");
     }
 
-    const enterpriseGet = await prismaClient.enterprise.findFirst({
-      where: {
-        document: document,
-        visible: true,
-      },
-    });
-
-    if (enterpriseGet) {
-      throw new Error(`${type} já cadastrado no sistema`);
-    }
-
     const enterprise = await prismaClient.enterprise.create({
       data: {
         user_id,
