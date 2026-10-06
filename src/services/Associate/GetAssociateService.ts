@@ -1,4 +1,5 @@
 import prismaClient from "../../prisma";
+import S3Storage from "../../utils/S3Storage";
 
 interface AssociateRequest {
   userId: string;
@@ -12,6 +13,13 @@ class GetAssociateService {
       },
     });
 
+    const s3Storage = new S3Storage();
+    if (associate.photo) {
+      associate["photo_url"] = await s3Storage.getTemporaryUrl(
+        associate.photo,
+        245,
+      );
+    }
     return associate;
   }
 }

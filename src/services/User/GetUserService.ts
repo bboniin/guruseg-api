@@ -1,4 +1,5 @@
 import prismaClient from "../../prisma";
+import S3Storage from "../../utils/S3Storage";
 
 interface UserRequest {
   userId: string;
@@ -44,9 +45,12 @@ class GetUserService {
       throw new Error("Usuário não encontrado");
     }
 
+    const s3Storage = new S3Storage();
+
     if (user) {
-      let photo_url =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + user.photo;
+      const photo_url = user.photo
+        ? await s3Storage.getTemporaryUrl(user.photo, 245)
+        : "";
 
       return {
         id: user.id,
@@ -65,8 +69,9 @@ class GetUserService {
       };
     }
     if (collaborator) {
-      let photo_url =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + collaborator.photo;
+      const photo_url = collaborator.photo
+        ? await s3Storage.getTemporaryUrl(collaborator.photo, 245)
+        : "";
 
       return {
         id: collaborator.id,
@@ -79,8 +84,9 @@ class GetUserService {
       };
     }
     if (admin) {
-      let photo_url =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + admin.photo;
+      const photo_url = admin.photo
+        ? await s3Storage.getTemporaryUrl(admin.photo, 245)
+        : "";
 
       return {
         id: admin.id,
@@ -93,8 +99,9 @@ class GetUserService {
       };
     }
     if (attendant) {
-      let photo_url =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + attendant.photo;
+      const photo_url = attendant.photo
+        ? await s3Storage.getTemporaryUrl(attendant.photo, 245)
+        : "";
       return {
         id: attendant.id,
         email: attendant.email,
@@ -106,8 +113,9 @@ class GetUserService {
       };
     }
     if (associate) {
-      let photo_url =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + associate.photo;
+      const photo_url = associate.photo
+        ? await s3Storage.getTemporaryUrl(associate.photo, 245)
+        : "";
       return {
         id: associate.id,
         email: associate.email,

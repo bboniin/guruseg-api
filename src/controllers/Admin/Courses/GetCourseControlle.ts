@@ -11,13 +11,6 @@ class GetCourseController {
       course_id,
     });
 
-    course.lessons.map((item) => {
-      if (item["file"]) {
-        item["file_url"] =
-          "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + item["file"];
-      }
-    });
-
     return res.json(course);
   }
 }

@@ -22,11 +22,6 @@ class EditBannerController {
       id,
     });
 
-    if (banner["photo"]) {
-      banner["photo_url"] =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + banner["photo"];
-    }
-
     return res.json(banner);
   }
 }

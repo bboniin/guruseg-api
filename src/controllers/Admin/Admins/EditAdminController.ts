@@ -27,11 +27,6 @@ class EditAdminController {
       id,
     });
 
-    if (admin["photo"]) {
-      admin["photo_url"] =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + admin["photo"];
-    }
-
     return res.json(admin);
   }
 }

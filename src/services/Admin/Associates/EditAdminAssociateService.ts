@@ -130,6 +130,13 @@ class EditAdminAssociateService {
       data: data,
     });
 
+    const s3Storage = new S3Storage();
+    if (associateEdited.photo) {
+      associateEdited["photo_url"] = await s3Storage.getTemporaryUrl(
+        associateEdited.photo,
+        245,
+      );
+    }
     return associateEdited;
   }
 }

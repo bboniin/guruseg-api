@@ -24,11 +24,6 @@ class EditAttendantController {
       enabled: enabled == "true" ? true : false,
     });
 
-    if (attendant["photo"]) {
-      attendant["photo_url"] =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + attendant["photo"];
-    }
-
     return res.json(attendant);
   }
 }

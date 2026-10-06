@@ -6,12 +6,13 @@ import { validateCpf } from "../../config/functions";
 
 interface DepositRequest {
   package_id: string;
+  value: number;
   userId: string;
   cpf: string;
 }
 
 class CreateDepositService {
-  async execute({ userId, package_id, cpf }: DepositRequest) {
+  async execute({ userId, value, package_id, cpf }: DepositRequest) {
     const user = await prismaClient.user.findUnique({
       where: {
         id: userId,
@@ -43,18 +44,24 @@ class CreateDepositService {
 
     const depositPackage = await prismaClient.depositPackage.findUnique({
       where: {
-        id: package_id,
+        id: package_id || "",
       },
     });
 
-    if (!depositPackage) {
+    if (!depositPackage && !value) {
       throw new Error("Pacote não está mais disponivel para compra");
+    }
+
+    const valueDeposit = value || depositPackage.value;
+
+    if (valueDeposit < 10) {
+      throw new Error("Valor minimo para depósito é R$ 10,00");
     }
 
     let responseDeposit;
     await api
       .post("/payments", {
-        value: depositPackage.value,
+        value: valueDeposit,
         billingType: "PIX",
         customer: user.costumer_id,
         dueDate: format(addDays(new Date(), 7), "yyyy-MM-dd"),
@@ -63,7 +70,7 @@ class CreateDepositService {
         const payment = await prismaClient.payment.create({
           data: {
             asaas_id: response.data.id,
-            value: depositPackage.value,
+            value: valueDeposit,
             user_id: userId,
             status: "pendente",
             type: "DEPOSIT",
@@ -73,13 +80,13 @@ class CreateDepositService {
 
         const depositRes = await prismaClient.deposit.create({
           data: {
-            value: depositPackage.value,
-            name: depositPackage.name,
-            description: depositPackage.description,
+            value: valueDeposit,
+            name: depositPackage?.name || "Depósito Personalizado",
+            description: depositPackage?.description || "",
             status: "pendente",
             user_id: userId,
-            type: depositPackage.type,
-            bonus: depositPackage.bonus,
+            type: depositPackage?.type || "services",
+            bonus: depositPackage?.bonus || 0,
           },
         });
 
@@ -107,6 +114,7 @@ class CreateDepositService {
           });
       })
       .catch((e) => {
+        console.log(e);
         throw new Error("Ocorreu um erro ao criar cobrança");
       });
 

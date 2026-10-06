@@ -21,11 +21,6 @@ class CreateCourseController {
       module_id,
     });
 
-    if (course["photo"]) {
-      course["photo_url"] =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + course["photo"];
-    }
-
     return res.json(course);
   }
 }

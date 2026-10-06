@@ -27,11 +27,6 @@ class EditLessonController {
       delete_file,
     });
 
-    if (lesson["file"]) {
-      lesson["file_url"] =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + lesson["file"];
-    }
-
     return res.json(lesson);
   }
 }

@@ -36,6 +36,13 @@ class CreateCourseService {
       },
     });
 
+    const s3Storage = new S3Storage();
+    if (courseRes.photo) {
+      courseRes["photo_url"] = await s3Storage.getTemporaryUrl(
+        courseRes.photo,
+        245,
+      );
+    }
     return courseRes;
   }
 }

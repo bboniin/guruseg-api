@@ -13,15 +13,6 @@ class ListCoursesPublicController {
       search: search ? String(search) : "",
     });
 
-    modules.map((item) => {
-      item.courses.map((data) => {
-        if (data["photo"]) {
-          data["photo_url"] =
-            "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + data["photo"];
-        }
-      });
-    });
-
     return res.json(modules);
   }
 }

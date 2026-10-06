@@ -18,7 +18,7 @@ class ListDepositsService {
         user_id: userId,
       },
       orderBy: {
-        create_at: "asc",
+        create_at: "desc",
       },
       skip: page * 30,
       take: 30,

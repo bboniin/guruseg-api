@@ -77,6 +77,13 @@ class EditLessonService {
       data: data,
     });
 
+    const s3Storage = new S3Storage();
+    if (lessonRes.file) {
+      lessonRes["file_url"] = await s3Storage.getTemporaryUrl(
+        lessonRes.file,
+        245,
+      );
+    }
     return lessonRes;
   }
 }

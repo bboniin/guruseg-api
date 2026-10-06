@@ -1,5 +1,6 @@
 import { api } from "../../config/api";
 import prismaClient from "../../prisma";
+import S3Storage from "../../utils/S3Storage";
 
 interface OrderRequest {
   userId: string;
@@ -90,11 +91,31 @@ class GetOrderService {
       }
     }
 
-    order.docs.map((item) => {
-      item["fileName"] = String(item.file).substr(33);
-    });
+    const s3Storage = new S3Storage();
+    if (order.user?.photo) {
+      order.user["photo_url"] = await s3Storage.getTemporaryUrl(
+        order.user.photo,
+        245,
+      );
+    }
+    if (order.collaborator?.photo) {
+      order.collaborator["photo_url"] = await s3Storage.getTemporaryUrl(
+        order.collaborator.photo,
+        245,
+      );
+    }
+    const docsResponse = await Promise.all(
+      order.docs.map(async (file) => {
+        file["file_url"] = await s3Storage.getTemporaryUrl(file.file, 245);
+        file["fileName"] = String(file.file).substr(33);
 
-    return order;
+        return file;
+      }),
+    );
+    return {
+      ...order,
+      docs: docsResponse,
+    };
   }
 }
 

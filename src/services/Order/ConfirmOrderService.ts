@@ -194,17 +194,19 @@ class ConfirmOrderService {
       collaborator = tecnico;
     }
 
+    if (!collaborator) {
+      throw new Error(
+        "Nenhum técnico encontrado para sua OS, contate o suporte",
+      );
+    }
+
     const order = await prismaClient.order.update({
       where: {
         id: id,
       },
       data: {
-        status: orderGet.urgent
-          ? "aberto"
-          : collaborator.id
-            ? "andamento"
-            : "aberto",
-        collaborator_id: orderGet.urgent ? null : collaborator.id,
+        status: "andamento",
+        collaborator_id: collaborator.id,
         delivery_date: addBusinessDays(new Date(), orderGet.delivery_time),
       },
       include: {

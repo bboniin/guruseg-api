@@ -29,7 +29,6 @@ class S3Storage {
       .putObject({
         Bucket: "guruseg-data",
         Key: filename,
-        ACL: "public-read",
         Body: fileContent,
         ContentType,
       })
@@ -47,6 +46,18 @@ class S3Storage {
         Key: file,
       })
       .promise();
+  }
+
+  async getTemporaryUrl(
+    filename: string,
+    expiresInMinutes = 15,
+  ): Promise<string> {
+    const url = await this.client.getSignedUrlPromise("getObject", {
+      Bucket: "guruseg-data",
+      Key: filename,
+      Expires: expiresInMinutes * 60,
+    });
+    return url;
   }
 }
 

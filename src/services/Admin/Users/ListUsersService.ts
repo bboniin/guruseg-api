@@ -1,4 +1,5 @@
 import prismaClient from "../../../prisma";
+import S3Storage from "../../../utils/S3Storage";
 
 interface ServiceRequest {
   userId: string;
@@ -69,7 +70,17 @@ class ListUsersService {
       take: 30,
     });
 
-    return { users, usersTotal };
+    const s3Storage = new S3Storage();
+    const usersResponse = await Promise.all(
+      users.map(async (user) => {
+        if (user.photo) {
+          user["photo_url"] = await s3Storage.getTemporaryUrl(user.photo, 245);
+        }
+
+        return user;
+      }),
+    );
+    return { users: usersResponse, usersTotal };
   }
 }
 

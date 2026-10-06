@@ -17,14 +17,6 @@ class ListAssociateLeadsController {
       search: search as string,
     });
 
-    leads.leads.map((lead) => {
-      if (lead.leads?.[0]?.user.photo) {
-        lead.leads[0].user["photo_url"] =
-          "https://guruseg-data.s3.sa-east-1.amazonaws.com/" +
-          lead.leads[0].user.photo;
-      }
-    });
-
     return res.json(leads);
   }
 }

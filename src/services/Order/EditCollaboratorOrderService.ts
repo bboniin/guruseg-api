@@ -1,4 +1,5 @@
 import prismaClient from "../../prisma";
+import S3Storage from "../../utils/S3Storage";
 
 interface OrderRequest {
   id: number;
@@ -34,6 +35,13 @@ class EditCollaboratorOrderService {
       },
     });
 
+    const s3Storage = new S3Storage();
+    if (orderD.collaborator?.photo) {
+      orderD.collaborator["photo_url"] = await s3Storage.getTemporaryUrl(
+        orderD.collaborator.photo,
+        245,
+      );
+    }
     return orderD;
   }
 }

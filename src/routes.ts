@@ -110,9 +110,7 @@ import { CreateDocOrderController } from "./controllers/Order/CreateDocOrderCont
 import { DeleteDocOrderController } from "./controllers/Order/DeleteDocOrderController";
 import { RecusedDocOrderController } from "./controllers/Order/RecusedDocOrderController";
 import { EditCollaboratorOrderController } from "./controllers/Order/EditCollaboratorOrderController";
-import { SendOrderUrgentController } from "./controllers/Order/SendOrderUrgentController";
 import { ListAdminOrdersController } from "./controllers/Admin/ListAdminOrdersController";
-import { ListAdminOrdersUrgentController } from "./controllers/Admin/ListAdminOrdersUrgentController";
 import { ListAdminOrdersPeriodoController } from "./controllers/Admin/ListAdminOrdersPeriodoController";
 
 // Company & SGG Controllers
@@ -289,6 +287,7 @@ import { ListEnterpriseTecnicoController } from "./controllers/Enterprise/ListEn
 import { EditEnterpriseTecnicoController } from "./controllers/Enterprise/EditEnterpriseTecnicoController";
 import { CreateEnterpriseTecnicoController } from "./controllers/Enterprise/CreateEnterpriseTecnicoController";
 import { DeleteEnterpriseTecnicoController } from "./controllers/Enterprise/DeleteEnterpriseTecnicoController";
+import { AddUrgentOrderController } from "./controllers/Order/AddUrgentOrderController";
 
 const upload = multer(uploadConfig);
 const router = Router();
@@ -417,7 +416,7 @@ router.put("/accept-order/:id", new AcceptOrderController().handle);
 router.put("/recused-order/:id", new RecusedOrderController().handle);
 router.put("/status/:id", new StatusOrderController().handle);
 router.put("/order-cancel/:id", new CancelOrderController().handle);
-router.put("/send-order/:id", new SendOrderUrgentController().handle);
+router.put("/order-urgent/:id", new AddUrgentOrderController().handle);
 router.post(
   "/doc/:id",
   upload.single("file"),
@@ -771,7 +770,6 @@ router.delete("/service/:id", new DeleteServiceController().handle);
 
 // Gestão Admin de Ordens de Serviço (OS)
 router.get("/orders-admin", new ListAdminOrdersController().handle);
-router.get("/orders-urgente", new ListAdminOrdersUrgentController().handle);
 router.post("/list-orders", new ListAdminOrdersPeriodoController().handle);
 router.get("/orders/:id", new ListAdminOrdersController().handle);
 

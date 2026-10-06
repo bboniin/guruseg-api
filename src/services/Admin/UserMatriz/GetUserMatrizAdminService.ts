@@ -1,4 +1,5 @@
 import prismaClient from "../../../prisma";
+import S3Storage from "../../../utils/S3Storage";
 
 interface ServiceRequest {
   id: string;
@@ -46,6 +47,10 @@ class GetUserMatrizAdminService {
       throw new Error("Usuário Matriz não foi encontrado.");
     }
 
+    const s3Storage = new S3Storage();
+    if (user.photo) {
+      user["photo_url"] = await s3Storage.getTemporaryUrl(user.photo, 245);
+    }
     return user;
   }
 }

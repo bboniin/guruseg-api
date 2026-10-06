@@ -104,6 +104,13 @@ class EditAdminService {
       data: data,
     });
 
+    const s3Storage = new S3Storage();
+    if (adminEdited.photo) {
+      adminEdited["photo_url"] = await s3Storage.getTemporaryUrl(
+        adminEdited.photo,
+        245,
+      );
+    }
     return adminEdited;
   }
 }

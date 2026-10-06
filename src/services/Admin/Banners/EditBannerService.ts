@@ -52,6 +52,14 @@ class EditBannerService {
       data: data,
     });
 
+    const s3Storage = new S3Storage();
+    if (bannerRes.photo) {
+      bannerRes["photo_url"] = await s3Storage.getTemporaryUrl(
+        bannerRes.photo,
+        245,
+      );
+    }
+
     return bannerRes;
   }
 }

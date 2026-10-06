@@ -1,5 +1,6 @@
 import { endOfDay, startOfDay } from "date-fns";
 import prismaClient from "../../prisma";
+import S3Storage from "../../utils/S3Storage";
 
 interface LeadRequest {
   associate_id: string;
@@ -68,8 +69,20 @@ class ListAssociateLeadsService {
         },
       },
     });
+    const s3Storage = new S3Storage();
+    const leadsResponse = await Promise.all(
+      leads.map(async (lead) => {
+        if (lead.leads?.[0]?.user.photo) {
+          lead.leads[0].user["photo_url"] = await s3Storage.getTemporaryUrl(
+            lead.leads[0].user.photo,
+            245,
+          );
+        }
 
-    return { leads, total };
+        return leadsResponse;
+      }),
+    );
+    return { leads: leadsResponse, total };
   }
 }
 

@@ -93,6 +93,13 @@ class EditAttendantService {
       data: data,
     });
 
+    const s3Storage = new S3Storage();
+    if (attendantEdited.photo) {
+      attendantEdited["photo_url"] = await s3Storage.getTemporaryUrl(
+        attendantEdited.photo,
+        245,
+      );
+    }
     return attendantEdited;
   }
 }

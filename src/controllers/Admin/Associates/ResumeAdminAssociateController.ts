@@ -15,14 +15,6 @@ class ResumeAdminAssociateController {
       startDate: startDate ? String(startDate) : "",
     });
 
-    if (resume.associate) {
-      if (resume.associate["photo"]) {
-        resume.associate["photo_url"] =
-          "https://guruseg-data.s3.sa-east-1.amazonaws.com/" +
-          resume.associate["photo"];
-      }
-    }
-
     return res.json(resume);
   }
 }

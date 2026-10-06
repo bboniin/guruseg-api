@@ -63,7 +63,7 @@ class EditAdminCollaboratorService {
           collaboratorExistUser.user_id != collaborator.user_id
         ) {
           throw new Error(
-            "Franqueado já vinculado a outro técnico desse setor."
+            "Franqueado já vinculado a outro técnico desse setor.",
           );
         }
       }
@@ -102,6 +102,13 @@ class EditAdminCollaboratorService {
       data: data,
     });
 
+    const s3Storage = new S3Storage();
+    if (collaboratorR.photo) {
+      collaboratorR["photo_url"] = await s3Storage.getTemporaryUrl(
+        collaboratorR.photo,
+        245,
+      );
+    }
     return collaboratorR;
   }
 }

@@ -2,6 +2,7 @@ import prismaClient from "../../prisma";
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import authConfig from "./../../utils/auth";
+import S3Storage from "../../utils/S3Storage";
 
 interface AuthRequest {
   email: string;
@@ -43,9 +44,12 @@ class AuthUserService {
         visible: true,
       },
     });
+
     if (!user && !collaborator && !admin && !attendant && !associate) {
       throw new Error("Email e Senha não correspondem ou não existe.");
     }
+
+    const s3Storage = new S3Storage();
 
     if (user) {
       const passwordMatch = await compare(password, user.password);
@@ -66,8 +70,9 @@ class AuthUserService {
         throw new Error("Email e Senha não correspondem ou não existe.");
       }
 
-      let photo_url =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + user.photo;
+      const photo_url = user.photo
+        ? await s3Storage.getTemporaryUrl(user.photo, 245)
+        : "";
 
       return {
         user: {
@@ -106,8 +111,9 @@ class AuthUserService {
         throw new Error("Email e Senha não correspondem ou não existe.");
       }
 
-      let photo_url =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + collaborator.photo;
+      const photo_url = collaborator.photo
+        ? await s3Storage.getTemporaryUrl(collaborator.photo, 245)
+        : "";
 
       return {
         user: {
@@ -139,8 +145,9 @@ class AuthUserService {
       if (!passwordMatch) {
         throw new Error("Email e Senha não correspondem ou não existe.");
       }
-      let photo_url =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + admin.photo;
+      const photo_url = admin.photo
+        ? await s3Storage.getTemporaryUrl(admin.photo, 245)
+        : "";
 
       return {
         user: {
@@ -173,8 +180,9 @@ class AuthUserService {
         throw new Error("Email e Senha não correspondem ou não existe.");
       }
 
-      let photo_url =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + attendant.photo;
+      const photo_url = attendant.photo
+        ? await s3Storage.getTemporaryUrl(attendant.photo, 245)
+        : "";
 
       return {
         user: {
@@ -207,8 +215,9 @@ class AuthUserService {
         throw new Error("Email e Senha não correspondem ou não existe.");
       }
 
-      let photo_url =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + associate.photo;
+      const photo_url = associate.photo
+        ? await s3Storage.getTemporaryUrl(associate.photo, 245)
+        : "";
 
       return {
         user: {

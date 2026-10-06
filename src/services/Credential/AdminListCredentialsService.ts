@@ -1,4 +1,5 @@
 import prismaClient from "../../prisma";
+import S3Storage from "../../utils/S3Storage";
 
 interface CredentialRequest {
   filter: string;
@@ -71,8 +72,21 @@ class AdminListCredentialsService {
         id: true,
       },
     });
+    const s3Storage = new S3Storage();
+    const credentialsResponse = await Promise.all(
+      credentials.map(async (credential) => {
+        if (credential.photo) {
+          credential["photo_url"] = await s3Storage.getTemporaryUrl(
+            credential.photo,
+            245,
+          );
+        }
 
-    return { credentials, total: credentialsTotal };
+        return credential;
+      }),
+    );
+
+    return { credentials: credentialsResponse, total: credentialsTotal };
   }
 }
 

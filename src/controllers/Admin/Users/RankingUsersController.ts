@@ -15,13 +15,6 @@ class RankingUsersController {
       date_end: date_end ? String(date_end) : "",
     });
 
-    users.users.map((item) => {
-      if (item["photo"]) {
-        item["photo_url"] =
-          "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + item["photo"];
-      }
-    });
-
     return res.json(users);
   }
 }

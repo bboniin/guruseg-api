@@ -1,5 +1,6 @@
 import { addDays } from "date-fns";
 import prismaClient from "../../../prisma";
+import S3Storage from "../../../utils/S3Storage";
 
 interface AssociateRequest {
   filter: string;
@@ -47,8 +48,20 @@ class ListAssociatesService {
       skip: page * 30,
       take: 30,
     });
+    const s3Storage = new S3Storage();
+    const associatesResponse = await Promise.all(
+      associates.map(async (associate) => {
+        if (associate.photo) {
+          associate["photo_url"] = await s3Storage.getTemporaryUrl(
+            associate.photo,
+            245,
+          );
+        }
 
-    return { associates: associates, associatesTotal };
+        return associate;
+      }),
+    );
+    return { associates: associatesResponse, associatesTotal };
   }
 }
 

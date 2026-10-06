@@ -1,4 +1,5 @@
 import prismaClient from "../../../prisma";
+import S3Storage from "../../../utils/S3Storage";
 
 interface CourseRequest {
   search: string;
@@ -66,7 +67,24 @@ class ListCoursesService {
       });
     }
 
-    return modules;
+    const s3Storage = new S3Storage();
+    const modulesResponse = await Promise.all(
+      modules.map(async (module) => {
+        await Promise.all(
+          module.courses.map(async (course) => {
+            if (course.photo) {
+              course["photo_url"] = await s3Storage.getTemporaryUrl(
+                course.photo,
+                245,
+              );
+            }
+          }),
+        );
+
+        return module;
+      }),
+    );
+    return modulesResponse;
   }
 }
 

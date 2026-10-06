@@ -1,5 +1,6 @@
 import { endOfDay, startOfDay } from "date-fns";
 import prismaClient from "../../../prisma";
+import S3Storage from "../../../utils/S3Storage";
 
 interface AssociateRequest {
   associate_id: string;
@@ -125,6 +126,14 @@ class ResumeAdminAssociateService {
 
       return acc + Number(valorPrimeiroLead);
     }, 0);
+
+    const s3Storage = new S3Storage();
+    if (associate?.photo) {
+      associate["photo_url"] = await s3Storage.getTemporaryUrl(
+        associate.photo,
+        245,
+      );
+    }
 
     return {
       totalPaymentsValue,

@@ -43,11 +43,6 @@ class EditAdminAssociateController {
       user_id,
     });
 
-    if (associate["photo"]) {
-      associate["photo_url"] =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + associate["photo"];
-    }
-
     return res.json(associate);
   }
 }

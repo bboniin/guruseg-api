@@ -1,4 +1,5 @@
 import prismaClient from "../../../prisma";
+import S3Storage from "../../../utils/S3Storage";
 
 interface AdminRequest {
   userId: string;
@@ -43,6 +44,20 @@ class ListAdminsService {
       skip: page * 30,
       take: 30,
     });
+
+    const s3Storage = new S3Storage();
+    const adminsResponse = await Promise.all(
+      admins.map(async (banner) => {
+        if (banner.photo) {
+          banner["photo_url"] = await s3Storage.getTemporaryUrl(
+            banner.photo,
+            245,
+          );
+        }
+
+        return adminsResponse;
+      }),
+    );
 
     return { admins: admins, adminsTotal };
   }

@@ -1,5 +1,6 @@
 import { addDays } from "date-fns";
 import prismaClient from "../../../prisma";
+import S3Storage from "../../../utils/S3Storage";
 
 interface ServiceRequest {
   userId: string;
@@ -84,7 +85,21 @@ class ListCollaboratorsService {
       });
     });
 
-    return { collaborators: collaborators, collaboratorsTotal };
+    const s3Storage = new S3Storage();
+    const collaboratorsResponse = await Promise.all(
+      collaborators.map(async (collaborator) => {
+        if (collaborator.photo) {
+          collaborator["photo_url"] = await s3Storage.getTemporaryUrl(
+            collaborator.photo,
+            245,
+          );
+        }
+
+        return collaborator;
+      }),
+    );
+
+    return { collaborators: collaboratorsResponse, collaboratorsTotal };
   }
 }
 

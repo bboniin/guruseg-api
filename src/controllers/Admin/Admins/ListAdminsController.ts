@@ -15,13 +15,6 @@ class ListAdminsController {
       filter: filter ? String(filter) : "",
     });
 
-    admins.admins.map((item) => {
-      if (item["photo"]) {
-        item["photo_url"] =
-          "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + item["photo"];
-      }
-    });
-
     return res.json(admins);
   }
 }

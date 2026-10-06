@@ -1,5 +1,6 @@
 import { endOfDay, startOfDay } from "date-fns";
 import prismaClient from "../../../prisma";
+import S3Storage from "../../../utils/S3Storage";
 
 interface ServiceRequest {
   userId: string;
@@ -80,7 +81,17 @@ class RankingUsersMatrizService {
       return b["totalPayment"] - a["totalPayment"];
     });
 
-    return { users: orderUsers, totalPayments };
+    const s3Storage = new S3Storage();
+    const usersResponse = await Promise.all(
+      orderUsers.map(async (user) => {
+        if (user.photo) {
+          user["photo_url"] = await s3Storage.getTemporaryUrl(user.photo, 245);
+        }
+
+        return user;
+      }),
+    );
+    return { users: usersResponse, totalPayments };
   }
 }
 

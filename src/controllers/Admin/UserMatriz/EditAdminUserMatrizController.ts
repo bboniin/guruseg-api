@@ -73,11 +73,6 @@ class EditAdminUserMatrizController {
       value_lp: Number(value_lp) || 0,
     });
 
-    if (user["photo"]) {
-      user["photo_url"] =
-        "https://guruseg-data.s3.sa-east-1.amazonaws.com/" + user["photo"];
-    }
-
     return res.json(user);
   }
 }
