@@ -114,12 +114,15 @@ class IntegrationRisksService {
         },
       )
       .then((response) => {
+        console.log(1, response.data);
         const returnJSON = JSON.parse(
           response.data.replace(/"({.*?})"/g, (match, p1) => {
             return JSON.stringify(p1);
           }),
         );
+        console.log(2, returnJSON);
         const returnData = JSON.parse(returnJSON.returnInfo);
+        console.log(3, returnData);
         if (returnData.erro) {
           error = returnData.msg;
           throw new Error(returnData.msg);
@@ -128,6 +131,7 @@ class IntegrationRisksService {
         sggId = returnData.id;
       })
       .catch((error) => {
+        console.log(4, error);
         error =
           error.message || "Ocorreu um erro inesperado, contate o suporte";
       });
