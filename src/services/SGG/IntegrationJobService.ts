@@ -92,7 +92,8 @@ class IntegrationJobService {
         sggId = returnData.id;
       })
       .catch((error) => {
-        error = error.message;
+        error =
+          error.message || "Ocorreu um erro inesperado, contate o suporte";
       });
 
     if (error) {

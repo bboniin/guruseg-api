@@ -96,7 +96,7 @@ class IntegrationRisksService {
 
     await axios
       .post(
-        "https://app.sgg.net.br/api/v3/avaliacao_de_riscos/",
+        "https://app.sgg.net.br/api/v3/avaliacao_de_riscos",
         {
           empresa: company.sgg_id,
           id_setor: sector.sgg_id,
@@ -114,15 +114,12 @@ class IntegrationRisksService {
         },
       )
       .then((response) => {
-        console.log(response.data);
         const returnJSON = JSON.parse(
           response.data.replace(/"({.*?})"/g, (match, p1) => {
             return JSON.stringify(p1);
           }),
         );
-        console.log(returnJSON);
         const returnData = JSON.parse(returnJSON.returnInfo);
-        console.log(returnData);
         if (returnData.erro) {
           error = returnData.msg;
           throw new Error(returnData.msg);
@@ -131,8 +128,8 @@ class IntegrationRisksService {
         sggId = returnData.id;
       })
       .catch((error) => {
-        console.log(error);
-        error = error.message;
+        error =
+          error.message || "Ocorreu um erro inesperado, contate o suporte";
       });
 
     if (error) {
