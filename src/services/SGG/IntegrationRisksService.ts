@@ -96,7 +96,7 @@ class IntegrationRisksService {
 
     await axios
       .post(
-        "https://app.sgg.net.br/api/v3/avaliacao_de_riscos",
+        "https://app.sgg.net.br/api/v3/avaliacao_de_riscos/",
         {
           empresa: company.sgg_id,
           id_setor: sector.sgg_id,
