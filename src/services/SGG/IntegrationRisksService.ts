@@ -114,6 +114,22 @@ class IntegrationRisksService {
         },
       )
       .then((response) => {
+        console.log(
+          {
+            empresa: company.sgg_id,
+            id_setor: sector.sgg_id,
+            ids_cargos: cargosId,
+            cargos: cargos,
+            data: format(new Date(), "yyyy-MM-dd"),
+            data_validade: format(addYears(new Date(), 1), "yyyy-MM-dd"),
+            riscos: riscos,
+          },
+          {
+            username: process.env.SGG_USER || "",
+            password: "",
+          },
+        );
+        console.log(0, response);
         console.log(1, response.data);
         const returnJSON = JSON.parse(
           response.data.replace(/"({.*?})"/g, (match, p1) => {
