@@ -366,6 +366,7 @@ model Service {
   id                  String    @id @default(uuid())
   name                String
   value               Float
+  value_terceirize    Float     @default(0)
   commission          Float     @default(0)
   min_collaborators   Int       @default(0)
   max_collaborators   Int       @default(0)

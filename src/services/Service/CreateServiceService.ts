@@ -4,6 +4,7 @@ interface ServiceRequest {
   name: string;
   description: string;
   value: number;
+  value_terceirize: number;
   commission: number;
   sector: string;
   min_collaborators: number;
@@ -16,13 +17,14 @@ class CreateServiceService {
     name,
     description,
     value,
+    value_terceirize,
     min_collaborators,
     max_collaborators,
     commission,
     sector,
     required_company,
   }: ServiceRequest) {
-    if (!name || !value || !commission || !sector) {
+    if (!name || (!value && !value_terceirize) || !commission || !sector) {
       throw new Error("Nome, valor, setor e comissão é obrigatório");
     }
 
@@ -30,6 +32,7 @@ class CreateServiceService {
       data: {
         name: name,
         value: Number(value),
+        value_terceirize: Number(value_terceirize),
         commission: Number(commission),
         visible: true,
         description: description,
