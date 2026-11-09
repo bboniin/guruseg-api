@@ -875,6 +875,47 @@ model Message {
   @@map("messages")
 }
 
+model PreliminaryCompany {
+  id                  String    @id @default(uuid())
+  razao_social        String?
+  nome_fantasia       String?
+  cnpj                String?
+  ramo_atividade      String?
+  cep                 String?
+  endereco            String?
+  nome_responsavel    String?
+  cpf_responsavel     String?
+  contato_responsavel String?
+  observation         String?
+  type                String    @default("CNPJ")
+  status              String    @default("aguardando")
+  collaborador_id     String?  
+  create_at           DateTime? @default(now())
+  update_at           DateTime? @updatedAt
+
+  functions           PreliminaryFunction[]
+
+  @@map("preliminary_companies")
+}
+
+model PreliminaryFunction {
+  id                         String    @id @default(uuid())
+  name                       String
+  cbo                        String?
+  quantidade_colaboradores   Int?
+  quantidade_colaboradores_m Int?
+  quantidade_colaboradores_f Int?
+  description                String?
+  epis                       String?
+  create_at                  DateTime? @default(now())
+  update_at                  DateTime? @updatedAt
+
+  preliminary_company        PreliminaryCompany? @relation(fields: [preliminary_company_id], references: [id], onDelete: Cascade)
+  preliminary_company_id     String?
+
+  @@map("preliminary_functions")
+}
+
 enum CouponType {
   FIXED
   PERCENTAGE

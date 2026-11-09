@@ -129,6 +129,14 @@ import { SggSectorController } from "./controllers/Company/SggSectorController";
 import { EditRiskCompanyController } from "./controllers/Company/EditRiskCompanyController";
 import { DeleteEmployeController } from "./controllers/Company/DeleteEmployeController";
 
+// Preliminary Company Controllers
+import { CreatePreliminaryCompanyController } from "./controllers/PreliminaryCompany/CreatePreliminaryCompanyController";
+import { ListPreliminaryCompaniesController } from "./controllers/PreliminaryCompany/ListPreliminaryCompaniesController";
+import { GetPreliminaryCompanyController } from "./controllers/PreliminaryCompany/GetPreliminaryCompanyController";
+import { EditPreliminaryCompanyController } from "./controllers/PreliminaryCompany/EditPreliminaryCompanyController";
+import { DeletePreliminaryCompanyController } from "./controllers/PreliminaryCompany/DeletePreliminaryCompanyController";
+import { ConvertPreliminaryToSurveyController } from "./controllers/PreliminaryCompany/ConvertPreliminaryToSurveyController";
+
 // Company Renewal & Timeline Controllers
 import { CreateRenewalController } from "./controllers/CompanyRenewal/CreateRenewalController";
 import { ListRenewalsController } from "./controllers/CompanyRenewal/ListRenewalsController";
@@ -350,6 +358,24 @@ router.put(
 router.get("/company/:company_id", new GetCompanyController().handle);
 router.put("/company/:company_id", new EditCompanyController().handle);
 
+// Formulário Preliminar Público
+router.get(
+  "/preliminary-company/:company_id",
+  new GetPreliminaryCompanyController().handle
+);
+router.put(
+  "/preliminary-company/:company_id",
+  new EditPreliminaryCompanyController().handle
+);
+router.post(
+  "/preliminary-company",
+  new CreatePreliminaryCompanyController().handle
+);
+router.post(
+  "/preliminary-company/:company_id/convert",
+  new ConvertPreliminaryToSurveyController().handle
+);
+
 // Pagamento Usuário / Utilitários Públicos
 router.get("/payments/user", new GetPaymentUserController().handle);
 router.delete("/all/leads", new DeleteManyLeadsMasterController().handle);
@@ -439,6 +465,24 @@ router.get("/companies", new ListCompaniesController().handle);
 router.get("/companies-confirm", new ListCompaniesConfirmController().handle);
 router.post("/company", new CreateCompanyController().handle);
 router.delete("/company/:company_id", new DeleteCompanyController().handle);
+
+// Formulários Preliminares (Franqueado)
+router.get(
+  "/preliminary-companies",
+  new ListPreliminaryCompaniesController().handle
+);
+router.post(
+  "/preliminary-company",
+  new CreatePreliminaryCompanyController().handle
+);
+router.post(
+  "/preliminary-company/:company_id/convert",
+  new ConvertPreliminaryToSurveyController().handle
+);
+router.delete(
+  "/preliminary-company/:company_id",
+  new DeletePreliminaryCompanyController().handle
+);
 router.put(
   "/confirm-company/:company_id",
   new ConfirmCompanyController().handle,
