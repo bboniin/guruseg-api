@@ -28,46 +28,61 @@ interface SectorGenerated {
 }
 
 class GenerateSectorsFromFunctionsService {
-  async execute({ company, functions }: GenerateSectorsRequest): Promise<SectorGenerated[]> {
+  async execute({
+    company,
+    functions,
+  }: GenerateSectorsRequest): Promise<SectorGenerated[]> {
     if (!functions || functions.length === 0) {
-      throw new Error("É necessário fornecer ao menos uma função para gerar os setores.");
+      throw new Error(
+        "É necessário fornecer ao menos uma função para gerar os setores.",
+      );
     }
 
     const client = new OpenAI();
 
-    const systemInstruction = `Você é um Engenheiro e Perito Especialista em Segurança e Saúde no Trabalho no Brasil, especialista em NR-01, PGR (Programa de Gerenciamento de Riscos), PCMSO e eSocial.
-Seu objetivo é analisar os dados cadastrais da empresa e a lista de funções fornecidas, e criar os setores de trabalho ideais para a empresa, agrupando as funções de acordo com a semelhança dos ambientes físicos de trabalho e os Grupos Homogêneos de Exposição (GHE).
+    const systemInstruction = `Você é um Engenheiro e Perito Especialista em Segurança e Saúde no Trabalho no Brasil, atuando estritamente conforme a NR-01 (GRO/PGR), PCMSO (NR-07) e tabelas de SST do eSocial.
 
-Regras de Especialista em Segurança do Trabalho:
-1. Analise cuidadosamente o ramo de atividade da empresa e cada função (nome, descrição das atividades, CBO, EPIs).
-2. Defina os setores ideais (pode ser 1, 2, 3 ou mais setores, conforme achar estritamente necessário segundo as melhores práticas de SST):
-   - Funções de trabalho em escritório, computadores, administrativo, financeiro, vendas internas, atendimento -> agrupadas em um setor administrativo (ex: "Administrativo" ou "Escritório").
-   - Funções operacionais, chão de fábrica, produção, montagem, máquinas -> agrupadas em setor operacional (ex: "Operacional" ou "Produção").
-   - Funções de estoque, almoxarifado, expedição, logística -> agrupadas em setor específico (ex: "Almoxarifado" ou "Logística e Expedição").
-   - Funções externas, transporte, motoristas, entregas -> agrupadas em setor correspondente (ex: "Transporte e Entregas" ou "Externo / Campo").
-   - Se todas as funções pertencerem ao mesmo ambiente físico (ex: todas são de escritório), crie apenas 1 setor adequado.
-3. Para cada setor gerado:
-   - "name": Nome técnico claro do setor (Ex: "Administrativo", "Operacional", "Almoxarifado", "Transporte").
-   - "description": Descrição técnica rica e detalhada do ambiente físico deste setor (tipo de edificação, piso, iluminação, ventilação, maquinários, ruídos, mobiliário e características físicas do posto de trabalho). Esta descrição detalhada é indispensável para que o sistema consiga mapear corretamente os riscos ocupacionais (físicos, químicos, biológicos, ergonômicos e acidentes) do setor.
-   - "function_names": Array com os nomes EXATOS das funções que trabalham neste setor.
-4. TODAS as funções da lista fornecida devem ser alocadas em exatamente um setor. Nenhuma função pode ficar de fora.`;
+Seu objetivo é analisar o porte e a atividade econômica da empresa junto à lista de funções cadastradas para definir os SETORES de trabalho e/ou GRUPOS HOMOGÊNEOS DE EXPOSIÇÃO (GHE / GES), agrupando as funções pela semelhança dos ambientes físicos, tarefas executadas e fontes geradoras de risco.
+
+CRITÉRIOS TÉCNICOS DE AGRUPAMENTO (NR-01 / GHE):
+1. **Critério de Similaridade Ambiental e Operacional**:
+   - Agrupe no mesmo setor funções que compartilham o mesmo espaço físico, dinâmicas de trabalho, maquinários e potenciais fontes de exposição.
+   - Setores de referência comuns:
+     * Administrativo / Escritório: Atividades informatizadas, atendimento, financeiro, recepção, vendas internas.
+     * Operacional / Produção / Manutenção: Chão de fábrica, montagem, oficinas, operação de maquinários e ferramentas.
+     * Logística / Almoxarifado / Estoque: Movimentação de cargas, paletização, armazenamento, conferência e expedição.
+     * Limpeza / Conservação: Serviços gerais, higienização de ambientes e sanitários, descarte de resíduos.
+     * Externo / Transporte / Campo: Motoristas, entregadores, técnicos de rota e serviços externos (considerando inclusive operações em instalações de contratantes).
+     * Setor Único: Se todas as funções compartilharem o mesmo ambiente físico homogêneo (ex: pequeno escritório ou comércio local), mantenha apenas 1 setor técnico adequado.
+
+2. **Requisitos Obrigatórios para os Campos**:
+   - "name": Nome técnico padronizado do setor (ex: "Administrativo", "Produção", "Almoxarifado e Expedição", "Limpeza e Conservação").
+   - "description": Caracterização física e ambiental rica e detalhada do posto de trabalho (tipo de edificação/alvenaria/galpão, piso, ventilação natural/artificial, iluminação, maquinários, ruídos de fundo, mobiliário e produtos manuseados). Esta descrição serve como base preliminar para identificar os perigos e agentes nocivos (físicos, químicos, biológicos, ergonômicos e acidentes) do setor.
+   - "function_names": Array com os nomes EXATOS de cada função pertencente a este setor.
+
+3. **Regras Mandatórias de Validação**:
+   - TODAS as funções da lista devem ser alocadas em EXATAMENTE UM setor. Nenhuma função pode ser esquecida ou duplicada.
+   - Mantenha a grafia idêntica do nome da função enviada no prompt.
+   - Exclua qualquer menção a riscos psicossociais das descrições ambientais (estes são avaliados em instrumento separado).`;
 
     const userPrompt = `DADOS DA EMPRESA:
 Razão Social: ${company.razao_social || "Não informada"}
 Nome Fantasia: ${company.nome_fantasia || company.razao_social || "Não informado"}
-Ramo de Atividade: ${company.ramo_atividade || "Não informado"}
+Ramo de Atividade / CNAE: ${company.ramo_atividade || "Não informado"}
 
 LISTA DE FUNÇÕES CADASTRADAS:
 ${functions
   .map(
     (f, idx) =>
-      `${idx + 1}. Nome: "${f.name}" | CBO: ${f.cbo || "Não informado"} | Descrição: ${
-        f.description || "Sem descrição informada"
-      } | EPIs: ${f.epis || "Nenhum"}`
+      `${idx + 1}. Função: "${f.name}"
+   - CBO: ${f.cbo || "Não informado"}
+   - Colaboradores: Total: ${f.quantidade_colaboradores ?? "N/D"} (M: ${f.quantidade_colaboradores_m ?? "N/D"} | F: ${f.quantidade_colaboradores_f ?? "N/D"})
+   - Descrição das atividades: ${f.description || "Sem descrição informada"}
+   - EPIs cadastrados: ${f.epis || "Nenhum"}`,
   )
-  .join("\n")}
+  .join("\n\n")}
 
-Crie os setores ideais e distribua todas as funções acima nos setores correspondentes.`;
+Com base nas atividades, ambientes prováveis e semelhança de exposição (GHE), crie os setores ideais, formule a descrição física detalhada de cada ambiente e distribua 100% das funções acima sem omitir nenhuma.`;
 
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
@@ -90,7 +105,8 @@ Crie os setores ideais e distribua todas as funções acima nos setores correspo
                   properties: {
                     name: {
                       type: "string",
-                      description: "Nome técnico do setor (Ex: Administrativo, Operacional, Almoxarifado).",
+                      description:
+                        "Nome técnico do setor (Ex: Administrativo, Operacional, Almoxarifado).",
                     },
                     description: {
                       type: "string",
