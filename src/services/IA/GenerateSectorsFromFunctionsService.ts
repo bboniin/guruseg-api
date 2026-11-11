@@ -54,8 +54,7 @@ CRITÉRIOS TÉCNICOS DE AGRUPAMENTO (GHE GRUPO HOMOGENEO DE EXPOSIÇÃO):
 * Setor Elétrica / Serviços em elétrica: Atividades com eletricidade em geral e com Funções como eletricista e auxiliares de eletricistas etc.
      * Setor Limpeza / Conservação: Serviços gerais, higienização de ambientes e sanitários, descarte de resíduos e Funções como Auxiliar de Limpeza;
      * Setor Externo / Transporte / Campo: Motoristas, entregadores, técnicos de rota e serviços externos (considerando inclusive operações em instalações de contratantes) e Funções como Motorista, Auxiliar de Motorista, Operador de Empilhadeira;
-     * Setor Único: Se todas as funções compartilharem as mesmas familiaridades de nomenclaturas e atividades e riscos ocupacionais físico homogêneo (ex: pequeno escritório ou comércio local), mantenha apenas 1 setor técnico adequado.
-
+     
 2. Requisitos Obrigatórios para os Campos:
    - "name": Nome técnico padronizado do setor (ex: "Administrativo", "Produção", "Almoxarifado e Expedição", "Limpeza e Conservação").
    - "description": Caracterização física e ambiental rica e detalhada do posto de trabalho (tipo de edificação/alvenaria/galpão, piso, ventilação natural/artificial, iluminação, maquinários, ruídos de fundo, mobiliário e produtos manuseados). Esta descrição serve como base preliminar para identificar os perigos e agentes nocivos (físicos, químicos, biológicos, ergonômicos e acidentes) do setor.
