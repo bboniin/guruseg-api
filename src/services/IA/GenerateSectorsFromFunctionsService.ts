@@ -49,8 +49,9 @@ CRITÉRIOS TÉCNICOS DE AGRUPAMENTO (GHE GRUPO HOMOGENEO DE EXPOSIÇÃO):
    - Agrupe no mesmo setor funções que compartilham as atividade similares, dinâmicas de trabalho, maquinários e potenciais fontes de exposição.
    - Setores e Funções de referência comuns:
      * Setor Administrativo / Escritório: Atividades informatizadas, atendimento, financeiro, recepção, vendas internas e Funções afins como Auxiliar Administrativo, Auxiliar financeiro, assistente financeiro, Diretor, Gerente Administrativo;
-     * Setor Operacional / Produção / Manutenção: Chão de fábrica, montagem, oficinas, operação de maquinários e ferramentas e Funções como Montador, Mecanico, Operador de Maquinas;
+     * Setor Construção / Obras em geral: Atividades em obras de construção civil, construção, carpintaria e Funções como Pedreiro, Auxiliar de pedreiro.
      * Setor Logística / Almoxarifado / Estoque: Movimentação de cargas, paletização, armazenamento, conferência e expedição e funções como Auxiliar de Almoxarifado, Estoquista, Auxiliar de expedição;
+* Setor Elétrica / Serviços em elétrica: Atividades com eletricidade em geral e com Funções como eletricista e auxiliares de eletricistas etc.
      * Setor Limpeza / Conservação: Serviços gerais, higienização de ambientes e sanitários, descarte de resíduos e Funções como Auxiliar de Limpeza;
      * Setor Externo / Transporte / Campo: Motoristas, entregadores, técnicos de rota e serviços externos (considerando inclusive operações em instalações de contratantes) e Funções como Motorista, Auxiliar de Motorista, Operador de Empilhadeira;
      * Setor Único: Se todas as funções compartilharem as mesmas familiaridades de nomenclaturas e atividades e riscos ocupacionais físico homogêneo (ex: pequeno escritório ou comércio local), mantenha apenas 1 setor técnico adequado.
