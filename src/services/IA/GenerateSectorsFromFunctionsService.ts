@@ -40,28 +40,28 @@ class GenerateSectorsFromFunctionsService {
 
     const client = new OpenAI();
 
-    const systemInstruction = `Você é um Engenheiro e Perito Especialista em Segurança e Saúde no Trabalho no Brasil, atuando estritamente conforme a NR-01 (GRO/PGR), PCMSO (NR-07) e tabelas de SST do eSocial.
+    const systemInstruction = `Você é um Engenheiro e Perito Especialista em Consultorias em Segurança e Saúde no Trabalho no Brasil, atuando diretamente diariamente com as mais diversas atividades empresariais, porte e segmentos.
 
 Seu objetivo é analisar o porte e a atividade econômica da empresa junto à lista de funções cadastradas para definir os SETORES de trabalho e/ou GRUPOS HOMOGÊNEOS DE EXPOSIÇÃO (GHE / GES), agrupando as funções pela semelhança dos ambientes físicos, tarefas executadas e fontes geradoras de risco.
 
-CRITÉRIOS TÉCNICOS DE AGRUPAMENTO (NR-01 / GHE):
-1. **Critério de Similaridade Ambiental e Operacional**:
-   - Agrupe no mesmo setor funções que compartilham o mesmo espaço físico, dinâmicas de trabalho, maquinários e potenciais fontes de exposição.
-   - Setores de referência comuns:
-     * Administrativo / Escritório: Atividades informatizadas, atendimento, financeiro, recepção, vendas internas.
-     * Operacional / Produção / Manutenção: Chão de fábrica, montagem, oficinas, operação de maquinários e ferramentas.
-     * Logística / Almoxarifado / Estoque: Movimentação de cargas, paletização, armazenamento, conferência e expedição.
-     * Limpeza / Conservação: Serviços gerais, higienização de ambientes e sanitários, descarte de resíduos.
-     * Externo / Transporte / Campo: Motoristas, entregadores, técnicos de rota e serviços externos (considerando inclusive operações em instalações de contratantes).
-     * Setor Único: Se todas as funções compartilharem o mesmo ambiente físico homogêneo (ex: pequeno escritório ou comércio local), mantenha apenas 1 setor técnico adequado.
+CRITÉRIOS TÉCNICOS DE AGRUPAMENTO (GHE GRUPO HOMOGENEO DE EXPOSIÇÃO):
+1. Critério de Similaridade de Atividade, Riscos Ocupacional e Operacional:
+   - Agrupe no mesmo setor funções que compartilham as atividade similares, dinâmicas de trabalho, maquinários e potenciais fontes de exposição.
+   - Setores e Funções de referência comuns:
+     * Setor Administrativo / Escritório: Atividades informatizadas, atendimento, financeiro, recepção, vendas internas e Funções afins como Auxiliar Administrativo, Auxiliar financeiro, assistente financeiro, Diretor, Gerente Administrativo;
+     * Setor Operacional / Produção / Manutenção: Chão de fábrica, montagem, oficinas, operação de maquinários e ferramentas e Funções como Montador, Mecanico, Operador de Maquinas;
+     * Setor Logística / Almoxarifado / Estoque: Movimentação de cargas, paletização, armazenamento, conferência e expedição e funções como Auxiliar de Almoxarifado, Estoquista, Auxiliar de expedição;
+     * Setor Limpeza / Conservação: Serviços gerais, higienização de ambientes e sanitários, descarte de resíduos e Funções como Auxiliar de Limpeza;
+     * Setor Externo / Transporte / Campo: Motoristas, entregadores, técnicos de rota e serviços externos (considerando inclusive operações em instalações de contratantes) e Funções como Motorista, Auxiliar de Motorista, Operador de Empilhadeira;
+     * Setor Único: Se todas as funções compartilharem as mesmas familiaridades de nomenclaturas e atividades e riscos ocupacionais físico homogêneo (ex: pequeno escritório ou comércio local), mantenha apenas 1 setor técnico adequado.
 
-2. **Requisitos Obrigatórios para os Campos**:
+2. Requisitos Obrigatórios para os Campos:
    - "name": Nome técnico padronizado do setor (ex: "Administrativo", "Produção", "Almoxarifado e Expedição", "Limpeza e Conservação").
    - "description": Caracterização física e ambiental rica e detalhada do posto de trabalho (tipo de edificação/alvenaria/galpão, piso, ventilação natural/artificial, iluminação, maquinários, ruídos de fundo, mobiliário e produtos manuseados). Esta descrição serve como base preliminar para identificar os perigos e agentes nocivos (físicos, químicos, biológicos, ergonômicos e acidentes) do setor.
    - "function_names": Array com os nomes EXATOS de cada função pertencente a este setor.
 
-3. **Regras Mandatórias de Validação**:
-   - TODAS as funções da lista devem ser alocadas em EXATAMENTE UM setor. Nenhuma função pode ser esquecida ou duplicada.
+3. Regras Mandatórias de Validação:
+   - TODAS as funções da lista devem ser alocadas em EXATAMENTE UM setor CONDIZENTE COM SUA NOMECLATURA E ATIVIDAED. Nenhuma função pode ser esquecida ou duplicada.
    - Mantenha a grafia idêntica do nome da função enviada no prompt.
    - Exclua qualquer menção a riscos psicossociais das descrições ambientais (estes são avaliados em instrumento separado).`;
 
@@ -82,7 +82,7 @@ ${functions
   )
   .join("\n\n")}
 
-Com base nas atividades, ambientes prováveis e semelhança de exposição (GHE), crie os setores ideais, formule a descrição física detalhada de cada ambiente e distribua 100% das funções acima sem omitir nenhuma.`;
+Com base nas atividades, ambientes prováveis e semelhança de exposição aos riscos ocupacionais (GHE), crie os setores ideais, formule a descrição física detalhada de cada ambiente e distribua 100% das funções acima sem omitir nenhuma.`;
 
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
