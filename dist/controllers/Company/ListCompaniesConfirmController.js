@@ -1,0 +1,22 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ListCompaniesConfirmController = void 0;
+var _ListCompaniesConfirmService = require("../../services/Company/ListCompaniesConfirmService");
+class ListCompaniesConfirmController {
+  async handle(req, res) {
+    const {
+      order_id
+    } = req.query;
+    let userId = req.userId;
+    const listCompaniesConfirmService = new _ListCompaniesConfirmService.ListCompaniesConfirmService();
+    const companies = await listCompaniesConfirmService.execute({
+      userId,
+      order_id: order_id ? Number(order_id) || 0 : 0
+    });
+    return res.json(companies);
+  }
+}
+exports.ListCompaniesConfirmController = ListCompaniesConfirmController;

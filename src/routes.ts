@@ -137,6 +137,12 @@ import { EditPreliminaryCompanyController } from "./controllers/PreliminaryCompa
 import { DeletePreliminaryCompanyController } from "./controllers/PreliminaryCompany/DeletePreliminaryCompanyController";
 import { ConvertPreliminaryToSurveyController } from "./controllers/PreliminaryCompany/ConvertPreliminaryToSurveyController";
 
+// SST Diagnostic Controllers
+import { CreateSSTDiagnosticController } from "./controllers/SSTDiagnostic/CreateSSTDiagnosticController";
+import { ListSSTDiagnosticsController } from "./controllers/SSTDiagnostic/ListSSTDiagnosticsController";
+import { GetSSTDiagnosticController } from "./controllers/SSTDiagnostic/GetSSTDiagnosticController";
+import { DeleteSSTDiagnosticController } from "./controllers/SSTDiagnostic/DeleteSSTDiagnosticController";
+
 // Company Renewal & Timeline Controllers
 import { CreateRenewalController } from "./controllers/CompanyRenewal/CreateRenewalController";
 import { ListRenewalsController } from "./controllers/CompanyRenewal/ListRenewalsController";
@@ -361,19 +367,25 @@ router.put("/company/:company_id", new EditCompanyController().handle);
 // Formulário Preliminar Público
 router.get(
   "/preliminary-company/:company_id",
-  new GetPreliminaryCompanyController().handle
+  new GetPreliminaryCompanyController().handle,
 );
 router.put(
   "/preliminary-company/:company_id",
-  new EditPreliminaryCompanyController().handle
+  new EditPreliminaryCompanyController().handle,
 );
 router.post(
   "/preliminary-company",
-  new CreatePreliminaryCompanyController().handle
+  new CreatePreliminaryCompanyController().handle,
 );
 router.post(
   "/preliminary-company/:company_id/convert",
-  new ConvertPreliminaryToSurveyController().handle
+  new ConvertPreliminaryToSurveyController().handle,
+);
+
+// Diagnóstico SST Público
+router.get(
+  "/public/sst-diagnostic/:id",
+  new GetSSTDiagnosticController().handle,
 );
 
 // Pagamento Usuário / Utilitários Públicos
@@ -469,20 +481,26 @@ router.delete("/company/:company_id", new DeleteCompanyController().handle);
 // Formulários Preliminares (Franqueado)
 router.get(
   "/preliminary-companies",
-  new ListPreliminaryCompaniesController().handle
+  new ListPreliminaryCompaniesController().handle,
 );
 router.post(
   "/preliminary-company",
-  new CreatePreliminaryCompanyController().handle
+  new CreatePreliminaryCompanyController().handle,
 );
 router.post(
   "/preliminary-company/:company_id/convert",
-  new ConvertPreliminaryToSurveyController().handle
+  new ConvertPreliminaryToSurveyController().handle,
 );
 router.delete(
   "/preliminary-company/:company_id",
-  new DeletePreliminaryCompanyController().handle
+  new DeletePreliminaryCompanyController().handle,
 );
+
+// Diagnóstico SST (Franqueado)
+router.post("/sst-diagnostic", new CreateSSTDiagnosticController().handle);
+router.get("/sst-diagnostics", new ListSSTDiagnosticsController().handle);
+router.get("/sst-diagnostic/:id", new GetSSTDiagnosticController().handle);
+router.delete("/sst-diagnostic/:id", new DeleteSSTDiagnosticController().handle);
 router.put(
   "/confirm-company/:company_id",
   new ConfirmCompanyController().handle,

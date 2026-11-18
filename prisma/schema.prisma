@@ -61,6 +61,7 @@ model User {
   reminders           Reminder[]
   enterprises         Enterprise[]
   leadsMatriz         LeadMatriz[]
+  sstDiagnostics      SSTDiagnostic[]
 
   @@map("users")
 }
@@ -279,6 +280,7 @@ model Payment {
   order_id      Int?     
   deposit_id    String?      
   lead_id       String?  
+  diagnostic_id String?
   description   String?
   method        PaymentMethod   @default(PIX)
   type          PaymentType     @default(OS)
@@ -916,6 +918,24 @@ model PreliminaryFunction {
   @@map("preliminary_functions")
 }
 
+model SSTDiagnostic {
+  id               String    @id @default(uuid())
+  company_name     String
+  employees_count  String?
+  assessment_date  String?
+  franchisee_name  String?
+  franchisee_phone String?
+  franchisee_email String?
+  answers          String?
+  stats            String?
+  user_id          String
+  user             User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  create_at        DateTime? @default(now())
+  update_at        DateTime? @updatedAt
+
+  @@map("sst_diagnostics")
+}
+
 enum CouponType {
   FIXED
   PERCENTAGE
@@ -925,6 +945,7 @@ enum PaymentType {
   OS
   LEAD
   DEPOSIT
+  DIAGNOSTICO_SST
 }
 
 enum PaymentMethod {

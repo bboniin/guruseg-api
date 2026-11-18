@@ -1,0 +1,34 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ListAdminOrdersController = void 0;
+var _ListAdminOrdersService = require("../../services/Admin/ListAdminOrdersService");
+class ListAdminOrdersController {
+  async handle(req, res) {
+    const {
+      endDate,
+      id,
+      startDate,
+      page,
+      status,
+      status_payment,
+      user_id,
+      collaborator_id
+    } = req.query;
+    const listAdminOrdersService = new _ListAdminOrdersService.ListAdminOrdersService();
+    const orders = await listAdminOrdersService.execute({
+      id: id ? Number(id) : 0,
+      status: status ? String(status) : "",
+      collaborator_id: collaborator_id ? String(collaborator_id) : "",
+      status_payment: status_payment ? String(status_payment) : "",
+      user_id: user_id ? String(user_id) : "",
+      endDate: endDate ? String(endDate) : "",
+      startDate: startDate ? String(startDate) : "",
+      page: Number(page) || 0
+    });
+    return res.json(orders);
+  }
+}
+exports.ListAdminOrdersController = ListAdminOrdersController;

@@ -66,6 +66,8 @@ class GetUserService {
         costumer_id: user.costumer_id,
         category: user.category,
         phone_number: user.phone_number,
+        balance: user.balance,
+        balance_leads: user.balance_leads,
       };
     }
     if (collaborator) {
