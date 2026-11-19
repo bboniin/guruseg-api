@@ -258,7 +258,7 @@ class SendEmailSSTDiagnosticService {
               `
               }
 
-              <a href="https://wa.me/5599999999999?text=${encodeURIComponent(
+              <a href="https://wa.me/5563992123451?text=${encodeURIComponent(
                 `Olá Guruseg! Recebi o Diagnóstico SST da ${company_name} por e-mail e gostaria de falar com um especialista sobre a regularização.`,
               )}" class="btn-action">
                 Falar com Especialista SST

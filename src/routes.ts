@@ -503,10 +503,16 @@ router.delete(
 
 // Diagnóstico SST (Franqueado)
 router.post("/sst-diagnostic", new CreateSSTDiagnosticController().handle);
-router.post("/sst-diagnostic/send-email", new SendEmailSSTDiagnosticController().handle);
+router.post(
+  "/sst-diagnostic/send-email",
+  new SendEmailSSTDiagnosticController().handle,
+);
 router.get("/sst-diagnostics", new ListSSTDiagnosticsController().handle);
 router.get("/sst-diagnostic/:id", new GetSSTDiagnosticController().handle);
-router.delete("/sst-diagnostic/:id", new DeleteSSTDiagnosticController().handle);
+router.delete(
+  "/sst-diagnostic/:id",
+  new DeleteSSTDiagnosticController().handle,
+);
 router.put(
   "/confirm-company/:company_id",
   new ConfirmCompanyController().handle,
@@ -557,7 +563,7 @@ router.post("/lead/master", new CreateLeadMasterController().handle);
 router.put("/lead/:id", new EditLeadController().handle);
 router.put("/lead/master/:id", new EditLeadMasterController().handle);
 router.put("/lead/status/:id", new StatusLeadController().handle);
-router.put("/lead/send", new SendLeadController().handle);
+router.put("/lead-send", new SendLeadController().handle);
 router.put("/buy-lead/:id", new BuyLeadController().handle);
 router.put("/reset-lead/:id", new ResetLeadController().handle);
 router.delete("/lead/:id", new DeleteLeadController().handle);
