@@ -39,6 +39,7 @@ model User {
   courses_enabled      Boolean   @default(true)
   marketing_enabled    Boolean   @default(true)
   credentials_enabled  Boolean   @default(true)
+  sst_prospect_enabled Boolean   @default(false)
   value_pcmso          Float     @default(0)
   value_ltcat_atr      Float     @default(0)
   value_ltcat_medico   Float     @default(0)
@@ -928,6 +929,7 @@ model SSTDiagnostic {
   franchisee_email String?
   answers          String?
   stats            String?
+  cost             Float     @default(0)
   user_id          String
   user             User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   create_at        DateTime? @default(now())

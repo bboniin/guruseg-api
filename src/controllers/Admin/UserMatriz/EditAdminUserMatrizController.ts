@@ -21,6 +21,8 @@ class EditAdminUserMatrizController {
       courses_enabled,
       marketing_enabled,
       credentials_enabled,
+      sst_prospect_enabled,
+      sst_prospect,
       value_pcmso,
       value_ltcat_atr,
       value_ltcat_medico,
@@ -63,7 +65,12 @@ class EditAdminUserMatrizController {
       leads_enabled: leads_enabled == "true",
       courses_enabled: courses_enabled == "true",
       marketing_enabled: marketing_enabled == "true",
-      credentials_enabled: credentials_enabled == "true",
+      credentials_enabled: credentials_enabled == "true" || credentials_enabled === true,
+      sst_prospect_enabled:
+        sst_prospect_enabled == "true" ||
+        sst_prospect_enabled === true ||
+        sst_prospect == "true" ||
+        sst_prospect === true,
       value_pcmso: Number(value_pcmso) || 0,
       value_ltcat_atr: Number(value_ltcat_atr) || 0,
       value_ltcat_medico: Number(value_ltcat_medico) || 0,

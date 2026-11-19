@@ -32,6 +32,7 @@ class GetUserAdminService {
         courses_enabled: true,
         marketing_enabled: true,
         credentials_enabled: true,
+        sst_prospect_enabled: true,
         value_pcmso: true,
         value_ltcat_atr: true,
         value_ltcat_medico: true,

@@ -142,6 +142,7 @@ import { CreateSSTDiagnosticController } from "./controllers/SSTDiagnostic/Creat
 import { ListSSTDiagnosticsController } from "./controllers/SSTDiagnostic/ListSSTDiagnosticsController";
 import { GetSSTDiagnosticController } from "./controllers/SSTDiagnostic/GetSSTDiagnosticController";
 import { DeleteSSTDiagnosticController } from "./controllers/SSTDiagnostic/DeleteSSTDiagnosticController";
+import { SendEmailSSTDiagnosticController } from "./controllers/SSTDiagnostic/SendEmailSSTDiagnosticController";
 
 // Company Renewal & Timeline Controllers
 import { CreateRenewalController } from "./controllers/CompanyRenewal/CreateRenewalController";
@@ -387,6 +388,10 @@ router.get(
   "/public/sst-diagnostic/:id",
   new GetSSTDiagnosticController().handle,
 );
+router.post(
+  "/public/sst-diagnostic/send-email",
+  new SendEmailSSTDiagnosticController().handle,
+);
 
 // Pagamento Usuário / Utilitários Públicos
 router.get("/payments/user", new GetPaymentUserController().handle);
@@ -498,6 +503,7 @@ router.delete(
 
 // Diagnóstico SST (Franqueado)
 router.post("/sst-diagnostic", new CreateSSTDiagnosticController().handle);
+router.post("/sst-diagnostic/send-email", new SendEmailSSTDiagnosticController().handle);
 router.get("/sst-diagnostics", new ListSSTDiagnosticsController().handle);
 router.get("/sst-diagnostic/:id", new GetSSTDiagnosticController().handle);
 router.delete("/sst-diagnostic/:id", new DeleteSSTDiagnosticController().handle);

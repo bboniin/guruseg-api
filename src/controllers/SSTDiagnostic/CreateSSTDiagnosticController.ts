@@ -12,6 +12,7 @@ class CreateSSTDiagnosticController {
       franchisee_email,
       answers,
       stats,
+      cost,
     } = req.body;
 
     const userId = req.userId;
@@ -27,6 +28,7 @@ class CreateSSTDiagnosticController {
       franchisee_email,
       answers,
       stats,
+      cost,
     });
 
     return res.status(201).json(result);

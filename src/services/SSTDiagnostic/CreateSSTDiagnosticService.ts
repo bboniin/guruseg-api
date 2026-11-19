@@ -10,6 +10,7 @@ interface CreateSSTDiagnosticRequest {
   franchisee_email?: string;
   answers?: any;
   stats?: any;
+  cost?: number | string;
 }
 
 class CreateSSTDiagnosticService {
@@ -23,6 +24,7 @@ class CreateSSTDiagnosticService {
     franchisee_email,
     answers,
     stats,
+    cost,
   }: CreateSSTDiagnosticRequest) {
     if (!userId) {
       throw new Error("Usuário é obrigatório");
@@ -42,11 +44,21 @@ class CreateSSTDiagnosticService {
       throw new Error("Usuário não encontrado");
     }
 
-    const DIAGNOSTIC_COST = 4.97;
+    const isProspect = Boolean(userExists.sst_prospect_enabled);
+    let DIAGNOSTIC_COST = isProspect ? 0 : 4.97;
 
-    if (userExists.balance < DIAGNOSTIC_COST) {
+    if (!isProspect && cost !== undefined && cost !== null && cost !== "") {
+      const parsedCost = Number(cost);
+      if (!isNaN(parsedCost)) {
+        DIAGNOSTIC_COST = Math.max(0, parseFloat(parsedCost.toFixed(2)));
+      }
+    }
+
+    if (DIAGNOSTIC_COST > 0 && userExists.balance < DIAGNOSTIC_COST) {
       throw new Error(
-        "Saldo insuficiente para solicitar o Diagnóstico SST (Custo: R$ 4,97). Efetue um depósito para continuar."
+        `Saldo insuficiente para solicitar o Diagnóstico SST (Custo: R$ ${DIAGNOSTIC_COST.toFixed(
+          2
+        ).replace(".", ",")}). Efetue um depósito para continuar.`
       );
     }
 
@@ -66,21 +78,34 @@ class CreateSSTDiagnosticService {
         franchisee_email: franchisee_email || userExists.email || "",
         answers: answersString,
         stats: statsString,
+        cost: DIAGNOSTIC_COST,
       },
     });
 
-    const newBalance = parseFloat(
-      (userExists.balance - DIAGNOSTIC_COST).toFixed(2)
-    );
+    const newBalance =
+      DIAGNOSTIC_COST > 0
+        ? parseFloat((userExists.balance - DIAGNOSTIC_COST).toFixed(2))
+        : userExists.balance;
 
-    await prismaClient.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        balance: newBalance,
-      },
-    });
+    if (DIAGNOSTIC_COST > 0) {
+      await prismaClient.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          balance: newBalance,
+        },
+      });
+    }
+
+    let description = "DIAGNOSTICO SST";
+    if (isProspect) {
+      description = "DIAGNOSTICO SST (PROSPECT)";
+    } else if (DIAGNOSTIC_COST === 0) {
+      description = "DIAGNOSTICO SST (ISENTO)";
+    } else if (DIAGNOSTIC_COST < 4.97) {
+      description = "DIAGNOSTICO SST (DESCONTO)";
+    }
 
     const payment = await prismaClient.payment.create({
       data: {
@@ -88,7 +113,7 @@ class CreateSSTDiagnosticService {
         status: "confirmado",
         method: "SALDO",
         type: "DIAGNOSTICO_SST",
-        description: "DIAGNOSTICO SST",
+        description,
         diagnostic_id: diagnostic.id,
         user_id: userId,
       },
@@ -98,6 +123,7 @@ class CreateSSTDiagnosticService {
       ...diagnostic,
       payment_id: payment.id,
       cost: DIAGNOSTIC_COST,
+      is_prospect: isProspect,
       new_balance: newBalance,
       answers: answers || (answersString ? JSON.parse(answersString) : {}),
       stats: stats || (statsString ? JSON.parse(statsString) : {}),

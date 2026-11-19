@@ -24,6 +24,7 @@ interface UserMatrizRequest {
   courses_enabled: boolean;
   marketing_enabled: boolean;
   credentials_enabled: boolean;
+  sst_prospect_enabled: boolean;
   value_pcmso: number;
   value_ltcat_atr: number;
   value_ltcat_medico: number;
@@ -55,6 +56,7 @@ class EditAdminUserMatrizService {
     courses_enabled,
     marketing_enabled,
     credentials_enabled,
+    sst_prospect_enabled,
     value_pcmso,
     value_ltcat_atr,
     value_ltcat_medico,
@@ -106,6 +108,7 @@ class EditAdminUserMatrizService {
       courses_enabled: courses_enabled,
       marketing_enabled: marketing_enabled,
       credentials_enabled: credentials_enabled,
+      sst_prospect_enabled: sst_prospect_enabled,
       value_pcmso: value_pcmso,
       value_ltcat_atr: value_ltcat_atr,
       value_ltcat_medico: value_ltcat_medico,

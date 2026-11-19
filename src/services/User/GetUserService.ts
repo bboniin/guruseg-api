@@ -63,6 +63,8 @@ class GetUserService {
         leads_enabled: user.leads_enabled,
         marketing_enabled: user.marketing_enabled,
         credentials_enabled: user.credentials_enabled,
+        sst_prospect_enabled: user.sst_prospect_enabled,
+        sst_prospect: user.sst_prospect_enabled,
         costumer_id: user.costumer_id,
         category: user.category,
         phone_number: user.phone_number,
